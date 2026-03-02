@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-LOG // V2.0</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor (UI) & FontAwesome (Stickers) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-netrunner">
+
+    <!-- CRT Overlay -->
+    <div class="crt-overlay"></div>
+
+    <!-- 1. ICON SIDEBAR -->
+    <div class="icon-bar">
+        <i class="ph ph-mask-happy icon-btn" onclick="switchApp(this)" title="Identity"></i>
+        <i class="ph ph-flask icon-btn" onclick="switchApp(this)" title="Labs"></i>
+        <i class="ph ph-fingerprint icon-btn active" onclick="switchApp(this)" title="Records"></i>
+        <i class="ph ph-skull icon-btn" onclick="switchApp(this)" title="Targets"></i>
+        <div style="flex-grow: 1;"></div>
+        <i class="ph ph-printer icon-btn" onclick="window.print()" title="Print/Export"></i>
+        <i class="ph ph-gear icon-btn" onclick="switchApp(this)" title="Settings"></i>
+    </div>
+
+    <!-- 2. FILE NAVIGATION -->
+    <nav class="file-nav">
+        <div class="brand">
+            <i class="ph ph-terminal-window"></i> CYBERLOG
+        </div>
+        
+        <!-- Theme Select -->
+        <div class="nav-group">
+            <label>SYSTEM THEME</label>
+            <select onchange="document.body.className = this.value">
+                <option value="theme-netrunner">Netrunner (Cyan)</option>
+                <option value="theme-hacker">Hacker (Green)</option>
+                <option value="theme-corpo">Corpo (Gold)</option>
+                <option value="theme-synthwave">Synthwave (Purple)</option>
+                <option value="theme-terminal">Terminal (Amber)</option>
+                <option value="theme-sakura">Sakura (Pink)</option>
+            </select>
+        </div>
+
+        <!-- Files -->
+        <div class="nav-group">
+            <div class="section-title">
+                LOCAL FILES 
+                <span class="add-btn" onclick="addNewFile()" title="Create New File"><i class="ph ph-plus-circle"></i></span>
+            </div>
+            <ul class="file-list" id="document-list">
+                <li class="file-item" onclick="selectNotebook(this)">
+                    Operation: Nightfall
+                    <span class="file-date">2026-02-25</span>
+                </li>
+                <li class="file-item active" onclick="selectNotebook(this)">
+                    Subject: 89-B
+                    <span class="file-date">2026-02-24</span>
+                </li>
+                <li class="file-item" onclick="selectNotebook(this)">
+                    Sector 7 Map
+                    <span class="file-date">2026-02-20</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 3. MAIN CONTENT -->
+    <main class="main-stage canvas-default" id="main-container">
+        <!-- App Sections -->
+        <div id="app-identity" class="app-section" style="display:none">
+            <h1>Identity</h1>
+            <p>Profile and user identity information will appear here.</p>
+        </div>
+        <div id="app-labs" class="app-section" style="display:none">
+            <h1>Labs</h1>
+            <p>Experimental features and sandbox tools will appear here.</p>
+        </div>
+        <div id="app-records" class="app-section">
+            <!-- Sticker Layer (Overlay) -->
+            <div id="sticker-layer"></div>
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="tool-group">
+                    <button class="tool-btn" onclick="formatDoc('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+                    <button class="tool-btn" onclick="formatDoc('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+                    <button class="tool-btn" onclick="formatDoc('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
+                    <button class="tool-btn" onclick="formatDoc('strikeThrough')" title="Strike"><i class="ph ph-text-strikethrough"></i></button>
+                </div>
+                <select style="width: 130px;" onchange="formatDoc('fontName', this.value)">
+                    <option value="Share Tech Mono">System UI</option>
+                    <option value="Courier Prime">Typewriter</option>
+                    <option value="Orbitron">Header</option>
+                </select>
+                <select style="width: 120px;" onchange="changePaper(this.value)">
+                    <option value="grid">Grid Pattern</option>
+                    <option value="dots">Dot Matrix</option>
+                    <option value="lines">Lined Paper</option>
+                    <option value="blank">Blank</option>
+                </select>
+                <select style="width: 130px;" onchange="changeCanvas(this.value)">
+                    <option value="canvas-default">Canvas: Dark</option>
+                    <option value="canvas-tinted">Canvas: Tinted</option>
+                    <option value="canvas-blueprint">Canvas: Blueprint</option>
+                </select>
+                <button class="tool-btn text-accent" onclick="triggerGlitch()" title="Corrupt Data">GLITCH</button>
+                <div class="asset-toggle" onclick="toggleAssets()">
+                    <i class="ph ph-folder-open"></i> ASSETS
+                </div>
+            </div>
+            <!-- Editable Document Content -->
+            <div id="active-page" contenteditable="true" class="paper-grid">
+                <h1 id="doc-title">Subject: 89-B</h1>
+                <div class="case-meta" contenteditable="false">
+                    Suspect was last seen in the <strong>Neon District</strong>.<br>
+                    Status: <span style="color: #ff3333; animation: pulse 2s infinite;">AT LARGE</span>
+                </div>
+                <div class="quote-block">
+                    "The rain tasted like acid and cheap synth-gin..."
+                </div>
+                <p style="max-width: 600px; margin-bottom: 20px;">
+                    Surveillance drones lost visual contact at 0400 hours. Subject appears to be using military-grade optical camouflage. Recommend deployment of thermal imaging units to Sector 4.
+                </p>
+            </div>
+            <!-- Interactive Terminal Output -->
+            <div class="terminal-log" id="terminal-window">
+                <div class="terminal-header">SYS.LOG // TERMINAL_ACTIVE</div>
+                <div id="terminal-output">
+                    <div class="log-line">CONNECTING TO MAINFRAME...</div>
+                    <div class="log-line">AUTHENTICATING USER...</div>
+                    <div class="log-line" style="color: var(--secondary)">ACCESS GRANTED. Type 'help' for commands.</div>
+                </div>
+                <div class="terminal-input-wrapper">
+                    <span class="prompt-arrow">></span>
+                    <input type="text" id="term-input" autocomplete="off" spellcheck="false" onkeypress="handleTerminal(event)">
+                </div>
+            </div>
+        </div>
+        <div id="app-targets" class="app-section" style="display:none">
+            <h1>Targets</h1>
+            <p>Target dossiers and mission objectives will appear here.</p>
+        </div>
+        <div id="app-settings" class="app-section" style="display:none">
+            <h1>Settings</h1>
+            <p>Application settings and preferences will appear here.</p>
+        </div>
+
+    </main>
+
+    <!-- 4. ASSET LIBRARY (Floating) -->
+    <div class="asset-panel" id="asset-drawer">
+        <div class="panel-header">
+            <i class="ph ph-briefcase"></i> ASSET LIBRARY
+            <span class="close-btn" onclick="toggleAssets()"><i class="ph ph-x-square"></i></span>
+        </div>
+        <div class="tag-cloud">
+            <div class="tag" onclick="addSticker('stamp-top-secret')">TOP SECRET</div>
+            <div class="tag" onclick="addSticker('stamp-approved')">APPROVED</div>
+            <div class="tag" onclick="addSticker('tape-warning')">WARN TAPE</div>
+            <div class="tag" onclick="addSticker('icon-bio')">BIOHAZARD</div>
+            <div class="tag" onclick="addSticker('icon-rad')">RADIATION</div>
+            <div class="tag" onclick="addSticker('note-yellow')">NOTE (Y)</div>
+            <div class="tag" onclick="addSticker('note-pink')">NOTE (P)</div>
+            <div class="tag" onclick="addSticker('svg-cyber-skull')">CYBER SKULL</div>
+            <div class="tag" onclick="addSticker('svg-cyber-chip')">CYBER CHIP</div>
+            <div class="tag" onclick="addSticker('svg-cyber-eye')">CYBER EYE</div>
+        </div>
+    </div>
+
+    <!-- Local Script -->
+    <script src="script.js"></script>
+</body>
+</html>
