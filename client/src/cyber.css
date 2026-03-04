@@ -1983,6 +1983,16 @@
 .cy-prompt-item:hover { box-shadow: var(--cy-glow); }
 .cy-prompt-number { background: var(--cy-primary); color: var(--cy-bg); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
 
+/* Vision Prompt Entry Form */
+.cy-prompt-form { display: flex; flex-direction: column; gap: 18px; }
+.cy-prompt-field { display: flex; flex-direction: column; gap: 8px; }
+.cy-prompt-field-label { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--cy-text); }
+.cy-prompt-textarea { background: var(--cy-bg); border: var(--cy-border); border-radius: 10px; padding: 12px 14px; color: var(--cy-text); font-family: var(--cy-font-body); font-size: 14px; line-height: 1.6; resize: vertical; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+.cy-prompt-textarea:focus { border-color: var(--cy-primary); box-shadow: var(--cy-glow); }
+.cy-prompt-textarea::placeholder { color: var(--cy-muted); font-style: italic; }
+.cy-prompt-save-btn { background: var(--cy-gradient-rainbow); border: none; padding: 12px 28px; border-radius: 12px; color: #111; font-weight: 700; font-size: 14px; cursor: pointer; align-self: flex-start; margin-top: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+.cy-prompt-save-btn:hover { transform: scale(1.03); box-shadow: var(--cy-glow); }
+
 /* Vision Board Image Gallery */
 .cy-vision-board-section { margin-bottom: 8px; }
 .cy-vision-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-top: 12px; }
@@ -2048,7 +2058,11 @@
 
 /* Print */
 @media print {
-  .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal { display: none !important; }
+  .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal, .cy-quick-add-btn, .cy-back-btn, .cy-goal-add-btn, .cy-affirmation-overlay { display: none !important; }
   .cyber-app { grid-template-columns: 1fr; background: white; color: #222; height: auto; overflow: visible; }
-  .cy-main-stage { background: white !important; }
+  .cy-main-stage { background: white !important; overflow: visible !important; }
+  .cy-page-header { background: none !important; border-bottom: 2px solid #ccc; }
+  .cy-page-title { background: none !important; -webkit-text-fill-color: #222 !important; color: #222 !important; font-size: 24px !important; }
+  .cy-page-subtitle { color: #555 !important; }
+  .cy-section { overflow: visible !important; }
 }

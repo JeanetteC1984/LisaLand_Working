@@ -67,6 +67,76 @@ const THEMES: Theme[] = [
 
 const INITIAL_FILES: JournalFile[] = [
   {
+    id: "tutorial",
+    name: "Welcome to Dream Log",
+    date: "2026-03-04",
+    content: `<h1 class="cy-doc-title" id="doc-title">Welcome to Dream Log</h1>
+<div class="cy-case-meta" contenteditable="false">
+  Your personal space to journal, dream, and grow.<br>
+  Status: <span class="pulse-text" style="color:#69f0ae;">LET'S GO!</span>
+</div>
+<div class="cy-quote-block">"The magic you seek is already within you."</div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Welcome to <strong>Dream Log</strong> — your cozy digital journal and life planner.
+  Here's a quick tour of everything you can do:
+</p>
+
+<div class="cy-highlight-bar"><strong>Navigation</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Use the icon bar on the left to switch between sections. Each icon takes you to a different part of the app. The sidebar on the right shows your journal entries — click any to open it, or use the <strong>+</strong> button to create a new one.
+</p>
+
+<div class="cy-highlight-bar"><strong>Journal (this section)</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  This is your rich text editor. Use the toolbar above to <strong>bold</strong>, <em>italicize</em>, change fonts, add lists, and more. Try the <strong>side bar</strong> buttons (vertical lines icon) to create callout blocks like this one. You can also add stickers from the Stickers button!
+</p>
+
+<div class="cy-highlight-bar"><strong>Profile</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Click your avatar to upload a photo. Edit your handle, bio, and personal details. It's your digital identity — make it yours.
+</p>
+
+<div class="cy-highlight-bar"><strong>Manifest</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Six themed cards — Self Love, Manifest, Grow, Morning Ritual, Night Reflect, and Dream Big. Click any card to see affirmations and guided journal prompts. Fill in your answers and hit <strong>"Save as Journal Entry"</strong> — it creates a beautifully formatted entry right here in your journal.
+</p>
+
+<div class="cy-highlight-bar"><strong>Vision Board</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Upload images that inspire you — dream homes, travel destinations, quotes, aesthetics. Build a visual collage of the life you're creating.
+</p>
+
+<div class="cy-highlight-bar"><strong>Goals (SMART Tracker)</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Add goals using the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound). Track progress with sliders, expand cards for details, and celebrate wins along the way.
+</p>
+
+<div class="cy-highlight-bar"><strong>Mind Map</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Drag nodes around to brainstorm. Double-click a node to rename it. Click the <strong>+</strong> button on any node to add children. Great for planning and connecting ideas visually.
+</p>
+
+<div class="cy-highlight-bar"><strong>Mood Tracker</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Check in daily with how you're feeling — pick an emoji, add an optional note. Your mood history shows up as a visual calendar so you can spot patterns over time.
+</p>
+
+<div class="cy-highlight-bar"><strong>Habit Tracker</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Six habits to build — Meditate, Journal, Exercise, Read, Hydrate, and Gratitude. Tap to check them off each day and watch your streaks grow. The weekly chart shows your consistency.
+</p>
+
+<div class="cy-highlight-bar"><strong>Customize</strong></div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Choose from 16 color themes, toggle the CRT screen effect, and pick a canvas + paper pattern. Access it from the gear icon at the bottom of the sidebar.
+</p>
+
+<div class="cy-quote-block">"Every page is a new beginning. Start writing your story."</div>
+<p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
+  Everything you write, track, and upload is saved automatically in your browser. Now go explore — and have fun!
+</p>`,
+  },
+  {
     id: "1",
     name: "My Dream Year",
     date: "2026-02-28",
@@ -415,7 +485,7 @@ export default function CyberLog() {
   const [section, setSection] = useState<Section>("journal");
   const [theme, setTheme] = useState("rainbow-dream");
   const [files, setFiles] = useState<JournalFile[]>(INITIAL_FILES);
-  const [activeFileId, setActiveFileId] = useState("1");
+  const [activeFileId, setActiveFileId] = useState("tutorial");
   const [paperPattern, setPaperPattern] = useState("paper-stars");
   const [canvasMode, setCanvasMode] = useState("canvas-default");
   const [stickers, setStickers] = useState<Sticker[]>([]);
@@ -1277,13 +1347,42 @@ export default function CyberLog() {
                   </div>
                   <div className="cy-vision-prompts">
                     <div className="cy-vision-section-title"><i className="fa-solid fa-pen-fancy" style={{ marginRight: 8 }} />Journal Prompts</div>
-                    <div className="cy-prompt-list">
+                    <div className="cy-prompt-form">
                       {feature.prompts.map((p, i) => (
-                        <div key={i} className="cy-prompt-item" data-testid={`prompt-${i}`}>
-                          <span className="cy-prompt-number">{i + 1}</span>
-                          {p}
+                        <div key={i} className="cy-prompt-field" data-testid={`prompt-field-${i}`}>
+                          <label className="cy-prompt-field-label">
+                            <span className="cy-prompt-number">{i + 1}</span>
+                            {p}
+                          </label>
+                          <textarea className="cy-prompt-textarea" rows={3} placeholder="Write your thoughts..."
+                            data-testid={`prompt-input-${i}`}
+                            id={`vision-prompt-${visionSubpage?.replace(/\s/g,"")}-${i}`}
+                          />
                         </div>
                       ))}
+                      <button className="cy-prompt-save-btn" data-testid="prompt-save-btn" onClick={() => {
+                        const answers = feature.prompts.map((p, i) => {
+                          const el = document.getElementById(`vision-prompt-${visionSubpage?.replace(/\s/g,"")}-${i}`) as HTMLTextAreaElement;
+                          return { prompt: p, answer: el?.value?.trim() || "" };
+                        }).filter(a => a.answer);
+                        if (answers.length === 0) return;
+                        const id = Date.now().toString();
+                        const now = new Date();
+                        const name = feature.title + " — " + now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                        const date = now.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+                        const content = `<h1 class="cy-doc-title" id="doc-title">${feature.title}</h1>` +
+                          `<div class="cy-case-meta" contenteditable="false"><i class="${feature.icon}"></i> ${feature.desc}<br>Date: <span style="color:var(--cy-primary);">${date}</span></div>` +
+                          answers.map(a =>
+                            `<div class="cy-highlight-bar"><strong>${a.prompt}</strong></div><p style="max-width:600px;margin-bottom:20px;line-height:1.8;">${a.answer.replace(/\n/g, "<br>")}</p>`
+                          ).join("");
+                        setFiles(f => [...f, { id, name, date, content }]);
+                        setActiveFileId(id);
+                        setSection("journal");
+                        setVisionSubpage(null);
+                      }}>
+                        <i className="fa-solid fa-wand-magic-sparkles" style={{ marginRight: 8 }} />
+                        Save as Journal Entry
+                      </button>
                     </div>
                   </div>
                 </div>
