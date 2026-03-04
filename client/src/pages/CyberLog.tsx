@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "journal" | "profile" | "vision" | "goals" | "mindmap" | "settings";
+type Section = "journal" | "profile" | "vision" | "goals" | "mindmap" | "mood" | "habits" | "settings";
 
 type JournalFile = {
   id: string;
@@ -60,6 +60,9 @@ const THEMES: Theme[] = [
   { id: "cotton-candy",    label: "Cotton Candy",    primary: "#f8bbd0" },
   { id: "lemonade",        label: "Lemonade",        primary: "#fff176" },
   { id: "lavender-mist",   label: "Lavender Mist",   primary: "#ce93d8" },
+  { id: "peach-sorbet",    label: "Peach Sorbet",    primary: "#ffab91" },
+  { id: "mint-chip",       label: "Mint Chip",       primary: "#80cbc4" },
+  { id: "rose-quartz",     label: "Rose Quartz",     primary: "#f8bbd0" },
 ];
 
 const INITIAL_FILES: JournalFile[] = [
@@ -134,12 +137,30 @@ const EMPTY_GOAL_FORM = {
 };
 
 const VISION_FEATURES = [
-  { icon: "fa-solid fa-heart", title: "SELF LOVE", desc: "Daily affirmations and self-care rituals to nurture your spirit.", status: "ACTIVE" },
-  { icon: "fa-solid fa-star", title: "MANIFEST", desc: "Visualization exercises to attract your dream life.", status: "ACTIVE" },
-  { icon: "fa-solid fa-seedling", title: "GROW", desc: "Track personal growth milestones and celebrate wins.", status: "ACTIVE" },
-  { icon: "fa-solid fa-sun", title: "MORNING RITUAL", desc: "Design your perfect morning routine for energy and clarity.", status: "ACTIVE" },
-  { icon: "fa-solid fa-moon", title: "NIGHT REFLECT", desc: "Evening journaling prompts for peace and gratitude.", status: "ACTIVE" },
-  { icon: "fa-solid fa-wand-magic-sparkles", title: "DREAM BIG", desc: "Big picture goal mapping and life design tools.", status: "ACTIVE" },
+  { icon: "fa-solid fa-heart", title: "SELF LOVE", desc: "Daily affirmations and self-care rituals to nurture your spirit.", status: "ACTIVE",
+    affirmations: ["I am worthy of love and belonging.", "I choose to be kind to myself today.", "My imperfections make me beautifully unique.", "I deserve rest, joy, and peace.", "I am enough, exactly as I am right now.", "I release the need to be perfect."],
+    prompts: ["What made you smile today?", "Write 3 things you love about yourself.", "What boundary do you need to set this week?", "How did you practice self-care today?"],
+  },
+  { icon: "fa-solid fa-star", title: "MANIFEST", desc: "Visualization exercises to attract your dream life.", status: "ACTIVE",
+    affirmations: ["I am a powerful creator of my reality.", "Abundance flows to me effortlessly.", "I attract incredible opportunities.", "My dreams are valid and achievable.", "The universe supports my vision.", "I am aligned with my highest purpose."],
+    prompts: ["Describe your ideal day 5 years from now.", "What would you do if you knew you couldn't fail?", "List 5 things you want to manifest this year.", "Visualize your dream life — what does it look like?"],
+  },
+  { icon: "fa-solid fa-seedling", title: "GROW", desc: "Track personal growth milestones and celebrate wins.", status: "ACTIVE",
+    affirmations: ["Every day I am becoming a better version of myself.", "I embrace challenges as opportunities to grow.", "My potential is limitless.", "I am proud of how far I've come.", "Growth is not linear, and that's okay.", "I celebrate my small victories."],
+    prompts: ["What skill are you developing right now?", "What's one thing you learned this week?", "Describe a challenge you overcame recently.", "What growth are you most proud of?"],
+  },
+  { icon: "fa-solid fa-sun", title: "MORNING RITUAL", desc: "Design your perfect morning routine for energy and clarity.", status: "ACTIVE",
+    affirmations: ["Today is full of endless possibilities.", "I wake up grateful and energized.", "This morning I choose joy and purpose.", "I am ready to make today amazing.", "My morning sets the tone for greatness.", "I start each day with intention."],
+    prompts: ["What are your top 3 priorities today?", "How do you want to feel by end of day?", "What's one thing you're excited about today?", "Write your morning gratitude list."],
+  },
+  { icon: "fa-solid fa-moon", title: "NIGHT REFLECT", desc: "Evening journaling prompts for peace and gratitude.", status: "ACTIVE",
+    affirmations: ["I release today with love and gratitude.", "I did my best today, and that is enough.", "I am at peace with myself.", "Tomorrow brings new opportunities.", "I let go of what I cannot control.", "I am grateful for this day."],
+    prompts: ["What went well today?", "What are 3 things you're grateful for tonight?", "What would you do differently tomorrow?", "What was the highlight of your day?"],
+  },
+  { icon: "fa-solid fa-wand-magic-sparkles", title: "DREAM BIG", desc: "Big picture goal mapping and life design tools.", status: "ACTIVE",
+    affirmations: ["No dream is too big for me.", "I give myself permission to dream wildly.", "My ambitions are a gift to the world.", "I am building a life I love.", "Anything is possible when I believe.", "My future is bright and exciting."],
+    prompts: ["What's your biggest, boldest dream?", "If money were no object, what would you do?", "Write a letter to your future self.", "What legacy do you want to leave?"],
+  },
 ];
 
 const STICKER_CATEGORIES = {
@@ -353,6 +374,43 @@ function getStickerContent(type: string): string {
   }
 }
 
+const DAILY_AFFIRMATIONS = [
+  "You are exactly where you need to be. Keep going.",
+  "Today is going to be amazing because YOU are amazing.",
+  "You have the power to create the life of your dreams.",
+  "Every step forward is a step toward your best self.",
+  "You are worthy of all the beauty life has to offer.",
+  "Shine bright today — the world needs your light.",
+  "You are stronger than you think and braver than you believe.",
+  "This is your story, and it's going to be incredible.",
+  "Choose joy. Choose growth. Choose YOU.",
+  "The magic you seek is already within you.",
+  "You deserve to take up space and be unapologetically yourself.",
+  "Today's effort is tomorrow's success story.",
+];
+
+const MOOD_EMOJIS = [
+  { emoji: "😢", label: "Rough", color: "#ff4081" },
+  { emoji: "😔", label: "Low", color: "#ffab40" },
+  { emoji: "😐", label: "Okay", color: "#ffd740" },
+  { emoji: "😊", label: "Good", color: "#69f0ae" },
+  { emoji: "🤩", label: "Amazing", color: "#e040fb" },
+];
+
+const DEFAULT_HABITS = [
+  { id: "h1", name: "Meditate", icon: "fa-solid fa-spa", color: "#b388ff" },
+  { id: "h2", name: "Journal", icon: "fa-solid fa-book-open", color: "#e040fb" },
+  { id: "h3", name: "Exercise", icon: "fa-solid fa-dumbbell", color: "#69f0ae" },
+  { id: "h4", name: "Read", icon: "fa-solid fa-glasses", color: "#00e5ff" },
+  { id: "h5", name: "Hydrate", icon: "fa-solid fa-droplet", color: "#81d4fa" },
+  { id: "h6", name: "Gratitude", icon: "fa-solid fa-heart", color: "#ff4081" },
+];
+
+type MoodEntry = { date: string; mood: number; note: string };
+type HabitDay = { date: string; completed: string[] };
+
+function getToday() { return new Date().toISOString().split("T")[0]; }
+
 export default function CyberLog() {
   const [section, setSection] = useState<Section>("journal");
   const [theme, setTheme] = useState("rainbow-dream");
@@ -391,6 +449,14 @@ export default function CyberLog() {
   const [newFileName, setNewFileName] = useState("");
   const [crtEnabled, setCrtEnabled] = useState(true);
   const [fontChoice, setFontChoice] = useState("Nunito");
+  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [visionSubpage, setVisionSubpage] = useState<string | null>(null);
+  const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([]);
+  const [moodNote, setMoodNote] = useState("");
+  const [habitDays, setHabitDays] = useState<HabitDay[]>([]);
+  const [showAffirmation, setShowAffirmation] = useState(false);
+  const [dailyAffirmation, setDailyAffirmation] = useState("");
+  const profilePicRef = useRef<HTMLInputElement>(null);
   const [identity, setIdentity] = useState({
     handle: "Dreamer",
     clearance: "Unlimited",
@@ -398,6 +464,44 @@ export default function CyberLog() {
     location: "Wherever my heart leads",
     bio: "Living boldly, dreaming wildly, and choosing joy every single day.",
   });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("dreamlog-data");
+      if (saved) {
+        const d = JSON.parse(saved);
+        if (d.theme) setTheme(d.theme);
+        if (d.files) setFiles(d.files);
+        if (d.goals) setGoals(d.goals);
+        if (d.identity) setIdentity(d.identity);
+        if (d.profilePic) setProfilePic(d.profilePic);
+        if (d.moodEntries) setMoodEntries(d.moodEntries);
+        if (d.habitDays) setHabitDays(d.habitDays);
+        if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
+        if (d.paperPattern) setPaperPattern(d.paperPattern);
+        if (d.canvasMode) setCanvasMode(d.canvasMode);
+        if (d.crtEnabled !== undefined) setCrtEnabled(d.crtEnabled);
+      }
+    } catch {}
+    const lastShown = localStorage.getItem("dreamlog-affirmation-date");
+    const today = getToday();
+    if (lastShown !== today) {
+      setDailyAffirmation(DAILY_AFFIRMATIONS[Math.floor(Math.random() * DAILY_AFFIRMATIONS.length)]);
+      setShowAffirmation(true);
+      localStorage.setItem("dreamlog-affirmation-date", today);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      try {
+        localStorage.setItem("dreamlog-data", JSON.stringify({
+          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, paperPattern, canvasMode, crtEnabled,
+        }));
+      } catch {}
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, paperPattern, canvasMode, crtEnabled]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -574,27 +678,34 @@ export default function CyberLog() {
   };
 
   const initNodeDrag = useCallback((el: HTMLDivElement, nodeId: string) => {
-    let sx = 0, sy = 0, ox = 0, oy = 0;
+    let sx = 0, sy = 0, ox = 0, oy = 0, dragged = false;
     const onDown = (e: MouseEvent) => {
       const tgt = e.target as HTMLElement;
       if (tgt.tagName === "INPUT" || tgt.tagName === "BUTTON" || tgt.closest("button")) return;
       e.preventDefault();
+      e.stopPropagation();
       sx = e.clientX; sy = e.clientY;
       ox = el.offsetLeft; oy = el.offsetTop;
+      dragged = false;
       document.addEventListener("mousemove", onMove);
       document.addEventListener("mouseup", onUp);
     };
     const onMove = (e: MouseEvent) => {
       e.preventDefault();
+      dragged = true;
       const nx = ox + (e.clientX - sx);
       const ny = oy + (e.clientY - sy);
       el.style.left = nx + "px";
       el.style.top = ny + "px";
-      setMindMapNodes(ns => ns.map(n => n.id === nodeId ? { ...n, x: nx, y: ny } : n));
     };
     const onUp = () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
+      if (dragged) {
+        const nx = parseInt(el.style.left) || 0;
+        const ny = parseInt(el.style.top) || 0;
+        setMindMapNodes(ns => ns.map(n => n.id === nodeId ? { ...n, x: nx, y: ny } : n));
+      }
     };
     el.addEventListener("mousedown", onDown);
   }, []);
@@ -609,17 +720,89 @@ export default function CyberLog() {
     });
   }, [mindMapNodes, initNodeDrag]);
 
+  const handleProfilePic = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setProfilePic(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const deleteFile = (id: string) => {
+    if (files.length <= 1) return;
+    setFiles(fs => fs.filter(f => f.id !== id));
+    if (activeFileId === id) setActiveFileId(files.find(f => f.id !== id)?.id || files[0].id);
+  };
+
+  const logMood = (mood: number) => {
+    const today = getToday();
+    setMoodEntries(prev => {
+      const existing = prev.find(e => e.date === today);
+      if (existing) return prev.map(e => e.date === today ? { ...e, mood, note: moodNote } : e);
+      return [...prev, { date: today, mood, note: moodNote }];
+    });
+    setMoodNote("");
+  };
+
+  const toggleHabit = (habitId: string) => {
+    const today = getToday();
+    setHabitDays(prev => {
+      const existing = prev.find(d => d.date === today);
+      if (existing) {
+        const has = existing.completed.includes(habitId);
+        return prev.map(d => d.date === today ? {
+          ...d,
+          completed: has ? d.completed.filter(h => h !== habitId) : [...d.completed, habitId],
+        } : d);
+      }
+      return [...prev, { date: today, completed: [habitId] }];
+    });
+  };
+
+  const getStreak = (habitId: string) => {
+    let streak = 0;
+    const now = new Date();
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split("T")[0];
+      const day = habitDays.find(h => h.date === dateStr);
+      if (day && day.completed.includes(habitId)) streak++;
+      else if (i > 0) break;
+    }
+    return streak;
+  };
+
+  const todayHabits = habitDays.find(d => d.date === getToday());
+  const todayMood = moodEntries.find(e => e.date === getToday());
+
   const ICON_NAV: { icon: string; title: string; section: Section }[] = [
     { icon: "fa-solid fa-user-astronaut", title: "Profile",  section: "profile" },
     { icon: "fa-solid fa-wand-magic-sparkles", title: "Vision", section: "vision" },
     { icon: "fa-solid fa-book-open",     title: "Journal",  section: "journal" },
     { icon: "fa-solid fa-bullseye",      title: "Goals",    section: "goals" },
     { icon: "fa-solid fa-diagram-project", title: "Mind Map", section: "mindmap" },
+    { icon: "fa-solid fa-face-smile",     title: "Mood",     section: "mood" },
+    { icon: "fa-solid fa-fire",           title: "Habits",   section: "habits" },
   ];
 
   return (
     <div className="cyber-app" data-cyber-theme={theme}>
       {crtEnabled && <div className="crt-overlay" />}
+
+      {showAffirmation && (
+        <div className="cy-affirmation-overlay" data-testid="affirmation-popup">
+          <div className="cy-affirmation-card">
+            <div className="cy-affirmation-sparkle">✨</div>
+            <div className="cy-affirmation-title">Good Morning, Beautiful Soul</div>
+            <div className="cy-affirmation-text">{dailyAffirmation}</div>
+            <button className="cy-affirmation-close" onClick={() => setShowAffirmation(false)} data-testid="affirmation-close">
+              <i className="fa-solid fa-heart" style={{ marginRight: 8 }} />
+              Let's Go!
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ICON BAR */}
       <div className="cy-icon-bar">
@@ -688,11 +871,19 @@ export default function CyberLog() {
             <ul className="cy-file-list">
               {files.map(f => (
                 <li key={f.id} className={`cy-file-item${f.id === activeFileId ? " active" : ""}`}
-                  onClick={() => { selectFile(f.id); setSection("journal"); }}
                   data-testid={`file-item-${f.id}`}
                 >
-                  {f.name}
-                  <span className="cy-file-date">{f.date}</span>
+                  <div style={{ flex: 1, cursor: "pointer" }} onClick={() => { selectFile(f.id); setSection("journal"); }}>
+                    {f.name}
+                    <span className="cy-file-date">{f.date}</span>
+                  </div>
+                  {files.length > 1 && (
+                    <button className="cy-file-delete" onClick={(e) => { e.stopPropagation(); deleteFile(f.id); }}
+                      title="Delete entry" data-testid={`file-delete-${f.id}`}
+                    >
+                      <i className="fa-solid fa-xmark" />
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -706,6 +897,11 @@ export default function CyberLog() {
               <option value="canvas-blueprint">Gradient</option>
               <option value="canvas-void">Deep Dark</option>
               <option value="canvas-neon">Glow</option>
+              <option value="canvas-dreamy">Dreamy</option>
+              <option value="canvas-starfield">Starfield</option>
+              <option value="canvas-aurora">Aurora</option>
+              <option value="canvas-soft">Soft Focus</option>
+              <option value="canvas-minimal">Minimal</option>
             </select>
           </div>
 
@@ -718,6 +914,8 @@ export default function CyberLog() {
               <option value="paper-dots">Dots</option>
               <option value="paper-lines">Lined</option>
               <option value="paper-blank">Blank</option>
+              <option value="paper-diamonds">Diamonds</option>
+              <option value="paper-waves">Waves</option>
             </select>
           </div>
         </div>
@@ -757,6 +955,12 @@ export default function CyberLog() {
                 <option value="Indie Flower">Doodle</option>
                 <option value="Satisfy">Script</option>
                 <option value="Amatic SC">Tall</option>
+                <option value="Sacramento">Elegant</option>
+                <option value="Kalam">Brush</option>
+                <option value="Patrick Hand">Casual</option>
+                <option value="Architects Daughter">Architect</option>
+                <option value="Shadows Into Light">Dreamy</option>
+                <option value="Righteous">Retro</option>
               </select>
 
               <div className="cy-tool-group">
@@ -846,9 +1050,18 @@ export default function CyberLog() {
             <div className="cy-page-body">
               <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
                 <div className="cy-identity-card" style={{ flex: "1", minWidth: 280 }}>
+                  <input type="file" accept="image/*" ref={profilePicRef} style={{ display: "none" }}
+                    onChange={handleProfilePic} data-testid="input-profile-pic" />
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 20 }}>
-                    <div className="cy-identity-avatar">
-                      <i className="fa-solid fa-user-astronaut" />
+                    <div className="cy-identity-avatar" onClick={() => profilePicRef.current?.click()}
+                      style={{ cursor: "pointer", overflow: "hidden" }} title="Click to upload photo"
+                      data-testid="profile-avatar"
+                    >
+                      {profilePic ? (
+                        <img src={profilePic} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
+                      ) : (
+                        <i className="fa-solid fa-user-astronaut" />
+                      )}
                     </div>
                     <div>
                       <div style={{ fontFamily: "var(--cy-font-accent)", fontSize: 24, background: "var(--cy-gradient-rainbow)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
@@ -917,7 +1130,7 @@ export default function CyberLog() {
         )}
 
         {/* VISION */}
-        {section === "vision" && (
+        {section === "vision" && !visionSubpage && (
           <div className="cy-section">
             <div className="cy-page-header">
               <div className="cy-page-title">Vision Board</div>
@@ -926,7 +1139,9 @@ export default function CyberLog() {
             <div className="cy-page-body">
               <div className="cy-lab-grid">
                 {VISION_FEATURES.map(lab => (
-                  <div key={lab.title} className="cy-lab-card" data-testid={`vision-${lab.title.replace(/\s/g,"")}`}>
+                  <div key={lab.title} className="cy-lab-card" data-testid={`vision-${lab.title.replace(/\s/g,"")}`}
+                    style={{ cursor: "pointer" }} onClick={() => setVisionSubpage(lab.title)}
+                  >
                     <div className="cy-lab-icon"><i className={lab.icon} /></div>
                     <div className="cy-lab-title">{lab.title}</div>
                     <div className="cy-lab-desc">{lab.desc}</div>
@@ -939,6 +1154,52 @@ export default function CyberLog() {
             </div>
           </div>
         )}
+
+        {section === "vision" && visionSubpage && (() => {
+          const feature = VISION_FEATURES.find(f => f.title === visionSubpage);
+          if (!feature) return null;
+          return (
+            <div className="cy-section" data-testid={`vision-subpage-${visionSubpage.replace(/\s/g,"")}`}>
+              <div className="cy-page-header">
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <button className="cy-back-btn" onClick={() => setVisionSubpage(null)} data-testid="vision-back">
+                    <i className="fa-solid fa-arrow-left" />
+                  </button>
+                  <div>
+                    <div className="cy-page-title"><i className={feature.icon} style={{ marginRight: 8 }} />{feature.title}</div>
+                    <div className="cy-page-subtitle">{feature.desc.toUpperCase()}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="cy-page-body">
+                <div className="cy-vision-subpage">
+                  <div className="cy-vision-affirmations">
+                    <div className="cy-vision-section-title"><i className="fa-solid fa-star" style={{ marginRight: 8 }} />Daily Affirmations</div>
+                    <div className="cy-affirmation-list">
+                      {feature.affirmations.map((a, i) => (
+                        <div key={i} className="cy-affirmation-item" data-testid={`affirmation-${i}`}>
+                          <i className="fa-solid fa-star" style={{ color: "var(--cy-primary)", marginRight: 8, fontSize: 10 }} />
+                          {a}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="cy-vision-prompts">
+                    <div className="cy-vision-section-title"><i className="fa-solid fa-pen-fancy" style={{ marginRight: 8 }} />Journal Prompts</div>
+                    <div className="cy-prompt-list">
+                      {feature.prompts.map((p, i) => (
+                        <div key={i} className="cy-prompt-item" data-testid={`prompt-${i}`}>
+                          <span className="cy-prompt-number">{i + 1}</span>
+                          {p}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* GOALS */}
         {section === "goals" && (
@@ -1248,6 +1509,112 @@ export default function CyberLog() {
               <div className="cy-mm-help">
                 <i className="fa-solid fa-circle-info" style={{ marginRight: 6 }} />
                 Drag nodes to reposition. Double-click to edit text. Click + to add child nodes.
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MOOD */}
+        {section === "mood" && (
+          <div className="cy-section">
+            <div className="cy-page-header">
+              <div className="cy-page-title">Mood Tracker</div>
+              <div className="cy-page-subtitle">CHECK IN WITH YOURSELF ~ HOW ARE YOU FEELING?</div>
+            </div>
+            <div className="cy-page-body">
+              <div className="cy-mood-checkin" data-testid="mood-checkin">
+                <div className="cy-mood-label">How are you feeling today?</div>
+                <div className="cy-mood-emojis">
+                  {MOOD_EMOJIS.map((m, i) => (
+                    <button key={i} className={`cy-mood-btn${todayMood?.mood === i ? " active" : ""}`}
+                      style={{ "--mood-color": m.color } as React.CSSProperties}
+                      onClick={() => logMood(i)} data-testid={`mood-btn-${i}`}
+                    >
+                      <span className="cy-mood-emoji">{m.emoji}</span>
+                      <span className="cy-mood-emoji-label">{m.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <input className="cy-mood-note" placeholder="Add a note about your day..."
+                  value={moodNote} onChange={e => setMoodNote(e.target.value)}
+                  data-testid="mood-note-input"
+                />
+              </div>
+              <div className="cy-mood-history">
+                <div className="cy-vision-section-title" style={{ marginBottom: 16 }}>
+                  <i className="fa-solid fa-calendar" style={{ marginRight: 8 }} />Recent Moods
+                </div>
+                <div className="cy-mood-calendar">
+                  {[...moodEntries].reverse().slice(0, 30).map((e, i) => (
+                    <div key={i} className="cy-mood-day" data-testid={`mood-day-${i}`}>
+                      <div className="cy-mood-day-date">{new Date(e.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
+                      <div className="cy-mood-day-emoji">{MOOD_EMOJIS[e.mood]?.emoji || "?"}</div>
+                      {e.note && <div className="cy-mood-day-note">{e.note}</div>}
+                    </div>
+                  ))}
+                  {moodEntries.length === 0 && (
+                    <div style={{ color: "var(--cy-muted)", fontStyle: "italic", padding: 20 }}>
+                      No mood entries yet — check in above to start tracking!
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* HABITS */}
+        {section === "habits" && (
+          <div className="cy-section">
+            <div className="cy-page-header">
+              <div className="cy-page-title">Habit Tracker</div>
+              <div className="cy-page-subtitle">BUILD YOUR STREAK ~ ONE DAY AT A TIME</div>
+            </div>
+            <div className="cy-page-body">
+              <div className="cy-habit-grid" data-testid="habit-grid">
+                {DEFAULT_HABITS.map(h => {
+                  const done = todayHabits?.completed.includes(h.id) || false;
+                  const streak = getStreak(h.id);
+                  return (
+                    <div key={h.id} className={`cy-habit-card${done ? " done" : ""}`}
+                      style={{ "--habit-color": h.color } as React.CSSProperties}
+                      onClick={() => toggleHabit(h.id)} data-testid={`habit-${h.id}`}
+                    >
+                      <div className="cy-habit-icon"><i className={h.icon} /></div>
+                      <div className="cy-habit-name">{h.name}</div>
+                      <div className="cy-habit-check">
+                        <i className={`fa-solid ${done ? "fa-circle-check" : "fa-circle"}`} />
+                      </div>
+                      {streak > 0 && (
+                        <div className="cy-habit-streak" data-testid={`streak-${h.id}`}>
+                          <i className="fa-solid fa-fire" style={{ marginRight: 4 }} />
+                          {streak} day{streak !== 1 ? "s" : ""}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="cy-habit-history">
+                <div className="cy-vision-section-title" style={{ marginBottom: 16 }}>
+                  <i className="fa-solid fa-chart-line" style={{ marginRight: 8 }} />Weekly Overview
+                </div>
+                <div className="cy-habit-week">
+                  {Array.from({ length: 7 }, (_, i) => {
+                    const d = new Date();
+                    d.setDate(d.getDate() - (6 - i));
+                    const dateStr = d.toISOString().split("T")[0];
+                    const dayData = habitDays.find(h => h.date === dateStr);
+                    const count = dayData?.completed.length || 0;
+                    return (
+                      <div key={i} className="cy-habit-week-day" data-testid={`habit-week-${i}`}>
+                        <div className="cy-habit-week-label">{d.toLocaleDateString("en-US", { weekday: "short" })}</div>
+                        <div className="cy-habit-week-bar" style={{ height: `${Math.max(4, (count / DEFAULT_HABITS.length) * 60)}px`, background: count > 0 ? "var(--cy-primary)" : "var(--cy-surface)" }} />
+                        <div className="cy-habit-week-count">{count}/{DEFAULT_HABITS.length}</div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

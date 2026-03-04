@@ -1882,6 +1882,117 @@
   z-index: 2;
 }
 
+/* === NEW THEMES === */
+[data-cyber-theme="peach-sorbet"] {
+  --cy-bg: #1a1210;
+  --cy-surface: #2a1e1a;
+  --cy-primary: #ffab91;
+  --cy-accent: #ff8a65;
+  --cy-text: #fbe9e7;
+  --cy-muted: #a1887f;
+  --cy-border: 1px solid #4e342e;
+  --cy-glow: 0 0 12px #ff8a6566;
+  --cy-gradient-rainbow: linear-gradient(90deg, #ffab91, #ff8a65, #ffcc80, #ffab91);
+}
+[data-cyber-theme="mint-chip"] {
+  --cy-bg: #0d1a17;
+  --cy-surface: #1a2e28;
+  --cy-primary: #80cbc4;
+  --cy-accent: #4db6ac;
+  --cy-text: #e0f2f1;
+  --cy-muted: #80a8a2;
+  --cy-border: 1px solid #2e4a44;
+  --cy-glow: 0 0 12px #80cbc466;
+  --cy-gradient-rainbow: linear-gradient(90deg, #80cbc4, #4db6ac, #a5d6a7, #80cbc4);
+}
+[data-cyber-theme="rose-quartz"] {
+  --cy-bg: #1a0f14;
+  --cy-surface: #2a1a22;
+  --cy-primary: #f8bbd0;
+  --cy-accent: #f48fb1;
+  --cy-text: #fce4ec;
+  --cy-muted: #b0889a;
+  --cy-border: 1px solid #4a2a3a;
+  --cy-glow: 0 0 12px #f8bbd066;
+  --cy-gradient-rainbow: linear-gradient(90deg, #f8bbd0, #f48fb1, #ce93d8, #f8bbd0);
+}
+
+/* === NEW CANVAS MODES === */
+.canvas-dreamy .cy-main-stage { background: radial-gradient(ellipse at 30% 50%, rgba(var(--cy-primary-rgb, 224,64,251), 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(124,77,255,0.06) 0%, transparent 50%), var(--cy-bg); }
+.canvas-starfield .cy-main-stage { background: var(--cy-bg); background-image: radial-gradient(1px 1px at 10% 20%, var(--cy-primary) 50%, transparent 50%), radial-gradient(1px 1px at 30% 70%, var(--cy-accent) 50%, transparent 50%), radial-gradient(1px 1px at 50% 40%, #fff 50%, transparent 50%), radial-gradient(1px 1px at 70% 80%, var(--cy-primary) 50%, transparent 50%), radial-gradient(1px 1px at 90% 10%, var(--cy-accent) 50%, transparent 50%), radial-gradient(1px 1px at 20% 90%, #fff 50%, transparent 50%), radial-gradient(1px 1px at 80% 50%, var(--cy-primary) 50%, transparent 50%), radial-gradient(1px 1px at 60% 15%, var(--cy-accent) 50%, transparent 50%); }
+.canvas-aurora .cy-main-stage { background: linear-gradient(180deg, var(--cy-bg) 0%, rgba(100,255,218,0.04) 30%, rgba(124,77,255,0.06) 60%, rgba(255,64,129,0.04) 80%, var(--cy-bg) 100%); }
+.canvas-soft .cy-main-stage { background: linear-gradient(135deg, var(--cy-surface) 0%, var(--cy-bg) 100%); }
+.canvas-minimal .cy-main-stage { background: var(--cy-bg); }
+
+/* === NEW PAPER PATTERNS === */
+.paper-diamonds .cy-editor::before { content: ""; position: absolute; inset: 0; opacity: 0.04; pointer-events: none; background-image: repeating-conic-gradient(var(--cy-primary) 0% 25%, transparent 0% 50%); background-size: 30px 30px; transform: rotate(45deg); }
+.paper-waves .cy-editor::before { content: ""; position: absolute; inset: 0; opacity: 0.04; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0px, transparent 28px, var(--cy-primary) 28px, var(--cy-primary) 30px); background-size: 100% 30px; border-radius: inherit; mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='30'%3E%3Cpath d='M0 15 Q25 0 50 15 Q75 30 100 15 Q125 0 150 15 Q175 30 200 15' fill='none' stroke='black' stroke-width='1'/%3E%3C/svg%3E"); }
+
+/* === FILE DELETE BUTTON === */
+.cy-file-item { display: flex; align-items: center; }
+.cy-file-delete { background: none; border: none; color: var(--cy-muted); cursor: pointer; padding: 2px 6px; font-size: 11px; opacity: 0; transition: opacity 0.2s, color 0.2s; }
+.cy-file-item:hover .cy-file-delete { opacity: 1; }
+.cy-file-delete:hover { color: #ff4081; }
+
+/* === DAILY AFFIRMATION POPUP === */
+.cy-affirmation-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); animation: fadeIn 0.5s ease; }
+.cy-affirmation-card { background: var(--cy-surface); border: var(--cy-border); border-radius: 20px; padding: 40px 48px; max-width: 440px; text-align: center; box-shadow: var(--cy-glow), 0 0 60px rgba(224,64,251,0.15); animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+.cy-affirmation-sparkle { font-size: 48px; margin-bottom: 16px; }
+.cy-affirmation-title { font-family: var(--cy-font-accent); font-size: 22px; color: var(--cy-primary); margin-bottom: 16px; }
+.cy-affirmation-text { font-size: 16px; line-height: 1.7; color: var(--cy-text); margin-bottom: 28px; font-style: italic; }
+.cy-affirmation-close { background: var(--cy-gradient-rainbow); border: none; padding: 10px 28px; border-radius: 20px; color: #111; font-weight: 700; font-size: 14px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.cy-affirmation-close:hover { transform: scale(1.05); box-shadow: var(--cy-glow); }
+@keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+/* === VISION BOARD SUBPAGES === */
+.cy-back-btn { background: var(--cy-surface); border: var(--cy-border); color: var(--cy-primary); width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, box-shadow 0.2s; }
+.cy-back-btn:hover { background: var(--cy-bg); box-shadow: var(--cy-glow); }
+.cy-vision-subpage { display: flex; flex-direction: column; gap: 28px; }
+.cy-vision-section-title { font-family: var(--cy-font-accent); font-size: 16px; color: var(--cy-primary); letter-spacing: 1px; text-transform: uppercase; }
+.cy-affirmation-list { display: flex; flex-direction: column; gap: 10px; }
+.cy-affirmation-item { background: var(--cy-surface); border: var(--cy-border); border-radius: 10px; padding: 12px 16px; color: var(--cy-text); font-size: 14px; line-height: 1.5; transition: box-shadow 0.2s, border-color 0.2s; }
+.cy-affirmation-item:hover { box-shadow: var(--cy-glow); border-color: var(--cy-primary); }
+.cy-prompt-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.cy-prompt-item { background: var(--cy-surface); border: var(--cy-border); border-radius: 10px; padding: 14px 16px; color: var(--cy-text); font-size: 13px; display: flex; align-items: flex-start; gap: 10px; transition: box-shadow 0.2s; }
+.cy-prompt-item:hover { box-shadow: var(--cy-glow); }
+.cy-prompt-number { background: var(--cy-primary); color: var(--cy-bg); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+/* === MOOD TRACKER === */
+.cy-mood-checkin { background: var(--cy-surface); border: var(--cy-border); border-radius: 14px; padding: 28px; text-align: center; margin-bottom: 24px; }
+.cy-mood-label { font-family: var(--cy-font-accent); font-size: 18px; color: var(--cy-primary); margin-bottom: 20px; }
+.cy-mood-emojis { display: flex; justify-content: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.cy-mood-btn { background: var(--cy-bg); border: 2px solid transparent; border-radius: 14px; padding: 14px 18px; cursor: pointer; transition: all 0.25s; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 72px; }
+.cy-mood-btn:hover { border-color: var(--mood-color); box-shadow: 0 0 16px color-mix(in srgb, var(--mood-color) 40%, transparent); transform: translateY(-2px); }
+.cy-mood-btn.active { border-color: var(--mood-color); background: color-mix(in srgb, var(--mood-color) 15%, var(--cy-bg)); box-shadow: 0 0 20px color-mix(in srgb, var(--mood-color) 50%, transparent); }
+.cy-mood-emoji { font-size: 32px; }
+.cy-mood-emoji-label { font-size: 11px; color: var(--cy-muted); text-transform: uppercase; letter-spacing: 1px; }
+.cy-mood-note { background: var(--cy-bg); border: var(--cy-border); border-radius: 10px; padding: 10px 14px; color: var(--cy-text); width: 100%; max-width: 400px; font-size: 13px; outline: none; }
+.cy-mood-note:focus { border-color: var(--cy-primary); box-shadow: var(--cy-glow); }
+.cy-mood-calendar { display: flex; flex-wrap: wrap; gap: 10px; }
+.cy-mood-day { background: var(--cy-surface); border: var(--cy-border); border-radius: 10px; padding: 10px 14px; min-width: 80px; text-align: center; }
+.cy-mood-day-date { font-size: 10px; color: var(--cy-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.cy-mood-day-emoji { font-size: 24px; }
+.cy-mood-day-note { font-size: 10px; color: var(--cy-muted); margin-top: 4px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* === HABIT TRACKER === */
+.cy-habit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.cy-habit-card { background: var(--cy-surface); border: 2px solid transparent; border-radius: 14px; padding: 20px 14px; text-align: center; cursor: pointer; transition: all 0.25s; position: relative; }
+.cy-habit-card:hover { border-color: var(--habit-color); transform: translateY(-2px); box-shadow: 0 0 16px color-mix(in srgb, var(--habit-color) 30%, transparent); }
+.cy-habit-card.done { border-color: var(--habit-color); background: color-mix(in srgb, var(--habit-color) 10%, var(--cy-surface)); }
+.cy-habit-icon { font-size: 28px; color: var(--habit-color); margin-bottom: 8px; }
+.cy-habit-name { font-size: 13px; color: var(--cy-text); font-weight: 600; margin-bottom: 8px; }
+.cy-habit-check { font-size: 20px; }
+.cy-habit-card:not(.done) .cy-habit-check { color: var(--cy-muted); }
+.cy-habit-card.done .cy-habit-check { color: var(--habit-color); }
+.cy-habit-streak { position: absolute; top: 6px; right: 8px; font-size: 9px; color: #ffd740; font-weight: 700; display: flex; align-items: center; }
+.cy-habit-history { background: var(--cy-surface); border: var(--cy-border); border-radius: 14px; padding: 24px; }
+.cy-habit-week { display: flex; justify-content: space-around; align-items: flex-end; gap: 8px; height: 100px; }
+.cy-habit-week-day { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cy-habit-week-label { font-size: 10px; color: var(--cy-muted); text-transform: uppercase; }
+.cy-habit-week-bar { width: 28px; border-radius: 6px 6px 0 0; transition: height 0.3s; min-height: 4px; }
+.cy-habit-week-count { font-size: 10px; color: var(--cy-muted); }
+
 /* Print */
 @media print {
   .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal { display: none !important; }
