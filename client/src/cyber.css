@@ -835,7 +835,7 @@
   top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
   z-index: 15;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .cy-sticker {
@@ -961,14 +961,60 @@
 }
 
 .sticky-note {
-  padding: 14px;
+  padding: 16px 14px;
   font-family: 'Caveat', cursive;
-  font-size: 15px;
-  box-shadow: 3px 4px 16px rgba(0,0,0,0.35);
-  min-width: 130px;
-  min-height: 130px;
-  line-height: 1.4;
-  border-radius: 4px 4px 14px 4px;
+  font-size: 16px;
+  box-shadow: 3px 4px 16px rgba(0,0,0,0.35), inset 0 -2px 6px rgba(0,0,0,0.08);
+  min-width: 140px;
+  min-height: 140px;
+  max-width: 200px;
+  line-height: 1.5;
+  border-radius: 4px 4px 18px 4px;
+  cursor: text;
+  outline: none;
+  position: relative;
+  overflow-wrap: break-word;
+}
+
+.sticky-note::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 4px 4px 0 0;
+}
+
+.sticky-note:focus-within {
+  box-shadow: 3px 4px 20px rgba(0,0,0,0.4), 0 0 0 2px rgba(224,64,251,0.3);
+}
+
+.cy-note-drag-handle {
+  cursor: grab;
+  text-align: center;
+  opacity: 0.4;
+  font-size: 10px;
+  margin: -8px -6px 6px -6px;
+  padding: 4px 0 2px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  user-select: none;
+  transition: opacity 0.15s;
+}
+
+.cy-note-drag-handle:active {
+  cursor: grabbing;
+}
+
+.sticky-note:hover .cy-note-drag-handle {
+  opacity: 0.7;
+}
+
+.cy-note-body {
+  outline: none;
+  min-height: 90px;
+  cursor: text;
 }
 
 /* ============================================
@@ -1051,10 +1097,10 @@
 
 .cy-tag-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 14px;
-  max-height: 260px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  padding: 12px;
+  max-height: 300px;
   overflow-y: auto;
 }
 

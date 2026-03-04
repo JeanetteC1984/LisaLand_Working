@@ -12,27 +12,30 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 
 - **13 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 3 lighter (Cotton Candy, Lemonade, Lavender Mist)
 - **6 Sections**: Journal (rich text editor), Profile, Vision Board, Goals, Mind Map, Settings/Customize
-- **Rich Text Editor**: Bold, italic, underline, strikethrough, font choices (Nunito, Quicksand, Comfortaa, Poppins, Fredoka, Handwritten, Calligraphy, Doodle, Script, Tall), alignment, lists
+- **Rich Text Editor**: Bold, italic, underline, strikethrough, 10 font choices, alignment, lists
 - **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank
 - **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow
-- **Sticker System**: Vibes (8 motivational stamps), Symbols (10 hearts/stars/sparkles), Notes (6 sticky notes), Art (8 SVG stickers including unicorn, dolphin, diamond, cloud) — all draggable
+- **Sticker System (60+ stickers)**: 5 categories — Vibes (12 motivational stamps), Symbols (16 icon stickers), Emoji (12 large emoji), Notes (8 editable sticky notes with drag handle), Art (12 SVG art stickers). All draggable with position persistence.
+- **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move. Position persists on drag.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Sparkle Overlay**: Toggleable floating sparkle particle effect
 - **File/Entry Management**: Create, select, edit multiple journal entries
-- **SMART Goal Tracker**: Add/delete goals using the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound). Expandable goal cards show full SMART breakdown. Progress bars and status badges.
-- **Mind Map**: Interactive node-based mind mapping with draggable nodes, SVG curved connector lines, add/edit/delete nodes, inline text editing. Root node "My Dream Life" with preset branches. Dynamic SVG sizing.
+- **SMART Goal Tracker**: Add/delete goals using SMART framework. Expandable cards with progress bars.
+- **Mind Map**: Interactive node-based mind mapping with draggable nodes, SVG curved connectors, add/edit/delete nodes.
 - **Profile**: Editable personal info with life stats
 
-## Design Philosophy
+## Sticker Drag System
 
-Dark backgrounds (deep purples, dark teals, midnight blacks) with vibrant Lisa Frank-inspired neon accents. Rainbow gradients used for brand elements, active states, and decorative touches. Rounded corners, soft glows, and warm fonts throughout. All mind map and UI elements use CSS custom properties for full theme compatibility.
+- `initDrag(el, stickerId)` handles mousedown/mousemove/mouseup with position persistence to React state
+- Notes use `.cy-note-drag-handle` for dragging (grip icon) while `.cy-note-body` stays `contenteditable`
+- Sticker layer uses `overflow: visible` so stickers can be dragged beyond editor bounds
 
 ## Structure
 
 ```
 client/src/
   pages/CyberLog.tsx   — Main app (all sections, stickers, editor, goals, mind map)
-  cyber.css            — All theme CSS variables and component styles (13 themes + mind map styles)
+  cyber.css            — All theme CSS variables and component styles
   App.tsx              — Router
 ```
 

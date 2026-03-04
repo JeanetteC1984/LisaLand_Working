@@ -152,6 +152,10 @@ const STICKER_CATEGORIES = {
     { type: "stamp-slay",       label: "SLAY" },
     { type: "stamp-blessed",    label: "BLESSED" },
     { type: "stamp-manifest",   label: "MANIFEST" },
+    { type: "stamp-dreamer",    label: "DREAMER" },
+    { type: "stamp-iconic",     label: "ICONIC" },
+    { type: "stamp-worthy",     label: "WORTHY" },
+    { type: "stamp-main-char",  label: "MAIN CHARACTER" },
   ],
   Symbols: [
     { type: "icon-heart",     label: "HEART" },
@@ -164,6 +168,26 @@ const STICKER_CATEGORIES = {
     { type: "icon-fire",      label: "FIRE" },
     { type: "icon-gem",       label: "GEM" },
     { type: "icon-bolt",      label: "BOLT" },
+    { type: "icon-dove",      label: "DOVE" },
+    { type: "icon-infinity",  label: "INFINITY" },
+    { type: "icon-eye",       label: "EYE" },
+    { type: "icon-feather",   label: "FEATHER" },
+    { type: "icon-clover",    label: "CLOVER" },
+    { type: "icon-ribbon",    label: "RIBBON" },
+  ],
+  Emoji: [
+    { type: "emoji-sparkles",   label: "SPARKLES" },
+    { type: "emoji-rainbow",    label: "RAINBOW" },
+    { type: "emoji-butterfly",  label: "BUTTERFLY" },
+    { type: "emoji-star-eyes",  label: "STAR EYES" },
+    { type: "emoji-fire",       label: "FIRE" },
+    { type: "emoji-hearts",     label: "HEARTS" },
+    { type: "emoji-crystalball",label: "CRYSTAL BALL" },
+    { type: "emoji-unicorn",    label: "UNICORN" },
+    { type: "emoji-crown",      label: "CROWN" },
+    { type: "emoji-cherries",   label: "CHERRIES" },
+    { type: "emoji-blossom",    label: "BLOSSOM" },
+    { type: "emoji-shooting",   label: "SHOOTING STAR" },
   ],
   Notes: [
     { type: "note-pink",    label: "NOTE (Pink)" },
@@ -172,6 +196,8 @@ const STICKER_CATEGORIES = {
     { type: "note-peach",   label: "NOTE (Peach)" },
     { type: "note-gold",    label: "NOTE (Gold)" },
     { type: "note-sky",     label: "NOTE (Sky)" },
+    { type: "note-rose",    label: "NOTE (Rose)" },
+    { type: "note-neon",    label: "NOTE (Neon)" },
   ],
   Art: [
     { type: "svg-butterfly", label: "BUTTERFLY" },
@@ -182,6 +208,10 @@ const STICKER_CATEGORIES = {
     { type: "svg-cloud",     label: "CLOUD" },
     { type: "svg-dolphin",   label: "DOLPHIN" },
     { type: "svg-unicorn",   label: "UNICORN" },
+    { type: "svg-heart-wings", label: "WINGED HEART" },
+    { type: "svg-crescent",    label: "CRESCENT" },
+    { type: "svg-lotus",       label: "LOTUS" },
+    { type: "svg-cat",         label: "CAT" },
   ],
 };
 
@@ -219,13 +249,13 @@ function getStickerContent(type: string): string {
     case "icon-moon":
       return `<i class="fa-solid fa-moon" style="font-size:3rem; color:#b388ff; text-shadow: 0 0 14px rgba(179,136,255,0.5);"></i>`;
     case "note-pink":
-      return `<div class="sticky-note" style="background:#d81b60;color:#ffe0f0;" contenteditable="true">My thoughts...</div>`;
+      return `<div class="sticky-note" style="background:#d81b60;color:#ffe0f0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-lilac":
-      return `<div class="sticky-note" style="background:#7c4dff;color:#ece0ff;" contenteditable="true">My thoughts...</div>`;
+      return `<div class="sticky-note" style="background:#7c4dff;color:#ece0ff;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-mint":
-      return `<div class="sticky-note" style="background:#00897b;color:#d0fff0;" contenteditable="true">My thoughts...</div>`;
+      return `<div class="sticky-note" style="background:#00897b;color:#d0fff0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-peach":
-      return `<div class="sticky-note" style="background:#e65100;color:#fff3e0;" contenteditable="true">My thoughts...</div>`;
+      return `<div class="sticky-note" style="background:#e65100;color:#fff3e0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "svg-butterfly":
       return `<svg width="80" height="60" viewBox="0 0 80 60"><ellipse cx="28" cy="22" rx="20" ry="16" fill="rgba(224,64,251,0.3)" stroke="#e040fb" stroke-width="2"/><ellipse cx="52" cy="22" rx="20" ry="16" fill="rgba(124,77,255,0.3)" stroke="#7c4dff" stroke-width="2"/><ellipse cx="30" cy="42" rx="16" ry="12" fill="rgba(255,64,129,0.25)" stroke="#ff4081" stroke-width="1.5"/><ellipse cx="50" cy="42" rx="16" ry="12" fill="rgba(0,229,255,0.25)" stroke="#00e5ff" stroke-width="1.5"/><line x1="40" y1="8" x2="40" y2="56" stroke="#e040fb" stroke-width="2.5"/><circle cx="36" cy="6" r="2" fill="#ffd740"/><circle cx="44" cy="6" r="2" fill="#ffd740"/></svg>`;
     case "svg-rainbow":
@@ -259,9 +289,65 @@ function getStickerContent(type: string): string {
     case "icon-bolt":
       return `<i class="fa-solid fa-bolt" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5);"></i>`;
     case "note-gold":
-      return `<div class="sticky-note" style="background:#f9a825;color:#3e2723;" contenteditable="true">My thoughts...</div>`;
+      return `<div class="sticky-note" style="background:#f9a825;color:#3e2723;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-sky":
-      return `<div class="sticky-note" style="background:#0288d1;color:#e1f5fe;" contenteditable="true">My thoughts...</div>`;
+      return `<div class="sticky-note" style="background:#0288d1;color:#e1f5fe;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "note-rose":
+      return `<div class="sticky-note" style="background:#ad1457;color:#fce4ec;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "note-neon":
+      return `<div class="sticky-note" style="background:#1b5e20;color:#b9f6ca;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "stamp-dreamer":
+      return `<div class="stamp-secret" style="border-color:#00e5ff;color:#00e5ff;">DREAMER</div>`;
+    case "stamp-iconic":
+      return `<div class="stamp-approved" style="border-color:#ff4081;color:#ff4081;">ICONIC</div>`;
+    case "stamp-worthy":
+      return `<div class="stamp-classified" style="border-color:#69f0ae;color:#69f0ae;">WORTHY</div>`;
+    case "stamp-main-char":
+      return `<div class="stamp-urgent" style="border-color:#ffab40;color:#ffab40;background:rgba(255,171,64,0.08);">MAIN CHARACTER</div>`;
+    case "icon-dove":
+      return `<i class="fa-solid fa-dove" style="font-size:3rem; color:#b388ff; text-shadow: 0 0 14px rgba(179,136,255,0.5);"></i>`;
+    case "icon-infinity":
+      return `<i class="fa-solid fa-infinity" style="font-size:3rem; color:#e040fb; text-shadow: 0 0 14px rgba(224,64,251,0.5);"></i>`;
+    case "icon-eye":
+      return `<i class="fa-solid fa-eye" style="font-size:3rem; color:#64ffda; text-shadow: 0 0 14px rgba(100,255,218,0.5);"></i>`;
+    case "icon-feather":
+      return `<i class="fa-solid fa-feather" style="font-size:3rem; color:#ff4081; text-shadow: 0 0 14px rgba(255,64,129,0.5);"></i>`;
+    case "icon-clover":
+      return `<i class="fa-solid fa-clover" style="font-size:3rem; color:#69f0ae; text-shadow: 0 0 14px rgba(105,240,174,0.5);"></i>`;
+    case "icon-ribbon":
+      return `<i class="fa-solid fa-ribbon" style="font-size:3rem; color:#f48fb1; text-shadow: 0 0 14px rgba(244,143,177,0.5);"></i>`;
+    case "emoji-sparkles":
+      return `<span style="font-size:3.5rem;">✨</span>`;
+    case "emoji-rainbow":
+      return `<span style="font-size:3.5rem;">🌈</span>`;
+    case "emoji-butterfly":
+      return `<span style="font-size:3.5rem;">🦋</span>`;
+    case "emoji-star-eyes":
+      return `<span style="font-size:3.5rem;">🤩</span>`;
+    case "emoji-fire":
+      return `<span style="font-size:3.5rem;">🔥</span>`;
+    case "emoji-hearts":
+      return `<span style="font-size:3.5rem;">💖</span>`;
+    case "emoji-crystalball":
+      return `<span style="font-size:3.5rem;">🔮</span>`;
+    case "emoji-unicorn":
+      return `<span style="font-size:3.5rem;">🦄</span>`;
+    case "emoji-crown":
+      return `<span style="font-size:3.5rem;">👑</span>`;
+    case "emoji-cherries":
+      return `<span style="font-size:3.5rem;">🍒</span>`;
+    case "emoji-blossom":
+      return `<span style="font-size:3.5rem;">🌸</span>`;
+    case "emoji-shooting":
+      return `<span style="font-size:3.5rem;">🌠</span>`;
+    case "svg-heart-wings":
+      return `<svg width="90" height="60" viewBox="0 0 90 60"><path d="M45 50 Q30 35 20 25 Q10 15 20 8 Q30 0 45 15 Q60 0 70 8 Q80 15 70 25 Q60 35 45 50Z" fill="rgba(255,64,129,0.2)" stroke="#ff4081" stroke-width="2"/><path d="M18 22 Q5 15 2 25 Q-1 35 15 30" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/><path d="M12 18 Q2 10 0 20 Q-2 28 12 25" fill="rgba(224,64,251,0.1)" stroke="#e040fb" stroke-width="1"/><path d="M72 22 Q85 15 88 25 Q91 35 75 30" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/><path d="M78 18 Q88 10 90 20 Q92 28 78 25" fill="rgba(224,64,251,0.1)" stroke="#e040fb" stroke-width="1"/></svg>`;
+    case "svg-crescent":
+      return `<svg width="60" height="70" viewBox="0 0 60 70"><path d="M40 5 A28 28 0 1 0 40 65 A22 22 0 1 1 40 5Z" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="2"/><circle cx="20" cy="18" r="1.5" fill="#ffd740"/><circle cx="12" cy="38" r="1" fill="#ffd740"/><circle cx="25" cy="52" r="1.2" fill="#ffd740"/><circle cx="38" cy="15" r="0.8" fill="#e040fb"/></svg>`;
+    case "svg-lotus":
+      return `<svg width="80" height="60" viewBox="0 0 80 60"><path d="M40 55 Q30 40 20 30 Q10 20 20 12 Q30 5 40 15" fill="rgba(244,143,177,0.2)" stroke="#f48fb1" stroke-width="1.5"/><path d="M40 55 Q50 40 60 30 Q70 20 60 12 Q50 5 40 15" fill="rgba(206,147,216,0.2)" stroke="#ce93d8" stroke-width="1.5"/><path d="M40 55 Q25 38 15 35 Q5 32 12 22 Q20 12 40 20" fill="rgba(255,64,129,0.12)" stroke="#ff4081" stroke-width="1"/><path d="M40 55 Q55 38 65 35 Q75 32 68 22 Q60 12 40 20" fill="rgba(124,77,255,0.12)" stroke="#7c4dff" stroke-width="1"/><ellipse cx="40" cy="30" rx="6" ry="4" fill="rgba(255,215,64,0.3)" stroke="#ffd740" stroke-width="1"/></svg>`;
+    case "svg-cat":
+      return `<svg width="60" height="70" viewBox="0 0 60 70"><ellipse cx="30" cy="45" rx="20" ry="22" fill="rgba(224,64,251,0.12)" stroke="#e040fb" stroke-width="2"/><ellipse cx="30" cy="32" rx="16" ry="14" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/><polygon points="16,26 10,8 22,20" fill="rgba(255,64,129,0.15)" stroke="#ff4081" stroke-width="1.5"/><polygon points="44,26 50,8 38,20" fill="rgba(255,64,129,0.15)" stroke="#ff4081" stroke-width="1.5"/><circle cx="24" cy="30" r="2.5" fill="#00e5ff"/><circle cx="36" cy="30" r="2.5" fill="#00e5ff"/><ellipse cx="30" cy="36" rx="2" ry="1.5" fill="#ff4081"/><path d="M25 38 Q30 42 35 38" fill="none" stroke="#ff4081" stroke-width="1"/><path d="M8 58 Q20 65 30 68 Q40 65 52 58" fill="none" stroke="#e040fb" stroke-width="1.5" stroke-dasharray="3 3"/></svg>`;
     default:
       return `<div style="color:var(--cy-primary);font-size:12px;">~</div>`;
   }
@@ -318,11 +404,14 @@ export default function CyberLog() {
 
   const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
-  const initDrag = useCallback((el: HTMLDivElement) => {
+  const initDrag = useCallback((el: HTMLDivElement, stickerId: string) => {
     let ox = 0, oy = 0, sx = 0, sy = 0;
     const onDown = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.classList.contains("cy-sticker-delete") || target.getAttribute("contenteditable") === "true") return;
+      if (target.classList.contains("cy-sticker-delete")) return;
+      if (target.getAttribute("contenteditable") === "true" || target.closest("[contenteditable='true']")) {
+        if (!target.classList.contains("cy-note-drag-handle") && !target.closest(".cy-note-drag-handle")) return;
+      }
       e.preventDefault();
       sx = e.clientX; sy = e.clientY;
       ox = el.offsetLeft; oy = el.offsetTop;
@@ -331,12 +420,17 @@ export default function CyberLog() {
     };
     const onMove = (e: MouseEvent) => {
       e.preventDefault();
-      el.style.left = ox + (e.clientX - sx) + "px";
-      el.style.top  = oy + (e.clientY - sy) + "px";
+      const nx = ox + (e.clientX - sx);
+      const ny = oy + (e.clientY - sy);
+      el.style.left = nx + "px";
+      el.style.top  = ny + "px";
     };
     const onUp = () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
+      const nx = parseInt(el.style.left) || 0;
+      const ny = parseInt(el.style.top) || 0;
+      setStickers(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
     };
     el.addEventListener("mousedown", onDown);
   }, []);
@@ -356,7 +450,7 @@ export default function CyberLog() {
       const el = document.getElementById(`sticker-${st.id}`) as HTMLDivElement | null;
       if (el && !el.dataset.dragging) {
         el.dataset.dragging = "1";
-        initDrag(el);
+        initDrag(el, st.id);
       }
     });
   }, [stickers, initDrag]);
