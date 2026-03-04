@@ -734,6 +734,16 @@ export default function CyberLog() {
     if (activeFileId === id) setActiveFileId(files.find(f => f.id !== id)?.id || files[0].id);
   };
 
+  const quickNewEntry = () => {
+    const id = Date.now().toString();
+    const now = new Date();
+    const name = "Entry " + now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const date = now.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    setFiles(f => [...f, { id, name, date, content: "" }]);
+    setActiveFileId(id);
+    setSection("journal");
+  };
+
   const logMood = (mood: number) => {
     const today = getToday();
     setMoodEntries(prev => {
@@ -1044,8 +1054,15 @@ export default function CyberLog() {
         {section === "profile" && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div className="cy-page-title">My Profile</div>
-              <div className="cy-page-subtitle">WHO I AM & WHO I'M BECOMING</div>
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">My Profile</div>
+                  <div className="cy-page-subtitle">Who I Am & Who I'm Becoming</div>
+                </div>
+                <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-profile">
+                  <i className="fa-solid fa-plus" />New Entry
+                </button>
+              </div>
             </div>
             <div className="cy-page-body">
               <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
@@ -1133,8 +1150,15 @@ export default function CyberLog() {
         {section === "vision" && !visionSubpage && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div className="cy-page-title">Vision Board</div>
-              <div className="cy-page-subtitle">TOOLS FOR MANIFESTING YOUR DREAM LIFE</div>
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">Vision Board</div>
+                  <div className="cy-page-subtitle">Tools for Manifesting Your Dream Life</div>
+                </div>
+                <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-vision">
+                  <i className="fa-solid fa-plus" />New Entry
+                </button>
+              </div>
             </div>
             <div className="cy-page-body">
               <div className="cy-lab-grid">
@@ -1167,7 +1191,7 @@ export default function CyberLog() {
                   </button>
                   <div>
                     <div className="cy-page-title"><i className={feature.icon} style={{ marginRight: 8 }} />{feature.title}</div>
-                    <div className="cy-page-subtitle">{feature.desc.toUpperCase()}</div>
+                    <div className="cy-page-subtitle">{feature.desc}</div>
                   </div>
                 </div>
               </div>
@@ -1205,12 +1229,12 @@ export default function CyberLog() {
         {section === "goals" && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div className="cy-page-header-row">
                 <div>
                   <div className="cy-page-title">My Goals</div>
-                  <div className="cy-page-subtitle">TRACK YOUR PROGRESS ~ CELEBRATE YOUR WINS</div>
+                  <div className="cy-page-subtitle">Track Your Progress ~ Celebrate Your Wins</div>
                 </div>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                   <span className="cy-badge cy-badge-online" style={{ fontSize: 10 }}>
                     {goals.filter(g => g.progress >= 70).length} ALMOST THERE
                   </span>
@@ -1220,6 +1244,9 @@ export default function CyberLog() {
                   <button className="cy-goal-add-btn" onClick={() => setShowGoalForm(v => !v)} data-testid="button-add-goal">
                     <i className={`fa-solid ${showGoalForm ? "fa-xmark" : "fa-plus"}`} style={{ marginRight: 6 }} />
                     {showGoalForm ? "Cancel" : "New Goal"}
+                  </button>
+                  <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-goals">
+                    <i className="fa-solid fa-pen" />New Entry
                   </button>
                 </div>
               </div>
@@ -1410,12 +1437,15 @@ export default function CyberLog() {
         {section === "mindmap" && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div className="cy-page-header-row">
                 <div>
                   <div className="cy-page-title">Mind Map</div>
-                  <div className="cy-page-subtitle">VISUALIZE YOUR IDEAS ~ CONNECT THE DOTS</div>
+                  <div className="cy-page-subtitle">Visualize Your Ideas ~ Connect the Dots</div>
                 </div>
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                  <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-mindmap">
+                    <i className="fa-solid fa-plus" />New Entry
+                  </button>
                   <span className="cy-badge cy-badge-online" style={{ fontSize: 10 }}>
                     {mindMapNodes.length} NODES
                   </span>
@@ -1518,8 +1548,15 @@ export default function CyberLog() {
         {section === "mood" && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div className="cy-page-title">Mood Tracker</div>
-              <div className="cy-page-subtitle">CHECK IN WITH YOURSELF ~ HOW ARE YOU FEELING?</div>
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">Mood Tracker</div>
+                  <div className="cy-page-subtitle">Check In With Yourself ~ How Are You Feeling?</div>
+                </div>
+                <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-mood">
+                  <i className="fa-solid fa-plus" />New Entry
+                </button>
+              </div>
             </div>
             <div className="cy-page-body">
               <div className="cy-mood-checkin" data-testid="mood-checkin">
@@ -1567,8 +1604,15 @@ export default function CyberLog() {
         {section === "habits" && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div className="cy-page-title">Habit Tracker</div>
-              <div className="cy-page-subtitle">BUILD YOUR STREAK ~ ONE DAY AT A TIME</div>
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">Habit Tracker</div>
+                  <div className="cy-page-subtitle">Build Your Streak ~ One Day at a Time</div>
+                </div>
+                <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-habits">
+                  <i className="fa-solid fa-plus" />New Entry
+                </button>
+              </div>
             </div>
             <div className="cy-page-body">
               <div className="cy-habit-grid" data-testid="habit-grid">
@@ -1624,8 +1668,15 @@ export default function CyberLog() {
         {section === "settings" && (
           <div className="cy-section">
             <div className="cy-page-header">
-              <div className="cy-page-title">Customize</div>
-              <div className="cy-page-subtitle">MAKE IT YOURS ~ MAKE IT BEAUTIFUL</div>
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">Customize</div>
+                  <div className="cy-page-subtitle">Make It Yours ~ Make It Beautiful</div>
+                </div>
+                <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-settings">
+                  <i className="fa-solid fa-plus" />New Entry
+                </button>
+              </div>
             </div>
             <div className="cy-page-body">
               <div className="cy-settings-grid">

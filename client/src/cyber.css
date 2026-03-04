@@ -1149,12 +1149,15 @@
 }
 
 .cy-page-subtitle {
-  font-family: var(--cy-font-ui);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--cy-text-muted);
-  letter-spacing: 2px;
+  font-family: var(--cy-font-accent);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--cy-muted);
+  letter-spacing: 1.5px;
 }
+.cy-page-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.cy-quick-add-btn { background: var(--cy-surface); border: var(--cy-border); color: var(--cy-primary); padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s, box-shadow 0.2s; white-space: nowrap; }
+.cy-quick-add-btn:hover { background: var(--cy-bg); box-shadow: var(--cy-glow); }
 
 .cy-page-body {
   padding: 24px 30px;
