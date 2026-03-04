@@ -18,6 +18,19 @@ type Sticker = {
   rotation: number;
 };
 
+type Goal = {
+  id: string;
+  name: string;
+  specific: string;
+  measurable: string;
+  achievable: string;
+  relevant: string;
+  timeBound: string;
+  category: string;
+  progress: number;
+  status: string;
+};
+
 type Theme = {
   id: string;
   label: string;
@@ -87,14 +100,26 @@ const INITIAL_FILES: JournalFile[] = [
   },
 ];
 
-const GOALS = [
-  { id: "g1", name: "Run a Half Marathon", category: "Fitness", progress: 65, deadline: "June 2026", status: "ON TRACK" },
-  { id: "g2", name: "Read 30 Books", category: "Growth", progress: 40, deadline: "Dec 2026", status: "IN PROGRESS" },
-  { id: "g3", name: "Launch My Side Project", category: "Career", progress: 80, deadline: "April 2026", status: "ALMOST THERE" },
-  { id: "g4", name: "Save $10K Emergency Fund", category: "Finance", progress: 55, deadline: "Sept 2026", status: "ON TRACK" },
-  { id: "g5", name: "Learn to Paint", category: "Creativity", progress: 25, deadline: "Ongoing", status: "JUST STARTED" },
-  { id: "g6", name: "Meditate Daily for 90 Days", category: "Wellness", progress: 72, deadline: "May 2026", status: "CRUSHING IT" },
+const INITIAL_GOALS: Goal[] = [
+  { id: "g1", name: "Run a Half Marathon", specific: "Complete a half marathon race", measurable: "Finish 13.1 miles under 2 hours", achievable: "Following a 16-week training plan", relevant: "Improves my health and builds discipline", timeBound: "June 2026", category: "Fitness", progress: 65, status: "ON TRACK" },
+  { id: "g2", name: "Read 30 Books", specific: "Read 30 books across different genres", measurable: "Track each book completed on my reading list", achievable: "2-3 books per month is doable", relevant: "Expands my knowledge and creativity", timeBound: "Dec 2026", category: "Growth", progress: 40, status: "IN PROGRESS" },
+  { id: "g3", name: "Launch My Side Project", specific: "Ship my app to production with paying users", measurable: "Get 50 signups in the first month", achievable: "MVP is 80% built already", relevant: "Steps me toward financial independence", timeBound: "April 2026", category: "Career", progress: 80, status: "ALMOST THERE" },
+  { id: "g4", name: "Save $10K Emergency Fund", specific: "Build a $10,000 emergency savings cushion", measurable: "Track balance monthly toward $10K target", achievable: "Saving $800/month from budget adjustments", relevant: "Financial security gives me peace of mind", timeBound: "Sept 2026", category: "Finance", progress: 55, status: "ON TRACK" },
+  { id: "g5", name: "Learn to Paint", specific: "Learn watercolor painting fundamentals", measurable: "Complete 12 paintings and 1 online course", achievable: "Practice 2 sessions per week", relevant: "Creative expression brings me joy", timeBound: "Ongoing", category: "Creativity", progress: 25, status: "JUST STARTED" },
+  { id: "g6", name: "Meditate Daily for 90 Days", specific: "Meditate for at least 10 minutes every day", measurable: "90 consecutive days tracked in my habit app", achievable: "Starting with guided meditations", relevant: "Mental clarity and stress reduction", timeBound: "May 2026", category: "Wellness", progress: 72, status: "CRUSHING IT" },
 ];
+
+const GOAL_CATEGORIES = ["Fitness", "Growth", "Career", "Finance", "Creativity", "Wellness", "Relationships", "Health", "Travel", "Other"];
+
+const EMPTY_GOAL_FORM = {
+  name: "",
+  specific: "",
+  measurable: "",
+  achievable: "",
+  relevant: "",
+  timeBound: "",
+  category: "Growth",
+};
 
 const VISION_FEATURES = [
   { icon: "fa-solid fa-heart", title: "SELF LOVE", desc: "Daily affirmations and self-care rituals to nurture your spirit.", status: "ACTIVE" },
@@ -198,6 +223,10 @@ export default function CyberLog() {
   const [stickers, setStickers] = useState<Sticker[]>([]);
   const [assetOpen, setAssetOpen] = useState(false);
   const [assetTab, setAssetTab] = useState<keyof typeof STICKER_CATEGORIES>("Vibes");
+  const [goals, setGoals] = useState<Goal[]>(INITIAL_GOALS);
+  const [showGoalForm, setShowGoalForm] = useState(false);
+  const [goalForm, setGoalForm] = useState({ ...EMPTY_GOAL_FORM });
+  const [expandedGoal, setExpandedGoal] = useState<string | null>(null);
   const [terminalLines, setTerminalLines] = useState([
     { text: "Welcome to your safe space...", cls: "" },
     { text: "Today is a beautiful day to chase your dreams.", cls: "cy-log-info" },
@@ -320,6 +349,32 @@ export default function CyberLog() {
     setAddingFile(false);
     selectFile(id);
     setSection("journal");
+  };
+
+  const addGoal = () => {
+    const { name, specific, measurable, achievable, relevant, timeBound, category } = goalForm;
+    if (!name.trim() || !specific.trim() || !measurable.trim() || !achievable.trim() || !relevant.trim() || !timeBound.trim()) return;
+    const id = "g" + Math.random().toString(36).slice(2);
+    const newGoal: Goal = {
+      id,
+      name: name.trim(),
+      specific: specific.trim(),
+      measurable: measurable.trim(),
+      achievable: achievable.trim(),
+      relevant: relevant.trim(),
+      timeBound: timeBound.trim(),
+      category,
+      progress: 0,
+      status: "JUST STARTED",
+    };
+    setGoals(g => [newGoal, ...g]);
+    setGoalForm({ ...EMPTY_GOAL_FORM });
+    setShowGoalForm(false);
+  };
+
+  const deleteGoal = (id: string) => {
+    setGoals(g => g.filter(goal => goal.id !== id));
+    if (expandedGoal === id) setExpandedGoal(null);
   };
 
   const ICON_NAV: { icon: string; title: string; section: Section }[] = [
@@ -606,7 +661,7 @@ export default function CyberLog() {
                   <div className="cy-identity-card" style={{ padding: 18 }}>
                     <div className="cy-field-label" style={{ marginBottom: 12 }}>QUICK STATS</div>
                     {[
-                      { label: "Goals Active", val: "6" },
+                      { label: "Goals Active", val: String(goals.length) },
                       { label: "Journal Entries", val: String(files.length) },
                       { label: "Days Journaling", val: "42" },
                     ].map(row => (
@@ -655,30 +710,183 @@ export default function CyberLog() {
                   <div className="cy-page-title">My Goals</div>
                   <div className="cy-page-subtitle">TRACK YOUR PROGRESS ~ CELEBRATE YOUR WINS</div>
                 </div>
-                <div style={{ display: "flex", gap: 8 }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <span className="cy-badge cy-badge-online" style={{ fontSize: 10 }}>
-                    {GOALS.filter(g => g.progress >= 70).length} ALMOST THERE
+                    {goals.filter(g => g.progress >= 70).length} ALMOST THERE
                   </span>
                   <span className="cy-badge cy-badge-warn" style={{ fontSize: 10 }}>
-                    {GOALS.filter(g => g.progress < 70).length} IN PROGRESS
+                    {goals.filter(g => g.progress < 70).length} IN PROGRESS
                   </span>
+                  <button className="cy-goal-add-btn" onClick={() => setShowGoalForm(v => !v)} data-testid="button-add-goal">
+                    <i className={`fa-solid ${showGoalForm ? "fa-xmark" : "fa-plus"}`} style={{ marginRight: 6 }} />
+                    {showGoalForm ? "Cancel" : "New Goal"}
+                  </button>
                 </div>
               </div>
             </div>
             <div className="cy-page-body">
+
+              {showGoalForm && (
+                <div className="cy-smart-form" data-testid="smart-goal-form">
+                  <div className="cy-smart-form-header">
+                    <i className="fa-solid fa-bullseye" style={{ marginRight: 8 }} />
+                    SET A SMART GOAL
+                  </div>
+                  <div className="cy-smart-form-desc">
+                    SMART goals are <strong>Specific</strong>, <strong>Measurable</strong>, <strong>Achievable</strong>, <strong>Relevant</strong>, and <strong>Time-bound</strong>.
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter">G</span> Goal Name
+                    </div>
+                    <input className="cy-field-input" placeholder="What's your goal? (e.g. Run a marathon)"
+                      value={goalForm.name} onChange={e => setGoalForm(f => ({ ...f, name: e.target.value }))}
+                      data-testid="goal-input-name"
+                    />
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter" style={{ background: "linear-gradient(135deg, #e040fb, #ff4081)" }}>S</span> Specific
+                    </div>
+                    <div className="cy-smart-hint">What exactly do you want to accomplish? Be clear and detailed.</div>
+                    <textarea className="cy-field-input" style={{ resize: "vertical", minHeight: 60 }}
+                      placeholder="I want to..."
+                      value={goalForm.specific} onChange={e => setGoalForm(f => ({ ...f, specific: e.target.value }))}
+                      data-testid="goal-input-specific"
+                    />
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter" style={{ background: "linear-gradient(135deg, #7c4dff, #536dfe)" }}>M</span> Measurable
+                    </div>
+                    <div className="cy-smart-hint">How will you track your progress and know when you've achieved it?</div>
+                    <textarea className="cy-field-input" style={{ resize: "vertical", minHeight: 60 }}
+                      placeholder="I'll measure success by..."
+                      value={goalForm.measurable} onChange={e => setGoalForm(f => ({ ...f, measurable: e.target.value }))}
+                      data-testid="goal-input-measurable"
+                    />
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter" style={{ background: "linear-gradient(135deg, #00e5ff, #18ffff)" }}>A</span> Achievable
+                    </div>
+                    <div className="cy-smart-hint">What steps or resources make this goal realistic for you?</div>
+                    <textarea className="cy-field-input" style={{ resize: "vertical", minHeight: 60 }}
+                      placeholder="This is achievable because..."
+                      value={goalForm.achievable} onChange={e => setGoalForm(f => ({ ...f, achievable: e.target.value }))}
+                      data-testid="goal-input-achievable"
+                    />
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter" style={{ background: "linear-gradient(135deg, #69f0ae, #00e676)" }}>R</span> Relevant
+                    </div>
+                    <div className="cy-smart-hint">Why does this matter to you? How does it fit your bigger picture?</div>
+                    <textarea className="cy-field-input" style={{ resize: "vertical", minHeight: 60 }}
+                      placeholder="This matters because..."
+                      value={goalForm.relevant} onChange={e => setGoalForm(f => ({ ...f, relevant: e.target.value }))}
+                      data-testid="goal-input-relevant"
+                    />
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter" style={{ background: "linear-gradient(135deg, #ffd740, #ffab40)" }}>T</span> Time-bound
+                    </div>
+                    <div className="cy-smart-hint">When is your deadline? Be specific about timing.</div>
+                    <input className="cy-field-input" placeholder="By when? (e.g. June 2026)"
+                      value={goalForm.timeBound} onChange={e => setGoalForm(f => ({ ...f, timeBound: e.target.value }))}
+                      data-testid="goal-input-timebound"
+                    />
+                  </div>
+
+                  <div className="cy-smart-field">
+                    <div className="cy-smart-label">
+                      <span className="cy-smart-letter" style={{ background: "linear-gradient(135deg, #ff4081, #ff80ab)" }}>
+                        <i className="fa-solid fa-tag" style={{ fontSize: 10 }} />
+                      </span> Category
+                    </div>
+                    <select className="cy-select" value={goalForm.category}
+                      onChange={e => setGoalForm(f => ({ ...f, category: e.target.value }))}
+                      data-testid="goal-input-category"
+                    >
+                      {GOAL_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="cy-smart-actions">
+                    <button className="cy-smart-cancel" onClick={() => { setShowGoalForm(false); setGoalForm({ ...EMPTY_GOAL_FORM }); }} data-testid="goal-form-cancel">
+                      Cancel
+                    </button>
+                    <button className="cy-smart-submit" onClick={addGoal} data-testid="goal-form-submit">
+                      <i className="fa-solid fa-sparkles" style={{ marginRight: 6 }} />
+                      Add My Goal
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {goals.length === 0 && !showGoalForm && (
+                <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--cy-text-muted)" }}>
+                  <i className="fa-solid fa-bullseye" style={{ fontSize: 48, marginBottom: 16, opacity: 0.3, display: "block" }} />
+                  <div style={{ fontFamily: "var(--cy-font-header)", fontSize: 18, fontWeight: 600, marginBottom: 8 }}>No goals yet</div>
+                  <div style={{ fontSize: 13 }}>Click "New Goal" to set your first SMART goal and start crushing it!</div>
+                </div>
+              )}
+
               <div className="cy-target-grid">
-                {GOALS.map(g => {
+                {goals.map(g => {
                   const barColor = g.progress >= 70 ? "#69f0ae" : g.progress >= 40 ? "#ffd740" : "#ff4081";
+                  const isExpanded = expandedGoal === g.id;
                   return (
-                    <div key={g.id} className="cy-target-card" data-testid={`goal-${g.id}`}>
+                    <div key={g.id} className={`cy-target-card ${isExpanded ? "cy-goal-expanded" : ""}`} data-testid={`goal-${g.id}`}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-                        <div className="cy-target-name">{g.name}</div>
-                        <span className={`cy-badge ${g.progress >= 70 ? "cy-badge-online" : "cy-badge-warn"}`}>{g.status}</span>
+                        <div className="cy-target-name" style={{ cursor: "pointer", flex: 1 }}
+                          onClick={() => setExpandedGoal(isExpanded ? null : g.id)}
+                          data-testid={`goal-expand-${g.id}`}
+                        >
+                          {g.name}
+                          <i className={`fa-solid fa-chevron-${isExpanded ? "up" : "down"}`} style={{ fontSize: 10, marginLeft: 8, opacity: 0.5 }} />
+                        </div>
+                        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                          <span className={`cy-badge ${g.progress >= 70 ? "cy-badge-online" : "cy-badge-warn"}`}>{g.status}</span>
+                          <button className="cy-goal-delete-btn" onClick={() => deleteGoal(g.id)}
+                            title="Delete goal" data-testid={`goal-delete-${g.id}`}
+                          >
+                            <i className="fa-solid fa-trash-can" />
+                          </button>
+                        </div>
                       </div>
                       <div className="cy-target-detail">
                         <div><span style={{ color: "var(--cy-text-muted)" }}>Category: </span>{g.category}</div>
-                        <div style={{ marginTop: 4 }}><span style={{ color: "var(--cy-text-muted)" }}>Deadline: </span>{g.deadline}</div>
+                        <div style={{ marginTop: 4 }}><span style={{ color: "var(--cy-text-muted)" }}>Deadline: </span>{g.timeBound}</div>
                       </div>
+
+                      {isExpanded && (
+                        <div className="cy-smart-details" data-testid={`goal-details-${g.id}`}>
+                          {[
+                            { letter: "S", label: "Specific", value: g.specific, color: "#e040fb" },
+                            { letter: "M", label: "Measurable", value: g.measurable, color: "#7c4dff" },
+                            { letter: "A", label: "Achievable", value: g.achievable, color: "#00e5ff" },
+                            { letter: "R", label: "Relevant", value: g.relevant, color: "#69f0ae" },
+                            { letter: "T", label: "Time-bound", value: g.timeBound, color: "#ffd740" },
+                          ].map(s => (
+                            <div className="cy-smart-detail-row" key={s.letter}>
+                              <span className="cy-smart-detail-letter" style={{ background: s.color }}>{s.letter}</span>
+                              <div>
+                                <div className="cy-smart-detail-label">{s.label}</div>
+                                <div className="cy-smart-detail-value">{s.value}</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                       <div className="cy-target-threat">
                         <span style={{ fontFamily: "var(--cy-font-ui)", fontSize: 10, fontWeight: 600, color: "var(--cy-text-muted)", letterSpacing: 1 }}>
                           PROGRESS

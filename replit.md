@@ -19,7 +19,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Sparkle Overlay**: Toggleable floating sparkle particle effect
 - **File/Entry Management**: Create, select, edit multiple journal entries
-- **Goal Tracker**: Progress bars and status badges for life goals
+- **SMART Goal Tracker**: Add/delete goals using the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound). Expandable goal cards show full SMART breakdown. Progress bars and status badges.
 - **Profile**: Editable personal info with life stats
 
 ## Design Philosophy

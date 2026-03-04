@@ -1429,6 +1429,224 @@
   letter-spacing: 1px;
 }
 
+/* ============================================
+   SMART GOAL FORM & GOAL MANAGEMENT
+   ============================================ */
+.cy-goal-add-btn {
+  background: var(--cy-gradient-rainbow);
+  color: #1a0a2e;
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  transition: 0.25s;
+  display: flex;
+  align-items: center;
+}
+
+.cy-goal-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(224,64,251,0.25);
+}
+
+.cy-goal-delete-btn {
+  background: none;
+  border: 1px solid rgba(255,64,129,0.2);
+  color: var(--cy-text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.cy-goal-delete-btn:hover {
+  color: #ff4081;
+  border-color: #ff4081;
+  background: rgba(255,64,129,0.1);
+}
+
+.cy-goal-expanded {
+  border-color: rgba(224,64,251,0.25) !important;
+}
+
+.cy-smart-form {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(224,64,251,0.2);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  max-width: 680px;
+}
+
+.cy-smart-form-header {
+  font-family: var(--cy-font-header);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  background: var(--cy-gradient-rainbow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cy-smart-form-desc {
+  font-family: var(--cy-font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cy-text-muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.cy-smart-form-desc strong {
+  color: var(--cy-text-main);
+}
+
+.cy-smart-field {
+  margin-bottom: 18px;
+}
+
+.cy-smart-label {
+  font-family: var(--cy-font-ui);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cy-text-main);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cy-smart-letter {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--cy-gradient-rainbow);
+  color: #1a0a2e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.cy-smart-hint {
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--cy-text-muted);
+  margin-bottom: 8px;
+  padding-left: 36px;
+}
+
+.cy-smart-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: var(--cy-border);
+}
+
+.cy-smart-cancel {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(224,64,251,0.15);
+  color: var(--cy-text-muted);
+  padding: 10px 22px;
+  font-family: var(--cy-font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.cy-smart-cancel:hover {
+  color: var(--cy-text-main);
+  border-color: rgba(224,64,251,0.3);
+}
+
+.cy-smart-submit {
+  background: var(--cy-gradient-rainbow);
+  color: #1a0a2e;
+  border: none;
+  padding: 10px 24px;
+  font-family: var(--cy-font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  transition: 0.25s;
+  display: flex;
+  align-items: center;
+}
+
+.cy-smart-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(224,64,251,0.3);
+}
+
+.cy-smart-details {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: var(--cy-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cy-smart-detail-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.cy-smart-detail-letter {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  color: #1a0a2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: var(--cy-font-ui);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cy-smart-detail-label {
+  font-family: var(--cy-font-ui);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--cy-text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.cy-smart-detail-value {
+  font-family: var(--cy-font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--cy-text-main);
+  line-height: 1.5;
+}
+
 /* Print */
 @media print {
   .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal { display: none !important; }
