@@ -2412,13 +2412,16 @@
   display: none;
 }
 
+.cy-print-title { display: none; }
+
 /* Print */
 @media print {
   .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal, .cy-quick-add-btn, .cy-back-btn, .cy-goal-add-btn, .cy-affirmation-overlay { display: none !important; }
+  .cy-print-title { display: block !important; font-family: var(--cy-font-header); font-size: 26px; font-weight: 700; color: #222 !important; padding: 24px 30px 12px; border-bottom: 2px solid #ccc; margin-bottom: 8px; }
   .cyber-app { grid-template-columns: 1fr; background: white; color: #222; height: auto; overflow: visible; }
   .cy-main-stage { background: white !important; overflow: visible !important; }
   .cy-page-header { background: none !important; border-bottom: 2px solid #ccc; }
-  .cy-page-title { background: none !important; -webkit-text-fill-color: #222 !important; color: #222 !important; font-size: 24px !important; }
-  .cy-page-subtitle { color: #555 !important; }
+  .cy-page-title { background: none !important; -webkit-text-fill-color: #222 !important; background-clip: unset !important; -webkit-background-clip: unset !important; color: #222 !important; font-size: 24px !important; }
+  .cy-page-subtitle { color: #555 !important; -webkit-text-fill-color: #555 !important; font-style: normal !important; }
   .cy-section { overflow: visible !important; }
 }
