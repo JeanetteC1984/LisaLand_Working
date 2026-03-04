@@ -948,8 +948,6 @@ export default function CyberLog() {
   ]);
   const [termCmd, setTermCmd] = useState("");
   const [glitching, setGlitching] = useState(false);
-  const [addingFile, setAddingFile] = useState(false);
-  const [newFileName, setNewFileName] = useState("");
   const [crtEnabled, setCrtEnabled] = useState(true);
   const [fontChoice, setFontChoice] = useState("Nunito");
   const [editorFontSize, setEditorFontSize] = useState(16);
@@ -1179,20 +1177,6 @@ export default function CyberLog() {
     if (editorRef.current && activeFile) editorRef.current.innerHTML = activeFile.content;
   }, [activeFileId]);
 
-  const confirmAddFile = () => {
-    if (!newFileName.trim()) return;
-    const id = Math.random().toString(36).slice(2);
-    const today = new Date().toISOString().split("T")[0];
-    const f: JournalFile = {
-      id, name: newFileName.trim(), date: today,
-      content: `<h1 class="cy-doc-title" id="doc-title">${newFileName.trim()}</h1>\n<p style="line-height:1.8;">Start writing your story here...</p>`,
-    };
-    setFiles(fs => [f, ...fs]);
-    setNewFileName("");
-    setAddingFile(false);
-    selectFile(id);
-    setSection("journal");
-  };
 
   const addGoal = () => {
     const { name, specific, measurable, achievable, relevant, timeBound, category } = goalForm;
@@ -1548,24 +1532,10 @@ export default function CyberLog() {
           <div className="cy-nav-group">
             <div className="cy-section-title">
               <span>MY ENTRIES</span>
-              <button className="cy-add-btn" title="New Entry" onClick={() => setAddingFile(v => !v)} data-testid="button-add-file">
+              <button className="cy-add-btn" title="New Entry" onClick={quickNewEntry} data-testid="button-add-file">
                 <i className="fa-solid fa-circle-plus" />
               </button>
             </div>
-            {addingFile && (
-              <div className="cy-new-file-form">
-                <input
-                  className="cy-new-file-input"
-                  placeholder="Entry name..."
-                  value={newFileName}
-                  onChange={e => setNewFileName(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && confirmAddFile()}
-                  autoFocus
-                  data-testid="input-new-file"
-                />
-                <button className="cy-new-file-btn" onClick={confirmAddFile} data-testid="button-confirm-file">ADD</button>
-              </div>
-            )}
             <ul className="cy-file-list">
               {files.map(f => (
                 <li key={f.id} className={`cy-file-item${f.id === activeFileId ? " active" : ""}`}
