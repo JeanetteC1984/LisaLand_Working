@@ -63,6 +63,9 @@ const THEMES: Theme[] = [
   { id: "peach-sorbet",    label: "Peach Sorbet",    primary: "#ffab91" },
   { id: "mint-chip",       label: "Mint Chip",       primary: "#80cbc4" },
   { id: "rose-quartz",     label: "Rose Quartz",     primary: "#f8bbd0" },
+  { id: "cloud-nine",      label: "☁️ Cloud Nine",    primary: "#7c4dff" },
+  { id: "honey-glow",      label: "🍯 Honey Glow",   primary: "#f57f17" },
+  { id: "sky-bloom",       label: "🌤️ Sky Bloom",    primary: "#0288d1" },
 ];
 
 const INITIAL_FILES: JournalFile[] = [
@@ -1242,6 +1245,8 @@ export default function CyberLog() {
                 { id: "paper-blank", label: "Blank", icon: "fa-solid fa-square" },
                 { id: "paper-diamonds", label: "Diamonds", icon: "fa-solid fa-diamond" },
                 { id: "paper-waves", label: "Waves", icon: "fa-solid fa-water" },
+                { id: "paper-confetti", label: "Confetti", icon: "fa-solid fa-burst" },
+                { id: "paper-floral", label: "Floral", icon: "fa-solid fa-seedling" },
               ].map(p => (
                 <button key={p.id} className={`cy-swatch-btn cy-swatch-paper${paperPattern === p.id ? " active" : ""}`}
                   onClick={() => setPaperPattern(p.id)}
@@ -2229,6 +2234,11 @@ export default function CyberLog() {
                       <option value="canvas-blueprint">Gradient</option>
                       <option value="canvas-void">Deep Dark</option>
                       <option value="canvas-neon">Glow</option>
+                      <option value="canvas-dreamy">Dreamy</option>
+                      <option value="canvas-starfield">Starfield</option>
+                      <option value="canvas-aurora">Aurora</option>
+                      <option value="canvas-soft">Soft Focus</option>
+                      <option value="canvas-minimal">Minimal</option>
                     </select>
                   </div>
                   <div className="cy-identity-field">
@@ -2242,6 +2252,10 @@ export default function CyberLog() {
                       <option value="paper-dots">Dots</option>
                       <option value="paper-lines">Lined</option>
                       <option value="paper-blank">Blank</option>
+                      <option value="paper-diamonds">Diamonds</option>
+                      <option value="paper-waves">Waves</option>
+                      <option value="paper-confetti">Confetti</option>
+                      <option value="paper-floral">Floral</option>
                     </select>
                   </div>
                 </div>

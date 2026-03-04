@@ -10,10 +10,10 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 
 ## Features
 
-- **16 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 3 light (Cotton Candy, Lemonade, Lavender Mist) + 3 warm/cool (Peach Sorbet, Mint Chip, Rose Quartz)
+- **19 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 3 dark-light (Cotton Candy, Lemonade, Lavender Mist) + 3 warm/cool (Peach Sorbet, Mint Chip, Rose Quartz) + 3 truly light-mode (☁️ Cloud Nine, 🍯 Honey Glow, 🌤️ Sky Bloom — white/pastel backgrounds with dark text, full CSS override block)
 - **8 Sections**: Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Settings/Customize
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 24 font choices, alignment, lists
-- **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves — visual icon swatch selectors
+- **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral — visual icon swatch selectors
 - **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal — visual gradient swatch selectors
 - **Sticker System (90+ stickers)**: 7 categories — Vibes (18), Symbols (20), Emoji (24), Notes (12), Art (12), Dividers (6). All draggable with position persistence.
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
