@@ -10,28 +10,29 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 
 ## Features
 
-- **10 Color Themes**: Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy
-- **5 Sections**: Journal (rich text editor), Profile, Vision Board, Goals, Settings/Customize
-- **Rich Text Editor**: Bold, italic, underline, strikethrough, font choices (Nunito, Quicksand, Handwritten, Comfortaa), alignment, lists
+- **13 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 3 lighter (Cotton Candy, Lemonade, Lavender Mist)
+- **6 Sections**: Journal (rich text editor), Profile, Vision Board, Goals, Mind Map, Settings/Customize
+- **Rich Text Editor**: Bold, italic, underline, strikethrough, font choices (Nunito, Quicksand, Comfortaa, Poppins, Fredoka, Handwritten, Calligraphy, Doodle, Script, Tall), alignment, lists
 - **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank
 - **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow
-- **Sticker System**: Vibes (motivational stamps), Symbols (hearts, stars, sparkles, moon), Notes (pink, lilac, mint, peach sticky notes), Art (butterfly, rainbow, star burst, flower SVGs) — all draggable
+- **Sticker System**: Vibes (8 motivational stamps), Symbols (10 hearts/stars/sparkles), Notes (6 sticky notes), Art (8 SVG stickers including unicorn, dolphin, diamond, cloud) — all draggable
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Sparkle Overlay**: Toggleable floating sparkle particle effect
 - **File/Entry Management**: Create, select, edit multiple journal entries
 - **SMART Goal Tracker**: Add/delete goals using the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound). Expandable goal cards show full SMART breakdown. Progress bars and status badges.
+- **Mind Map**: Interactive node-based mind mapping with draggable nodes, SVG curved connector lines, add/edit/delete nodes, inline text editing. Root node "My Dream Life" with preset branches. Dynamic SVG sizing.
 - **Profile**: Editable personal info with life stats
 
 ## Design Philosophy
 
-Dark backgrounds (deep purples, dark teals, midnight blacks) with vibrant Lisa Frank-inspired neon accents. Rainbow gradients used for brand elements, active states, and decorative touches. Rounded corners, soft glows, and warm fonts throughout.
+Dark backgrounds (deep purples, dark teals, midnight blacks) with vibrant Lisa Frank-inspired neon accents. Rainbow gradients used for brand elements, active states, and decorative touches. Rounded corners, soft glows, and warm fonts throughout. All mind map and UI elements use CSS custom properties for full theme compatibility.
 
 ## Structure
 
 ```
 client/src/
-  pages/CyberLog.tsx   — Main app (all sections, stickers, editor, goals)
-  cyber.css            — All theme CSS variables and component styles
+  pages/CyberLog.tsx   — Main app (all sections, stickers, editor, goals, mind map)
+  cyber.css            — All theme CSS variables and component styles (13 themes + mind map styles)
   App.tsx              — Router
 ```
 

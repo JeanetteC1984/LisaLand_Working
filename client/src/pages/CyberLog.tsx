@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "journal" | "profile" | "vision" | "goals" | "settings";
+type Section = "journal" | "profile" | "vision" | "goals" | "mindmap" | "settings";
 
 type JournalFile = {
   id: string;
@@ -31,6 +31,15 @@ type Goal = {
   status: string;
 };
 
+type MindMapNode = {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  color: string;
+  parentId: string | null;
+};
+
 type Theme = {
   id: string;
   label: string;
@@ -48,6 +57,9 @@ const THEMES: Theme[] = [
   { id: "midnight-rose",   label: "Midnight Rose",   primary: "#f48fb1" },
   { id: "aurora",          label: "Aurora",           primary: "#64ffda" },
   { id: "galaxy",          label: "Galaxy",           primary: "#7c4dff" },
+  { id: "cotton-candy",    label: "Cotton Candy",    primary: "#f8bbd0" },
+  { id: "lemonade",        label: "Lemonade",        primary: "#fff176" },
+  { id: "lavender-mist",   label: "Lavender Mist",   primary: "#ce93d8" },
 ];
 
 const INITIAL_FILES: JournalFile[] = [
@@ -137,6 +149,9 @@ const STICKER_CATEGORIES = {
     { type: "stamp-queen",      label: "QUEEN" },
     { type: "stamp-urgent",     label: "PRIORITY" },
     { type: "stamp-void",       label: "LET IT GO" },
+    { type: "stamp-slay",       label: "SLAY" },
+    { type: "stamp-blessed",    label: "BLESSED" },
+    { type: "stamp-manifest",   label: "MANIFEST" },
   ],
   Symbols: [
     { type: "icon-heart",     label: "HEART" },
@@ -144,18 +159,29 @@ const STICKER_CATEGORIES = {
     { type: "icon-sparkle",   label: "SPARKLE" },
     { type: "tape-rainbow",   label: "RAINBOW BAR" },
     { type: "icon-moon",      label: "MOON" },
+    { type: "icon-sun",       label: "SUN" },
+    { type: "icon-crown",     label: "CROWN" },
+    { type: "icon-fire",      label: "FIRE" },
+    { type: "icon-gem",       label: "GEM" },
+    { type: "icon-bolt",      label: "BOLT" },
   ],
   Notes: [
     { type: "note-pink",    label: "NOTE (Pink)" },
     { type: "note-lilac",   label: "NOTE (Lilac)" },
     { type: "note-mint",    label: "NOTE (Mint)" },
     { type: "note-peach",   label: "NOTE (Peach)" },
+    { type: "note-gold",    label: "NOTE (Gold)" },
+    { type: "note-sky",     label: "NOTE (Sky)" },
   ],
   Art: [
     { type: "svg-butterfly", label: "BUTTERFLY" },
     { type: "svg-rainbow",   label: "RAINBOW" },
     { type: "svg-star",      label: "STAR BURST" },
     { type: "svg-flower",    label: "FLOWER" },
+    { type: "svg-diamond",   label: "DIAMOND" },
+    { type: "svg-cloud",     label: "CLOUD" },
+    { type: "svg-dolphin",   label: "DOLPHIN" },
+    { type: "svg-unicorn",   label: "UNICORN" },
   ],
 };
 
@@ -208,6 +234,34 @@ function getStickerContent(type: string): string {
       return `<svg width="70" height="70" viewBox="0 0 70 70"><polygon points="35,2 43,26 68,26 48,42 55,66 35,52 15,66 22,42 2,26 27,26" fill="rgba(255,215,64,0.15)" stroke="#ffd740" stroke-width="2"/><polygon points="35,14 40,28 54,28 43,36 47,50 35,43 23,50 27,36 16,28 30,28" fill="rgba(255,215,64,0.2)" stroke="#ffab40" stroke-width="1"/></svg>`;
     case "svg-flower":
       return `<svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="18" r="12" fill="rgba(224,64,251,0.3)" stroke="#e040fb" stroke-width="1.5"/><circle cx="50" cy="30" r="12" fill="rgba(255,64,129,0.25)" stroke="#ff4081" stroke-width="1.5"/><circle cx="45" cy="48" r="12" fill="rgba(0,229,255,0.25)" stroke="#00e5ff" stroke-width="1.5"/><circle cx="25" cy="48" r="12" fill="rgba(105,240,174,0.25)" stroke="#69f0ae" stroke-width="1.5"/><circle cx="20" cy="30" r="12" fill="rgba(255,215,64,0.25)" stroke="#ffd740" stroke-width="1.5"/><circle cx="35" cy="35" r="8" fill="rgba(179,136,255,0.4)" stroke="#b388ff" stroke-width="2"/></svg>`;
+    case "svg-diamond":
+      return `<svg width="60" height="70" viewBox="0 0 60 70"><polygon points="30,5 55,25 45,65 15,65 5,25" fill="rgba(0,229,255,0.12)" stroke="#00e5ff" stroke-width="2"/><polygon points="30,5 45,25 30,65 15,25" fill="rgba(124,77,255,0.1)" stroke="#7c4dff" stroke-width="1"/><line x1="5" y1="25" x2="55" y2="25" stroke="#e040fb" stroke-width="1.5"/><line x1="30" y1="5" x2="30" y2="65" stroke="rgba(255,215,64,0.3)" stroke-width="1"/></svg>`;
+    case "svg-cloud":
+      return `<svg width="90" height="55" viewBox="0 0 90 55"><ellipse cx="45" cy="35" rx="30" ry="18" fill="rgba(179,136,255,0.2)" stroke="#b388ff" stroke-width="2"/><ellipse cx="28" cy="30" rx="20" ry="16" fill="rgba(224,64,251,0.15)" stroke="#e040fb" stroke-width="1.5"/><ellipse cx="62" cy="30" rx="20" ry="16" fill="rgba(0,229,255,0.15)" stroke="#00e5ff" stroke-width="1.5"/><ellipse cx="45" cy="22" rx="16" ry="14" fill="rgba(255,64,129,0.1)" stroke="#ff4081" stroke-width="1.5"/></svg>`;
+    case "svg-dolphin":
+      return `<svg width="80" height="60" viewBox="0 0 80 60"><path d="M15 35 Q25 15 45 20 Q60 22 70 35 Q65 40 55 38 Q45 42 35 40 Q25 42 15 35Z" fill="rgba(0,229,255,0.2)" stroke="#00e5ff" stroke-width="2"/><circle cx="35" cy="28" r="2" fill="#00e5ff"/><path d="M65 32 Q72 25 75 30" fill="none" stroke="#00e5ff" stroke-width="1.5"/><path d="M18 33 Q10 25 8 30 Q6 35 15 35" fill="rgba(124,77,255,0.2)" stroke="#7c4dff" stroke-width="1.5"/></svg>`;
+    case "svg-unicorn":
+      return `<svg width="70" height="80" viewBox="0 0 70 80"><ellipse cx="35" cy="50" rx="22" ry="25" fill="rgba(224,64,251,0.15)" stroke="#e040fb" stroke-width="2"/><ellipse cx="35" cy="35" rx="14" ry="16" fill="rgba(255,64,129,0.12)" stroke="#ff4081" stroke-width="1.5"/><polygon points="35,2 31,22 39,22" fill="rgba(255,215,64,0.3)" stroke="#ffd740" stroke-width="1.5"/><circle cx="30" cy="33" r="2" fill="#7c4dff"/><path d="M22 40 Q15 50 10 45" fill="none" stroke="#e040fb" stroke-width="2"/><path d="M48 40 Q55 50 60 45" fill="none" stroke="#00e5ff" stroke-width="2"/><path d="M20 55 Q10 70 18 72 Q25 68 22 58" fill="rgba(105,240,174,0.15)" stroke="#69f0ae" stroke-width="1.5"/><path d="M50 55 Q60 70 52 72 Q45 68 48 58" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/></svg>`;
+    case "stamp-slay":
+      return `<div class="stamp-secret" style="border-color:#e040fb;color:#e040fb;">SLAY</div>`;
+    case "stamp-blessed":
+      return `<div class="stamp-approved" style="border-color:#ffd740;color:#ffd740;">BLESSED</div>`;
+    case "stamp-manifest":
+      return `<div class="stamp-urgent" style="border-color:#b388ff;color:#b388ff;background:rgba(179,136,255,0.08);">MANIFEST</div>`;
+    case "icon-sun":
+      return `<i class="fa-solid fa-sun" style="font-size:3rem; color:#ffab40; text-shadow: 0 0 14px rgba(255,171,64,0.5);"></i>`;
+    case "icon-crown":
+      return `<i class="fa-solid fa-crown" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5);"></i>`;
+    case "icon-fire":
+      return `<i class="fa-solid fa-fire" style="font-size:3rem; color:#ff6d00; text-shadow: 0 0 14px rgba(255,109,0,0.5);"></i>`;
+    case "icon-gem":
+      return `<i class="fa-solid fa-gem" style="font-size:3rem; color:#00e5ff; text-shadow: 0 0 14px rgba(0,229,255,0.5);"></i>`;
+    case "icon-bolt":
+      return `<i class="fa-solid fa-bolt" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5);"></i>`;
+    case "note-gold":
+      return `<div class="sticky-note" style="background:#f9a825;color:#3e2723;" contenteditable="true">My thoughts...</div>`;
+    case "note-sky":
+      return `<div class="sticky-note" style="background:#0288d1;color:#e1f5fe;" contenteditable="true">My thoughts...</div>`;
     default:
       return `<div style="color:var(--cy-primary);font-size:12px;">~</div>`;
   }
@@ -227,6 +281,19 @@ export default function CyberLog() {
   const [showGoalForm, setShowGoalForm] = useState(false);
   const [goalForm, setGoalForm] = useState({ ...EMPTY_GOAL_FORM });
   const [expandedGoal, setExpandedGoal] = useState<string | null>(null);
+  const NODE_COLORS = ["#e040fb", "#7c4dff", "#00e5ff", "#69f0ae", "#ffd740", "#ff4081", "#ffab40", "#b388ff", "#64ffda", "#ff6d00"];
+  const [mindMapNodes, setMindMapNodes] = useState<MindMapNode[]>([
+    { id: "root", text: "My Dream Life", x: 400, y: 300, color: "#e040fb", parentId: null },
+    { id: "n1", text: "Career Goals", x: 200, y: 150, color: "#7c4dff", parentId: "root" },
+    { id: "n2", text: "Health & Wellness", x: 600, y: 150, color: "#69f0ae", parentId: "root" },
+    { id: "n3", text: "Relationships", x: 200, y: 450, color: "#ff4081", parentId: "root" },
+    { id: "n4", text: "Personal Growth", x: 600, y: 450, color: "#00e5ff", parentId: "root" },
+    { id: "n5", text: "Financial Freedom", x: 100, y: 300, color: "#ffd740", parentId: "root" },
+  ]);
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [editingNode, setEditingNode] = useState<string | null>(null);
+  const [newNodeText, setNewNodeText] = useState("");
+  const mindMapRef = useRef<HTMLDivElement>(null);
   const [terminalLines, setTerminalLines] = useState([
     { text: "Welcome to your safe space...", cls: "" },
     { text: "Today is a beautiful day to chase your dreams.", cls: "cy-log-info" },
@@ -377,11 +444,83 @@ export default function CyberLog() {
     if (expandedGoal === id) setExpandedGoal(null);
   };
 
+  const addMindMapNode = (parentId: string) => {
+    const parent = mindMapNodes.find(n => n.id === parentId);
+    if (!parent) return;
+    const id = "mm" + Math.random().toString(36).slice(2);
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 120 + Math.random() * 60;
+    const color = NODE_COLORS[Math.floor(Math.random() * NODE_COLORS.length)];
+    setMindMapNodes(ns => [...ns, {
+      id, text: "New idea...", x: parent.x + Math.cos(angle) * dist, y: parent.y + Math.sin(angle) * dist, color, parentId,
+    }]);
+    setEditingNode(id);
+    setNewNodeText("New idea...");
+  };
+
+  const deleteMindMapNode = (id: string) => {
+    if (id === "root") return;
+    const toRemove = new Set<string>();
+    const collect = (nid: string) => {
+      toRemove.add(nid);
+      mindMapNodes.filter(n => n.parentId === nid).forEach(n => collect(n.id));
+    };
+    collect(id);
+    setMindMapNodes(ns => ns.filter(n => !toRemove.has(n.id)));
+    if (selectedNode && toRemove.has(selectedNode)) setSelectedNode(null);
+    if (editingNode && toRemove.has(editingNode)) setEditingNode(null);
+  };
+
+  const saveNodeEdit = (id: string) => {
+    if (newNodeText.trim()) {
+      setMindMapNodes(ns => ns.map(n => n.id === id ? { ...n, text: newNodeText.trim() } : n));
+    }
+    setEditingNode(null);
+    setNewNodeText("");
+  };
+
+  const initNodeDrag = useCallback((el: HTMLDivElement, nodeId: string) => {
+    let sx = 0, sy = 0, ox = 0, oy = 0;
+    const onDown = (e: MouseEvent) => {
+      const tgt = e.target as HTMLElement;
+      if (tgt.tagName === "INPUT" || tgt.tagName === "BUTTON" || tgt.closest("button")) return;
+      e.preventDefault();
+      sx = e.clientX; sy = e.clientY;
+      ox = el.offsetLeft; oy = el.offsetTop;
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    };
+    const onMove = (e: MouseEvent) => {
+      e.preventDefault();
+      const nx = ox + (e.clientX - sx);
+      const ny = oy + (e.clientY - sy);
+      el.style.left = nx + "px";
+      el.style.top = ny + "px";
+      setMindMapNodes(ns => ns.map(n => n.id === nodeId ? { ...n, x: nx, y: ny } : n));
+    };
+    const onUp = () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    };
+    el.addEventListener("mousedown", onDown);
+  }, []);
+
+  useEffect(() => {
+    mindMapNodes.forEach(n => {
+      const el = document.getElementById(`mmnode-${n.id}`) as HTMLDivElement | null;
+      if (el && !el.dataset.dragging) {
+        el.dataset.dragging = "1";
+        initNodeDrag(el, n.id);
+      }
+    });
+  }, [mindMapNodes, initNodeDrag]);
+
   const ICON_NAV: { icon: string; title: string; section: Section }[] = [
     { icon: "fa-solid fa-user-astronaut", title: "Profile",  section: "profile" },
     { icon: "fa-solid fa-wand-magic-sparkles", title: "Vision", section: "vision" },
     { icon: "fa-solid fa-book-open",     title: "Journal",  section: "journal" },
     { icon: "fa-solid fa-bullseye",      title: "Goals",    section: "goals" },
+    { icon: "fa-solid fa-diagram-project", title: "Mind Map", section: "mindmap" },
   ];
 
   return (
@@ -516,8 +655,14 @@ export default function CyberLog() {
               >
                 <option value="Nunito">Nunito</option>
                 <option value="Quicksand">Quicksand</option>
-                <option value="Caveat">Handwritten</option>
                 <option value="Comfortaa">Comfortaa</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Fredoka">Fredoka</option>
+                <option value="Caveat">Handwritten</option>
+                <option value="Dancing Script">Calligraphy</option>
+                <option value="Indie Flower">Doodle</option>
+                <option value="Satisfy">Script</option>
+                <option value="Amatic SC">Tall</option>
               </select>
 
               <div className="cy-tool-group">
@@ -906,6 +1051,114 @@ export default function CyberLog() {
           </div>
         )}
 
+        {/* MIND MAP */}
+        {section === "mindmap" && (
+          <div className="cy-section">
+            <div className="cy-page-header">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <div className="cy-page-title">Mind Map</div>
+                  <div className="cy-page-subtitle">VISUALIZE YOUR IDEAS ~ CONNECT THE DOTS</div>
+                </div>
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <span className="cy-badge cy-badge-online" style={{ fontSize: 10 }}>
+                    {mindMapNodes.length} NODES
+                  </span>
+                  <button className="cy-goal-add-btn" onClick={() => addMindMapNode(selectedNode || "root")} data-testid="button-add-node">
+                    <i className="fa-solid fa-plus" style={{ marginRight: 6 }} />
+                    Add Node
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="cy-mindmap-container" ref={mindMapRef} data-testid="mindmap-canvas"
+              onClick={(e) => { if ((e.target as HTMLElement).classList.contains("cy-mindmap-container")) setSelectedNode(null); }}
+            >
+              <svg className="cy-mindmap-lines"
+                width={Math.max(900, ...mindMapNodes.map(n => n.x + 220))}
+                height={Math.max(700, ...mindMapNodes.map(n => n.y + 80))}
+              >
+                {mindMapNodes.filter(n => n.parentId).map(n => {
+                  const parent = mindMapNodes.find(p => p.id === n.parentId);
+                  if (!parent) return null;
+                  const pIsRoot = parent.id === "root";
+                  const nIsRoot = n.id === "root";
+                  const px = parent.x + (pIsRoot ? 80 : 60);
+                  const py = parent.y + (pIsRoot ? 26 : 22);
+                  const nx = n.x + (nIsRoot ? 80 : 60);
+                  const ny = n.y + (nIsRoot ? 26 : 22);
+                  const mx = (px + nx) / 2;
+                  return (
+                    <path key={`line-${n.id}`}
+                      d={`M ${px} ${py} C ${mx} ${py}, ${mx} ${ny}, ${nx} ${ny}`}
+                      stroke={n.color} strokeWidth="2" strokeOpacity={selectedNode === n.id || selectedNode === n.parentId ? "0.6" : "0.25"}
+                      fill="none"
+                      strokeDasharray={selectedNode === n.id || selectedNode === n.parentId ? "0" : "6 4"}
+                    />
+                  );
+                })}
+              </svg>
+
+              {mindMapNodes.map(n => (
+                <div key={n.id} id={`mmnode-${n.id}`}
+                  className={`cy-mindmap-node ${n.id === "root" ? "cy-mm-root" : ""} ${selectedNode === n.id ? "cy-mm-selected" : ""}`}
+                  style={{ left: n.x, top: n.y, borderColor: n.color, boxShadow: selectedNode === n.id ? `0 0 20px ${n.color}40` : undefined }}
+                  onClick={(e) => { e.stopPropagation(); setSelectedNode(n.id); }}
+                  data-testid={`mmnode-${n.id}`}
+                >
+                  {editingNode === n.id ? (
+                    <input className="cy-mm-edit-input" autoFocus
+                      value={newNodeText}
+                      onChange={e => setNewNodeText(e.target.value)}
+                      onKeyDown={e => { if (e.key === "Enter") saveNodeEdit(n.id); if (e.key === "Escape") { setEditingNode(null); setNewNodeText(""); } }}
+                      onBlur={() => saveNodeEdit(n.id)}
+                      data-testid={`mmnode-edit-${n.id}`}
+                    />
+                  ) : (
+                    <span className="cy-mm-text" onDoubleClick={() => { setEditingNode(n.id); setNewNodeText(n.text); }}
+                      style={{ color: n.id === "root" ? undefined : n.color }}
+                      data-testid={`mmnode-text-${n.id}`}
+                    >
+                      {n.text}
+                    </span>
+                  )}
+                  <div className="cy-mm-actions">
+                    <button className="cy-mm-action-btn" title="Add child node"
+                      onClick={(e) => { e.stopPropagation(); addMindMapNode(n.id); }}
+                      style={{ color: "#69f0ae" }}
+                      data-testid={`mmnode-add-${n.id}`}
+                    >
+                      <i className="fa-solid fa-plus" />
+                    </button>
+                    <button className="cy-mm-action-btn" title="Edit node"
+                      onClick={(e) => { e.stopPropagation(); setEditingNode(n.id); setNewNodeText(n.text); }}
+                      style={{ color: "#ffd740" }}
+                      data-testid={`mmnode-editbtn-${n.id}`}
+                    >
+                      <i className="fa-solid fa-pen" />
+                    </button>
+                    {n.id !== "root" && (
+                      <button className="cy-mm-action-btn" title="Delete node"
+                        onClick={(e) => { e.stopPropagation(); deleteMindMapNode(n.id); }}
+                        style={{ color: "#ff4081" }}
+                        data-testid={`mmnode-delete-${n.id}`}
+                      >
+                        <i className="fa-solid fa-trash-can" />
+                      </button>
+                    )}
+                  </div>
+                  <div className="cy-mm-dot" style={{ background: n.color }} />
+                </div>
+              ))}
+
+              <div className="cy-mm-help">
+                <i className="fa-solid fa-circle-info" style={{ marginRight: 6 }} />
+                Drag nodes to reposition. Double-click to edit text. Click + to add child nodes.
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* SETTINGS */}
         {section === "settings" && (
           <div className="cy-section">
@@ -917,7 +1170,7 @@ export default function CyberLog() {
               <div className="cy-settings-grid">
                 <div className="cy-settings-card" style={{ gridColumn: "1 / -1" }}>
                   <div className="cy-settings-card-title">VIBE / THEME</div>
-                  <div className="cy-theme-grid" style={{ gridTemplateColumns: "repeat(5, 1fr)" }}>
+                  <div className="cy-theme-grid" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
                     {THEMES.map(t => (
                       <div key={t.id} className={`cy-theme-option${theme === t.id ? " selected" : ""}`}
                         onClick={() => setTheme(t.id)} data-testid={`theme-option-${t.id}`}
