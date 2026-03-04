@@ -451,6 +451,8 @@ export default function CyberLog() {
   const [fontChoice, setFontChoice] = useState("Nunito");
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [visionSubpage, setVisionSubpage] = useState<string | null>(null);
+  const [visionImages, setVisionImages] = useState<Record<string, string[]>>({});
+  const visionImageRef = useRef<HTMLInputElement>(null);
   const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([]);
   const [moodNote, setMoodNote] = useState("");
   const [habitDays, setHabitDays] = useState<HabitDay[]>([]);
@@ -478,6 +480,7 @@ export default function CyberLog() {
         if (d.moodEntries) setMoodEntries(d.moodEntries);
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
+        if (d.visionImages) setVisionImages(d.visionImages);
         if (d.paperPattern) setPaperPattern(d.paperPattern);
         if (d.canvasMode) setCanvasMode(d.canvasMode);
         if (d.crtEnabled !== undefined) setCrtEnabled(d.crtEnabled);
@@ -496,12 +499,12 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, paperPattern, canvasMode, crtEnabled,
+          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, paperPattern, canvasMode, crtEnabled,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, paperPattern, canvasMode, crtEnabled]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, paperPattern, canvasMode, crtEnabled]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -732,6 +735,29 @@ export default function CyberLog() {
     if (files.length <= 1) return;
     setFiles(fs => fs.filter(f => f.id !== id));
     if (activeFileId === id) setActiveFileId(files.find(f => f.id !== id)?.id || files[0].id);
+  };
+
+  const addVisionImage = (category: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList) return;
+    Array.from(fileList).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setVisionImages(prev => ({
+          ...prev,
+          [category]: [...(prev[category] || []), reader.result as string],
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = "";
+  };
+
+  const removeVisionImage = (category: string, index: number) => {
+    setVisionImages(prev => ({
+      ...prev,
+      [category]: (prev[category] || []).filter((_, i) => i !== index),
+    }));
   };
 
   const quickNewEntry = () => {
@@ -1171,6 +1197,11 @@ export default function CyberLog() {
                     <div className="cy-lab-desc">{lab.desc}</div>
                     <div className="cy-lab-status">
                       <span className="cy-badge cy-badge-online">{lab.status}</span>
+                      {(visionImages[lab.title]?.length || 0) > 0 && (
+                        <span className="cy-badge" style={{ background: "var(--cy-primary)", color: "var(--cy-bg)", marginLeft: 6, fontSize: 9 }}>
+                          <i className="fa-solid fa-image" style={{ marginRight: 3 }} />{visionImages[lab.title].length}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -1197,6 +1228,30 @@ export default function CyberLog() {
               </div>
               <div className="cy-page-body">
                 <div className="cy-vision-subpage">
+                  <div className="cy-vision-board-section">
+                    <div className="cy-vision-section-title">
+                      <i className="fa-solid fa-images" style={{ marginRight: 8 }} />My Vision Board
+                    </div>
+                    <input type="file" accept="image/*" multiple ref={visionImageRef} style={{ display: "none" }}
+                      onChange={e => addVisionImage(feature.title, e)} data-testid="vision-image-input" />
+                    <div className="cy-vision-gallery">
+                      {(visionImages[feature.title] || []).map((img, i) => (
+                        <div key={i} className="cy-vision-img-card" data-testid={`vision-img-${i}`}>
+                          <img src={img} alt={`Vision ${i + 1}`} />
+                          <button className="cy-vision-img-remove" onClick={() => removeVisionImage(feature.title, i)}
+                            data-testid={`vision-img-remove-${i}`}>
+                            <i className="fa-solid fa-xmark" />
+                          </button>
+                        </div>
+                      ))}
+                      <button className="cy-vision-upload-card" onClick={() => visionImageRef.current?.click()}
+                        data-testid="vision-upload-btn">
+                        <i className="fa-solid fa-plus" />
+                        <span>Add Images</span>
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="cy-vision-affirmations">
                     <div className="cy-vision-section-title"><i className="fa-solid fa-star" style={{ marginRight: 8 }} />Daily Affirmations</div>
                     <div className="cy-affirmation-list">

@@ -1961,6 +1961,19 @@
 .cy-prompt-item:hover { box-shadow: var(--cy-glow); }
 .cy-prompt-number { background: var(--cy-primary); color: var(--cy-bg); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
 
+/* Vision Board Image Gallery */
+.cy-vision-board-section { margin-bottom: 8px; }
+.cy-vision-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-top: 12px; }
+.cy-vision-img-card { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 1; border: 2px solid transparent; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+.cy-vision-img-card:hover { border-color: var(--cy-primary); box-shadow: var(--cy-glow); transform: scale(1.02); }
+.cy-vision-img-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cy-vision-img-remove { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.7); border: none; color: #ff4081; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+.cy-vision-img-card:hover .cy-vision-img-remove { opacity: 1; }
+.cy-vision-img-remove:hover { background: #ff4081; color: #fff; }
+.cy-vision-upload-card { background: var(--cy-surface); border: 2px dashed var(--cy-muted); border-radius: 12px; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; color: var(--cy-muted); font-size: 13px; transition: border-color 0.2s, color 0.2s, box-shadow 0.2s; }
+.cy-vision-upload-card i { font-size: 28px; }
+.cy-vision-upload-card:hover { border-color: var(--cy-primary); color: var(--cy-primary); box-shadow: var(--cy-glow); }
+
 /* === MOOD TRACKER === */
 .cy-mood-checkin { background: var(--cy-surface); border: var(--cy-border); border-radius: 14px; padding: 28px; text-align: center; margin-bottom: 24px; }
 .cy-mood-label { font-family: var(--cy-font-accent); font-size: 18px; color: var(--cy-primary); margin-bottom: 20px; }
