@@ -2175,11 +2175,27 @@
 .cy-mood-emoji-label { font-size: 11px; color: var(--cy-muted); text-transform: uppercase; letter-spacing: 1px; }
 .cy-mood-note { background: var(--cy-bg); border: var(--cy-border); border-radius: 10px; padding: 10px 14px; color: var(--cy-text); width: 100%; max-width: 400px; font-size: 13px; outline: none; }
 .cy-mood-note:focus { border-color: var(--cy-primary); box-shadow: var(--cy-glow); }
+.cy-mood-stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.cy-mood-stat-card { background: var(--cy-surface); border: var(--cy-border); border-radius: 12px; padding: 16px; text-align: center; }
+.cy-mood-stat-value { font-family: var(--cy-font-header); font-size: 28px; font-weight: 700; color: var(--cy-primary); }
+.cy-mood-stat-label { font-size: 10px; color: var(--cy-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
+.cy-mood-dist { display: flex; gap: 8px; align-items: flex-end; justify-content: center; margin-bottom: 24px; padding: 20px; background: var(--cy-surface); border: var(--cy-border); border-radius: 14px; }
+.cy-mood-dist-bar { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; max-width: 70px; }
+.cy-mood-dist-fill { width: 100%; border-radius: 8px 8px 0 0; min-height: 4px; transition: height 0.3s; }
+.cy-mood-dist-emoji { font-size: 20px; }
+.cy-mood-dist-count { font-size: 11px; color: var(--cy-muted); font-weight: 600; }
+.cy-mood-week-trend { display: flex; gap: 6px; align-items: flex-end; justify-content: center; padding: 20px; background: var(--cy-surface); border: var(--cy-border); border-radius: 14px; margin-bottom: 24px; min-height: 120px; }
+.cy-mood-week-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; max-width: 48px; }
+.cy-mood-week-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.cy-mood-week-day { font-size: 9px; color: var(--cy-muted); text-transform: uppercase; letter-spacing: 1px; }
 .cy-mood-calendar { display: flex; flex-wrap: wrap; gap: 10px; }
-.cy-mood-day { background: var(--cy-surface); border: var(--cy-border); border-radius: 10px; padding: 10px 14px; min-width: 80px; text-align: center; }
+.cy-mood-day { background: var(--cy-surface); border: var(--cy-border); border-radius: 10px; padding: 10px 14px; min-width: 80px; text-align: center; position: relative; }
+.cy-mood-day:hover .cy-mood-day-delete { opacity: 1; }
 .cy-mood-day-date { font-size: 10px; color: var(--cy-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 .cy-mood-day-emoji { font-size: 24px; }
 .cy-mood-day-note { font-size: 10px; color: var(--cy-muted); margin-top: 4px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cy-mood-day-delete { position: absolute; top: 4px; right: 6px; background: none; border: none; color: var(--cy-muted); cursor: pointer; font-size: 10px; opacity: 0; transition: opacity 0.2s, color 0.2s; padding: 2px 4px; }
+.cy-mood-day-delete:hover { color: #ff4081; }
 
 /* === HABIT TRACKER === */
 .cy-habit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 28px; }
@@ -2410,6 +2426,85 @@
 [data-cyber-theme="honey-glow"] .crt-overlay,
 [data-cyber-theme="sky-bloom"] .crt-overlay {
   display: none;
+}
+
+/* Light theme canvas overrides */
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-blueprint,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-blueprint,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-blueprint {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cy-primary) 6%, var(--cy-bg)) 0%, color-mix(in srgb, var(--cy-accent) 4%, var(--cy-bg)) 100%);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-void,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-void,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-void {
+  background-color: color-mix(in srgb, var(--cy-surface) 70%, white);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-neon,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-neon,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-neon {
+  background: radial-gradient(ellipse at 30% 40%, color-mix(in srgb, var(--cy-primary) 8%, transparent) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 60%, color-mix(in srgb, var(--cy-accent) 6%, transparent) 0%, transparent 50%),
+              var(--cy-bg);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-dreamy,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-dreamy,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-dreamy {
+  background: radial-gradient(ellipse at 30% 50%, color-mix(in srgb, var(--cy-primary) 8%, transparent) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, color-mix(in srgb, var(--cy-accent) 6%, transparent) 0%, transparent 50%),
+              var(--cy-bg);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-starfield,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-starfield,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-starfield {
+  background: var(--cy-bg);
+  background-image:
+    radial-gradient(1.5px 1.5px at 10% 20%, color-mix(in srgb, var(--cy-primary) 30%, transparent) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 30% 70%, color-mix(in srgb, var(--cy-accent) 25%, transparent) 50%, transparent 50%),
+    radial-gradient(1px 1px at 50% 40%, color-mix(in srgb, var(--cy-primary) 20%, transparent) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 70% 80%, color-mix(in srgb, var(--cy-primary) 30%, transparent) 50%, transparent 50%),
+    radial-gradient(1px 1px at 90% 10%, color-mix(in srgb, var(--cy-accent) 25%, transparent) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 20% 90%, color-mix(in srgb, var(--cy-primary) 15%, transparent) 50%, transparent 50%),
+    radial-gradient(1px 1px at 80% 50%, color-mix(in srgb, var(--cy-accent) 20%, transparent) 50%, transparent 50%);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-aurora,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-aurora,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-aurora {
+  background: linear-gradient(180deg, var(--cy-bg) 0%, color-mix(in srgb, var(--cy-primary) 5%, var(--cy-bg)) 30%, color-mix(in srgb, var(--cy-accent) 5%, var(--cy-bg)) 60%, color-mix(in srgb, var(--cy-primary) 3%, var(--cy-bg)) 80%, var(--cy-bg) 100%);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-main-stage.canvas-soft,
+[data-cyber-theme="honey-glow"] .cy-main-stage.canvas-soft,
+[data-cyber-theme="sky-bloom"] .cy-main-stage.canvas-soft {
+  background: linear-gradient(135deg, var(--cy-surface) 0%, var(--cy-bg) 100%);
+}
+
+/* Light theme mood/checkin overrides */
+[data-cyber-theme="cloud-nine"] .cy-mood-checkin,
+[data-cyber-theme="honey-glow"] .cy-mood-checkin,
+[data-cyber-theme="sky-bloom"] .cy-mood-checkin {
+  background: color-mix(in srgb, var(--cy-surface) 60%, white);
+  border-color: color-mix(in srgb, var(--cy-primary) 12%, transparent);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-mood-btn,
+[data-cyber-theme="honey-glow"] .cy-mood-btn,
+[data-cyber-theme="sky-bloom"] .cy-mood-btn {
+  background: color-mix(in srgb, var(--cy-bg) 90%, white);
+}
+
+[data-cyber-theme="cloud-nine"] .cy-mood-day,
+[data-cyber-theme="honey-glow"] .cy-mood-day,
+[data-cyber-theme="sky-bloom"] .cy-mood-day,
+[data-cyber-theme="cloud-nine"] .cy-mood-stat-card,
+[data-cyber-theme="honey-glow"] .cy-mood-stat-card,
+[data-cyber-theme="sky-bloom"] .cy-mood-stat-card {
+  background: color-mix(in srgb, var(--cy-surface) 50%, white);
+  border-color: color-mix(in srgb, var(--cy-primary) 10%, transparent);
 }
 
 .cy-print-title { display: none; }

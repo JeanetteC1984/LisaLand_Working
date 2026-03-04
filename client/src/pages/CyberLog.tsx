@@ -2018,7 +2018,35 @@ export default function CyberLog() {
         )}
 
         {/* MOOD */}
-        {section === "mood" && (
+        {section === "mood" && (() => {
+          const moodStreak = (() => {
+            let streak = 0;
+            const today = new Date();
+            for (let i = 0; i < 365; i++) {
+              const d = new Date(today);
+              d.setDate(d.getDate() - i);
+              const ds = d.toISOString().split("T")[0];
+              if (moodEntries.some(e => e.date === ds)) streak++;
+              else break;
+            }
+            return streak;
+          })();
+          const avgMood = moodEntries.length > 0
+            ? (moodEntries.reduce((s, e) => s + e.mood, 0) / moodEntries.length)
+            : 0;
+          const moodCounts = MOOD_EMOJIS.map((_, i) => moodEntries.filter(e => e.mood === i).length);
+          const maxCount = Math.max(...moodCounts, 1);
+          const last7Days = Array.from({ length: 7 }, (_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - (6 - i));
+            const ds = d.toISOString().split("T")[0];
+            const entry = moodEntries.find(e => e.date === ds);
+            return { date: d, dateStr: ds, entry, dayName: d.toLocaleDateString("en-US", { weekday: "short" }) };
+          });
+          const deleteMoodEntry = (date: string) => {
+            setMoodEntries(prev => prev.filter(e => e.date !== date));
+          };
+          return (
           <div className="cy-section">
             <div className="cy-page-header">
               <div className="cy-page-header-row">
@@ -2050,6 +2078,69 @@ export default function CyberLog() {
                   data-testid="mood-note-input"
                 />
               </div>
+
+              {moodEntries.length > 0 && (
+                <>
+                  <div className="cy-mood-stats-row" data-testid="mood-stats">
+                    <div className="cy-mood-stat-card">
+                      <div className="cy-mood-stat-value">{moodEntries.length}</div>
+                      <div className="cy-mood-stat-label">Total Check-ins</div>
+                    </div>
+                    <div className="cy-mood-stat-card">
+                      <div className="cy-mood-stat-value">{moodStreak}🔥</div>
+                      <div className="cy-mood-stat-label">Day Streak</div>
+                    </div>
+                    <div className="cy-mood-stat-card">
+                      <div className="cy-mood-stat-value">{MOOD_EMOJIS[Math.round(avgMood)]?.emoji || "😐"}</div>
+                      <div className="cy-mood-stat-label">Average Mood</div>
+                    </div>
+                    <div className="cy-mood-stat-card">
+                      <div className="cy-mood-stat-value">{MOOD_EMOJIS[moodCounts.indexOf(Math.max(...moodCounts))]?.emoji || "?"}</div>
+                      <div className="cy-mood-stat-label">Most Common</div>
+                    </div>
+                  </div>
+
+                  <div className="cy-vision-section-title" style={{ marginBottom: 12 }}>
+                    <i className="fa-solid fa-chart-line" style={{ marginRight: 8 }} />This Week
+                  </div>
+                  <div className="cy-mood-week-trend" data-testid="mood-week-trend">
+                    {last7Days.map((d, i) => (
+                      <div key={i} className="cy-mood-week-col">
+                        {d.entry ? (
+                          <div className="cy-mood-week-dot"
+                            style={{ background: MOOD_EMOJIS[d.entry.mood]?.color || "var(--cy-muted)", opacity: 0.85 }}
+                            title={`${d.dayName}: ${MOOD_EMOJIS[d.entry.mood]?.label} ${d.entry.note ? "— " + d.entry.note : ""}`}
+                          >
+                            {MOOD_EMOJIS[d.entry.mood]?.emoji}
+                          </div>
+                        ) : (
+                          <div className="cy-mood-week-dot" style={{ background: "var(--cy-surface)", border: "1px dashed var(--cy-muted)" }} title={`${d.dayName}: No check-in`}>
+                            <span style={{ fontSize: 10, color: "var(--cy-muted)" }}>—</span>
+                          </div>
+                        )}
+                        <div className="cy-mood-week-day">{d.dayName}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="cy-vision-section-title" style={{ marginBottom: 12 }}>
+                    <i className="fa-solid fa-chart-bar" style={{ marginRight: 8 }} />Mood Distribution
+                  </div>
+                  <div className="cy-mood-dist" data-testid="mood-distribution">
+                    {MOOD_EMOJIS.map((m, i) => (
+                      <div key={i} className="cy-mood-dist-bar">
+                        <div className="cy-mood-dist-count">{moodCounts[i]}</div>
+                        <div className="cy-mood-dist-fill" style={{
+                          height: `${Math.max((moodCounts[i] / maxCount) * 80, 4)}px`,
+                          background: m.color
+                        }} />
+                        <div className="cy-mood-dist-emoji">{m.emoji}</div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
               <div className="cy-mood-history">
                 <div className="cy-vision-section-title" style={{ marginBottom: 16 }}>
                   <i className="fa-solid fa-calendar" style={{ marginRight: 8 }} />Recent Moods
@@ -2057,9 +2148,12 @@ export default function CyberLog() {
                 <div className="cy-mood-calendar">
                   {[...moodEntries].reverse().slice(0, 30).map((e, i) => (
                     <div key={i} className="cy-mood-day" data-testid={`mood-day-${i}`}>
+                      <button className="cy-mood-day-delete" onClick={() => deleteMoodEntry(e.date)} title="Remove" data-testid={`mood-day-delete-${i}`}>
+                        <i className="fa-solid fa-xmark" />
+                      </button>
                       <div className="cy-mood-day-date">{new Date(e.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
                       <div className="cy-mood-day-emoji">{MOOD_EMOJIS[e.mood]?.emoji || "?"}</div>
-                      {e.note && <div className="cy-mood-day-note">{e.note}</div>}
+                      {e.note && <div className="cy-mood-day-note" title={e.note}>{e.note}</div>}
                     </div>
                   ))}
                   {moodEntries.length === 0 && (
@@ -2071,7 +2165,8 @@ export default function CyberLog() {
               </div>
             </div>
           </div>
-        )}
+          );
+        })()}
 
         {/* HABITS */}
         {section === "habits" && (

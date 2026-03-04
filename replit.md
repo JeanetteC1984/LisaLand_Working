@@ -24,7 +24,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Mind Map**: Interactive node-based mind mapping with draggable nodes (ref-based cleanup for drag), SVG curved connectors, add/edit/delete nodes.
 - **Profile**: Editable personal info with profile picture upload (base64 in state)
 - **Vision Board Subpages**: Each of 6 cards opens to a 2-column grid layout — prompts on left, compact affirmation chips on right
-- **Mood Tracker**: Daily emoji check-in (5 moods) with optional notes, calendar history view
+- **Mood Tracker**: Daily emoji check-in (5 moods) with optional notes, stats dashboard (total check-ins, day streak, average mood, most common), 7-day week trend visualization, mood distribution bar chart, deletable entries with hover X button, calendar history view
 - **Habit Tracker**: 6 default habits + custom habit creation (name, icon picker, color picker). Tap to complete, streak counting, weekly bar chart. Custom habits can be deleted.
 - **Vision Board Images (vboard)**: Masonry image gallery with captions per image. Data: `Record<string, {src, caption}[]>`
 - **localStorage Persistence**: Theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled
