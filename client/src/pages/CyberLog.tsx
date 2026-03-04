@@ -521,7 +521,7 @@ export default function CyberLog() {
   const [fontChoice, setFontChoice] = useState("Nunito");
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [visionSubpage, setVisionSubpage] = useState<string | null>(null);
-  const [visionImages, setVisionImages] = useState<Record<string, string[]>>({});
+  const [visionImages, setVisionImages] = useState<Record<string, {src: string, caption: string}[]>>({});
   const visionImageRef = useRef<HTMLInputElement>(null);
   const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([]);
   const [moodNote, setMoodNote] = useState("");
@@ -550,7 +550,15 @@ export default function CyberLog() {
         if (d.moodEntries) setMoodEntries(d.moodEntries);
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
-        if (d.visionImages) setVisionImages(d.visionImages);
+        if (d.visionImages) {
+          const migrated: Record<string, {src: string, caption: string}[]> = {};
+          for (const [k, v] of Object.entries(d.visionImages)) {
+            migrated[k] = (v as any[]).map((item: any) =>
+              typeof item === "string" ? { src: item, caption: "" } : item
+            );
+          }
+          setVisionImages(migrated);
+        }
         if (d.paperPattern) setPaperPattern(d.paperPattern);
         if (d.canvasMode) setCanvasMode(d.canvasMode);
         if (d.crtEnabled !== undefined) setCrtEnabled(d.crtEnabled);
@@ -815,7 +823,7 @@ export default function CyberLog() {
       reader.onload = () => {
         setVisionImages(prev => ({
           ...prev,
-          [category]: [...(prev[category] || []), reader.result as string],
+          [category]: [...(prev[category] || []), { src: reader.result as string, caption: "" }],
         }));
       };
       reader.readAsDataURL(file);
@@ -827,6 +835,13 @@ export default function CyberLog() {
     setVisionImages(prev => ({
       ...prev,
       [category]: (prev[category] || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateVisionCaption = (category: string, index: number, caption: string) => {
+    setVisionImages(prev => ({
+      ...prev,
+      [category]: (prev[category] || []).map((item, i) => i === index ? { ...item, caption } : item),
     }));
   };
 
@@ -1424,13 +1439,23 @@ export default function CyberLog() {
                 </div>
               ) : (
                 <div className="cy-vboard-gallery" data-testid="vboard-gallery">
-                  {(visionImages["board"] || []).map((img, i) => (
+                  {(visionImages["board"] || []).map((item, i) => (
                     <div key={i} className="cy-vboard-img-card" data-testid={`vboard-img-${i}`}>
-                      <img src={img} alt={`Vision ${i + 1}`} />
+                      <img src={item.src} alt={item.caption || `Vision ${i + 1}`} />
                       <button className="cy-vision-img-remove" onClick={() => removeVisionImage("board", i)}
                         data-testid={`vboard-img-remove-${i}`}>
                         <i className="fa-solid fa-xmark" />
                       </button>
+                      <div className="cy-vboard-caption">
+                        <input
+                          type="text"
+                          className="cy-vboard-caption-input"
+                          placeholder="Add a caption..."
+                          value={item.caption}
+                          onChange={e => updateVisionCaption("board", i, e.target.value)}
+                          data-testid={`vboard-caption-${i}`}
+                        />
+                      </div>
                     </div>
                   ))}
                   <button className="cy-vision-upload-card" onClick={() => visionImageRef.current?.click()}
