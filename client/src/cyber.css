@@ -914,25 +914,49 @@
   filter: drop-shadow(4px 6px 14px rgba(0,0,0,0.7));
 }
 
-.cy-sticker-delete {
+.cy-sticker-controls {
   position: absolute;
-  top: -10px; right: -10px;
-  background: #ff4081;
-  color: #1a0a2e;
+  top: -12px; right: -12px;
+  display: none;
+  flex-direction: row;
+  gap: 3px;
+  z-index: 10;
+}
+.cy-sticker:hover .cy-sticker-controls { display: flex; }
+
+.cy-sticker-resize {
   width: 20px; height: 20px;
   border-radius: 50%;
-  text-align: center;
-  line-height: 20px;
-  font-size: 11px;
+  border: none;
+  background: rgba(124,77,255,0.85);
+  color: #fff;
+  font-size: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  pointer-events: auto;
+}
+.cy-sticker-resize:hover { background: #7c4dff; transform: scale(1.2); }
+
+.cy-sticker-delete {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #ff4081;
+  color: #fff;
+  font-size: 9px;
   font-weight: 700;
   cursor: pointer;
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   pointer-events: auto;
-  z-index: 2;
+  transition: background 0.2s, transform 0.2s;
 }
-
-.cy-sticker:hover .cy-sticker-delete { display: block; }
+.cy-sticker-delete:hover { background: #e91e63; transform: scale(1.2); }
 
 /* Sticker styles - Lisa Frank vibes */
 .stamp-secret {

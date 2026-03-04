@@ -16,6 +16,7 @@ type Sticker = {
   x: number;
   y: number;
   rotation: number;
+  scale?: number;
 };
 
 type Goal = {
@@ -341,6 +342,84 @@ const STICKER_CATEGORIES = {
     { type: "div-rainbow",  label: "RAINBOW LINE" },
     { type: "div-dots",     label: "DOTS LINE" },
   ],
+  Weather: [
+    { type: "emoji-cloud",      label: "CLOUD" },
+    { type: "emoji-thunder",    label: "THUNDER" },
+    { type: "emoji-snowflake",  label: "SNOWFLAKE" },
+    { type: "emoji-tornado",    label: "TORNADO" },
+    { type: "emoji-umbrella",   label: "UMBRELLA" },
+    { type: "emoji-raindrop",   label: "RAINDROP" },
+    { type: "emoji-wind",       label: "WIND" },
+    { type: "emoji-fog",        label: "FOG" },
+    { type: "emoji-thermometer",label: "THERMOMETER" },
+    { type: "emoji-sunny",      label: "SUNNY" },
+  ],
+  Nature: [
+    { type: "emoji-tree",       label: "TREE" },
+    { type: "emoji-mushroom",   label: "MUSHROOM" },
+    { type: "emoji-herb",       label: "HERB" },
+    { type: "emoji-leaf",       label: "LEAF" },
+    { type: "emoji-tulip",      label: "TULIP" },
+    { type: "emoji-sunflower",  label: "SUNFLOWER" },
+    { type: "emoji-hibiscus",   label: "HIBISCUS" },
+    { type: "emoji-cactus",     label: "CACTUS" },
+    { type: "emoji-shell",      label: "SHELL" },
+    { type: "emoji-ocean",      label: "OCEAN" },
+    { type: "emoji-mountain",   label: "MOUNTAIN" },
+    { type: "emoji-volcano",    label: "VOLCANO" },
+  ],
+  Food: [
+    { type: "emoji-strawberry", label: "STRAWBERRY" },
+    { type: "emoji-peach",      label: "PEACH" },
+    { type: "emoji-grapes",     label: "GRAPES" },
+    { type: "emoji-watermelon", label: "WATERMELON" },
+    { type: "emoji-lemon",      label: "LEMON" },
+    { type: "emoji-avocado",    label: "AVOCADO" },
+    { type: "emoji-cupcake",    label: "CUPCAKE" },
+    { type: "emoji-donut",      label: "DONUT" },
+    { type: "emoji-cookie",     label: "COOKIE" },
+    { type: "emoji-icecream",   label: "ICE CREAM" },
+    { type: "emoji-coffee",     label: "COFFEE" },
+    { type: "emoji-boba",       label: "BOBA" },
+  ],
+  Zodiac: [
+    { type: "emoji-aries",      label: "ARIES" },
+    { type: "emoji-taurus",     label: "TAURUS" },
+    { type: "emoji-gemini",     label: "GEMINI" },
+    { type: "emoji-cancer",     label: "CANCER" },
+    { type: "emoji-leo",        label: "LEO" },
+    { type: "emoji-virgo",      label: "VIRGO" },
+    { type: "emoji-libra",      label: "LIBRA" },
+    { type: "emoji-scorpio",    label: "SCORPIO" },
+    { type: "emoji-sagittarius",label: "SAGITTARIUS" },
+    { type: "emoji-capricorn",  label: "CAPRICORN" },
+    { type: "emoji-aquarius",   label: "AQUARIUS" },
+    { type: "emoji-pisces",     label: "PISCES" },
+  ],
+  Shapes: [
+    { type: "icon-circle",      label: "CIRCLE" },
+    { type: "icon-square",      label: "SQUARE" },
+    { type: "icon-triangle",    label: "TRIANGLE" },
+    { type: "icon-hexagon",     label: "HEXAGON" },
+    { type: "icon-diamond2",    label: "DIAMOND" },
+    { type: "icon-yin-yang",    label: "YIN YANG" },
+    { type: "icon-atom",        label: "ATOM" },
+    { type: "icon-peace",       label: "PEACE" },
+    { type: "icon-om",          label: "OM" },
+    { type: "icon-cross-celtic",label: "CELTIC" },
+  ],
+  Badges: [
+    { type: "stamp-done",       label: "DONE" },
+    { type: "stamp-wip",        label: "IN PROGRESS" },
+    { type: "stamp-love-it",    label: "LOVE IT" },
+    { type: "stamp-no-cap",     label: "NO CAP" },
+    { type: "stamp-vibing",     label: "VIBING" },
+    { type: "stamp-growth",     label: "GROWTH" },
+    { type: "stamp-self-care",  label: "SELF CARE" },
+    { type: "stamp-focus",      label: "FOCUS" },
+    { type: "stamp-breathe",    label: "BREATHE" },
+    { type: "stamp-trust",      label: "TRUST" },
+  ],
 };
 
 const AFFIRMATION_CMDS: Record<string, { response: string; cls?: string }> = {
@@ -540,6 +619,72 @@ function getStickerContent(type: string): string {
       return `<svg width="80" height="60" viewBox="0 0 80 60"><path d="M40 55 Q30 40 20 30 Q10 20 20 12 Q30 5 40 15" fill="rgba(244,143,177,0.2)" stroke="#f48fb1" stroke-width="1.5"/><path d="M40 55 Q50 40 60 30 Q70 20 60 12 Q50 5 40 15" fill="rgba(206,147,216,0.2)" stroke="#ce93d8" stroke-width="1.5"/><path d="M40 55 Q25 38 15 35 Q5 32 12 22 Q20 12 40 20" fill="rgba(255,64,129,0.12)" stroke="#ff4081" stroke-width="1"/><path d="M40 55 Q55 38 65 35 Q75 32 68 22 Q60 12 40 20" fill="rgba(124,77,255,0.12)" stroke="#7c4dff" stroke-width="1"/><ellipse cx="40" cy="30" rx="6" ry="4" fill="rgba(255,215,64,0.3)" stroke="#ffd740" stroke-width="1"/></svg>`;
     case "svg-cat":
       return `<svg width="60" height="70" viewBox="0 0 60 70"><ellipse cx="30" cy="45" rx="20" ry="22" fill="rgba(224,64,251,0.12)" stroke="#e040fb" stroke-width="2"/><ellipse cx="30" cy="32" rx="16" ry="14" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/><polygon points="16,26 10,8 22,20" fill="rgba(255,64,129,0.15)" stroke="#ff4081" stroke-width="1.5"/><polygon points="44,26 50,8 38,20" fill="rgba(255,64,129,0.15)" stroke="#ff4081" stroke-width="1.5"/><circle cx="24" cy="30" r="2.5" fill="#00e5ff"/><circle cx="36" cy="30" r="2.5" fill="#00e5ff"/><ellipse cx="30" cy="36" rx="2" ry="1.5" fill="#ff4081"/><path d="M25 38 Q30 42 35 38" fill="none" stroke="#ff4081" stroke-width="1"/><path d="M8 58 Q20 65 30 68 Q40 65 52 58" fill="none" stroke="#e040fb" stroke-width="1.5" stroke-dasharray="3 3"/></svg>`;
+    case "emoji-cloud": return `<span style="font-size:3.5rem;">☁️</span>`;
+    case "emoji-thunder": return `<span style="font-size:3.5rem;">⛈️</span>`;
+    case "emoji-snowflake": return `<span style="font-size:3.5rem;">❄️</span>`;
+    case "emoji-tornado": return `<span style="font-size:3.5rem;">🌪️</span>`;
+    case "emoji-umbrella": return `<span style="font-size:3.5rem;">☂️</span>`;
+    case "emoji-raindrop": return `<span style="font-size:3.5rem;">💧</span>`;
+    case "emoji-wind": return `<span style="font-size:3.5rem;">💨</span>`;
+    case "emoji-fog": return `<span style="font-size:3.5rem;">🌫️</span>`;
+    case "emoji-thermometer": return `<span style="font-size:3.5rem;">🌡️</span>`;
+    case "emoji-sunny": return `<span style="font-size:3.5rem;">🌞</span>`;
+    case "emoji-tree": return `<span style="font-size:3.5rem;">🌳</span>`;
+    case "emoji-mushroom": return `<span style="font-size:3.5rem;">🍄</span>`;
+    case "emoji-herb": return `<span style="font-size:3.5rem;">🌿</span>`;
+    case "emoji-leaf": return `<span style="font-size:3.5rem;">🍃</span>`;
+    case "emoji-tulip": return `<span style="font-size:3.5rem;">🌷</span>`;
+    case "emoji-sunflower": return `<span style="font-size:3.5rem;">🌻</span>`;
+    case "emoji-hibiscus": return `<span style="font-size:3.5rem;">🌺</span>`;
+    case "emoji-cactus": return `<span style="font-size:3.5rem;">🌵</span>`;
+    case "emoji-shell": return `<span style="font-size:3.5rem;">🐚</span>`;
+    case "emoji-ocean": return `<span style="font-size:3.5rem;">🌊</span>`;
+    case "emoji-mountain": return `<span style="font-size:3.5rem;">🏔️</span>`;
+    case "emoji-volcano": return `<span style="font-size:3.5rem;">🌋</span>`;
+    case "emoji-strawberry": return `<span style="font-size:3.5rem;">🍓</span>`;
+    case "emoji-peach": return `<span style="font-size:3.5rem;">🍑</span>`;
+    case "emoji-grapes": return `<span style="font-size:3.5rem;">🍇</span>`;
+    case "emoji-watermelon": return `<span style="font-size:3.5rem;">🍉</span>`;
+    case "emoji-lemon": return `<span style="font-size:3.5rem;">🍋</span>`;
+    case "emoji-avocado": return `<span style="font-size:3.5rem;">🥑</span>`;
+    case "emoji-cupcake": return `<span style="font-size:3.5rem;">🧁</span>`;
+    case "emoji-donut": return `<span style="font-size:3.5rem;">🍩</span>`;
+    case "emoji-cookie": return `<span style="font-size:3.5rem;">🍪</span>`;
+    case "emoji-icecream": return `<span style="font-size:3.5rem;">🍦</span>`;
+    case "emoji-coffee": return `<span style="font-size:3.5rem;">☕</span>`;
+    case "emoji-boba": return `<span style="font-size:3.5rem;">🧋</span>`;
+    case "emoji-aries": return `<span style="font-size:3.5rem;">♈</span>`;
+    case "emoji-taurus": return `<span style="font-size:3.5rem;">♉</span>`;
+    case "emoji-gemini": return `<span style="font-size:3.5rem;">♊</span>`;
+    case "emoji-cancer": return `<span style="font-size:3.5rem;">♋</span>`;
+    case "emoji-leo": return `<span style="font-size:3.5rem;">♌</span>`;
+    case "emoji-virgo": return `<span style="font-size:3.5rem;">♍</span>`;
+    case "emoji-libra": return `<span style="font-size:3.5rem;">♎</span>`;
+    case "emoji-scorpio": return `<span style="font-size:3.5rem;">♏</span>`;
+    case "emoji-sagittarius": return `<span style="font-size:3.5rem;">♐</span>`;
+    case "emoji-capricorn": return `<span style="font-size:3.5rem;">♑</span>`;
+    case "emoji-aquarius": return `<span style="font-size:3.5rem;">♒</span>`;
+    case "emoji-pisces": return `<span style="font-size:3.5rem;">♓</span>`;
+    case "icon-circle": return `<i class="fa-regular fa-circle" style="font-size:3rem; color:#e040fb; text-shadow: 0 0 14px rgba(224,64,251,0.5);"></i>`;
+    case "icon-square": return `<i class="fa-regular fa-square" style="font-size:3rem; color:#00e5ff; text-shadow: 0 0 14px rgba(0,229,255,0.5);"></i>`;
+    case "icon-triangle": return `<i class="fa-solid fa-play" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5); transform: rotate(-90deg);"></i>`;
+    case "icon-hexagon": return `<i class="fa-solid fa-hexagon-xmark" style="font-size:3rem; color:#ff4081; text-shadow: 0 0 14px rgba(255,64,129,0.5);"></i>`;
+    case "icon-diamond2": return `<i class="fa-regular fa-gem" style="font-size:3rem; color:#b388ff; text-shadow: 0 0 14px rgba(179,136,255,0.5);"></i>`;
+    case "icon-yin-yang": return `<i class="fa-solid fa-yin-yang" style="font-size:3rem; color:#69f0ae; text-shadow: 0 0 14px rgba(105,240,174,0.5);"></i>`;
+    case "icon-atom": return `<i class="fa-solid fa-atom" style="font-size:3rem; color:#00e5ff; text-shadow: 0 0 14px rgba(0,229,255,0.5);"></i>`;
+    case "icon-peace": return `<i class="fa-solid fa-peace" style="font-size:3rem; color:#e040fb; text-shadow: 0 0 14px rgba(224,64,251,0.5);"></i>`;
+    case "icon-om": return `<i class="fa-solid fa-om" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5);"></i>`;
+    case "icon-cross-celtic": return `<i class="fa-solid fa-cross" style="font-size:3rem; color:#b388ff; text-shadow: 0 0 14px rgba(179,136,255,0.5);"></i>`;
+    case "stamp-done": return `<div class="stamp-approved" style="border-color:#69f0ae;color:#69f0ae;">DONE ✓</div>`;
+    case "stamp-wip": return `<div class="stamp-urgent" style="border-color:#ffab40;color:#ffab40;background:rgba(255,171,64,0.08);">IN PROGRESS</div>`;
+    case "stamp-love-it": return `<div class="stamp-secret" style="border-color:#ff4081;color:#ff4081;">LOVE IT 💖</div>`;
+    case "stamp-no-cap": return `<div class="stamp-classified" style="border-color:#00e5ff;color:#00e5ff;">NO CAP</div>`;
+    case "stamp-vibing": return `<div class="stamp-approved" style="border-color:#e040fb;color:#e040fb;">VIBING ✨</div>`;
+    case "stamp-growth": return `<div class="stamp-secret" style="border-color:#69f0ae;color:#69f0ae;">GROWTH 🌱</div>`;
+    case "stamp-self-care": return `<div class="stamp-urgent" style="border-color:#f48fb1;color:#f48fb1;background:rgba(244,143,177,0.08);">SELF CARE</div>`;
+    case "stamp-focus": return `<div class="stamp-classified" style="border-color:#ffd740;color:#ffd740;">FOCUS 🎯</div>`;
+    case "stamp-breathe": return `<div class="stamp-approved" style="border-color:#81d4fa;color:#81d4fa;">BREATHE 🧘</div>`;
+    case "stamp-trust": return `<div class="stamp-secret" style="border-color:#b388ff;color:#b388ff;">TRUST ∞</div>`;
     default:
       return `<div style="color:var(--cy-primary);font-size:12px;">~</div>`;
   }
@@ -598,6 +743,7 @@ export default function CyberLog() {
   const [paperPattern, setPaperPattern] = useState("paper-stars");
   const [canvasMode, setCanvasMode] = useState("canvas-default");
   const [stickers, setStickers] = useState<Sticker[]>([]);
+  const [mindMapStickers, setMindMapStickers] = useState<Sticker[]>([]);
   const [assetOpen, setAssetOpen] = useState(false);
   const [assetTab, setAssetTab] = useState<keyof typeof STICKER_CATEGORIES>("Vibes");
   const [goals, setGoals] = useState<Goal[]>(INITIAL_GOALS);
@@ -667,6 +813,7 @@ export default function CyberLog() {
         if (d.moodEntries) setMoodEntries(d.moodEntries);
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
+        if (d.mindMapStickers) setMindMapStickers(d.mindMapStickers);
         if (d.customHabits) setCustomHabits(d.customHabits);
         if (d.visionImages) {
           const migrated: Record<string, {src: string, caption: string}[]> = {};
@@ -695,23 +842,23 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled,
+          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
 
   const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
-  const initDrag = useCallback((el: HTMLDivElement, stickerId: string) => {
+  const initDrag = useCallback((el: HTMLDivElement, stickerId: string, isMindMap = false) => {
     let ox = 0, oy = 0, sx = 0, sy = 0;
     const onDown = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.classList.contains("cy-sticker-delete")) return;
+      if (target.classList.contains("cy-sticker-delete") || target.classList.contains("cy-sticker-resize")) return;
       if (target.getAttribute("contenteditable") === "true" || target.closest("[contenteditable='true']")) {
         if (!target.classList.contains("cy-note-drag-handle") && !target.closest(".cy-note-drag-handle")) return;
       }
@@ -733,20 +880,32 @@ export default function CyberLog() {
       document.removeEventListener("mouseup", onUp);
       const nx = parseInt(el.style.left) || 0;
       const ny = parseInt(el.style.top) || 0;
-      setStickers(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
+      const setter = isMindMap ? setMindMapStickers : setStickers;
+      setter(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
     };
     el.addEventListener("mousedown", onDown);
   }, []);
 
-  const addSticker = (type: string) => {
+  const addSticker = (type: string, target: "journal" | "mindmap" = "journal") => {
     const id = Math.random().toString(36).slice(2);
     const rx = Math.floor(Math.random() * 200) + 60;
     const ry = Math.floor(Math.random() * 200) + 100;
     const rot = type.startsWith("note") || type.startsWith("icon") ? 0 : Math.floor(Math.random() * 24) - 12;
-    setStickers(s => [...s, { id, type, x: rx, y: ry, rotation: rot }]);
+    const newSticker = { id, type, x: rx, y: ry, rotation: rot, scale: 1 };
+    if (target === "mindmap") {
+      setMindMapStickers(s => [...s, newSticker]);
+    } else {
+      setStickers(s => [...s, newSticker]);
+    }
   };
 
   const removeSticker = (id: string) => setStickers(s => s.filter(st => st.id !== id));
+  const removeMindMapSticker = (id: string) => setMindMapStickers(s => s.filter(st => st.id !== id));
+
+  const resizeSticker = (id: string, delta: number, target: "journal" | "mindmap" = "journal") => {
+    const setter = target === "mindmap" ? setMindMapStickers : setStickers;
+    setter(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
+  };
 
   useEffect(() => {
     stickers.forEach(st => {
@@ -757,6 +916,16 @@ export default function CyberLog() {
       }
     });
   }, [stickers, initDrag]);
+
+  useEffect(() => {
+    mindMapStickers.forEach(st => {
+      const el = document.getElementById(`mmsticker-${st.id}`) as HTMLDivElement | null;
+      if (el && !el.dataset.dragging) {
+        el.dataset.dragging = "1";
+        initDrag(el, st.id, true);
+      }
+    });
+  }, [mindMapStickers, initDrag]);
 
   const formatDoc = (cmd: string, value?: string) => {
     document.execCommand(cmd, false, value ?? undefined);
@@ -1390,12 +1559,20 @@ export default function CyberLog() {
               <div className="cy-sticker-layer">
                 {stickers.map(st => (
                   <div key={st.id} id={`sticker-${st.id}`} className="cy-sticker"
-                    style={{ left: st.x, top: st.y, transform: `rotate(${st.rotation}deg)` }}
+                    style={{ left: st.x, top: st.y, transform: `rotate(${st.rotation}deg) scale(${st.scale || 1})` }}
                     data-testid={`sticker-${st.id}`}
                   >
                     <div dangerouslySetInnerHTML={{ __html: getStickerContent(st.type) }} />
-                    <div className="cy-sticker-delete" onClick={() => removeSticker(st.id)} title="Remove">
-                      <i className="fa-solid fa-xmark" />
+                    <div className="cy-sticker-controls">
+                      <button className="cy-sticker-resize" onClick={() => resizeSticker(st.id, 0.15)} title="Bigger" data-testid={`sticker-grow-${st.id}`}>
+                        <i className="fa-solid fa-plus" />
+                      </button>
+                      <button className="cy-sticker-resize" onClick={() => resizeSticker(st.id, -0.15)} title="Smaller" data-testid={`sticker-shrink-${st.id}`}>
+                        <i className="fa-solid fa-minus" />
+                      </button>
+                      <button className="cy-sticker-delete" onClick={() => removeSticker(st.id)} title="Remove" data-testid={`sticker-remove-${st.id}`}>
+                        <i className="fa-solid fa-xmark" />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -1926,6 +2103,9 @@ export default function CyberLog() {
                     <i className="fa-solid fa-plus" style={{ marginRight: 6 }} />
                     Add Node
                   </button>
+                  <button className="cy-quick-add-btn" onClick={() => setAssetOpen(v => !v)} data-testid="btn-mindmap-stickers">
+                    <i className="fa-solid fa-palette" style={{ marginRight: 4 }} />Stickers
+                  </button>
                 </div>
               </div>
             </div>
@@ -1956,6 +2136,26 @@ export default function CyberLog() {
                   );
                 })}
               </svg>
+
+              {mindMapStickers.map(st => (
+                <div key={st.id} id={`mmsticker-${st.id}`} className="cy-sticker"
+                  style={{ left: st.x, top: st.y, transform: `rotate(${st.rotation}deg) scale(${st.scale || 1})` }}
+                  data-testid={`mmsticker-${st.id}`}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: getStickerContent(st.type) }} />
+                  <div className="cy-sticker-controls">
+                    <button className="cy-sticker-resize" onClick={() => resizeSticker(st.id, 0.15, "mindmap")} title="Bigger">
+                      <i className="fa-solid fa-plus" />
+                    </button>
+                    <button className="cy-sticker-resize" onClick={() => resizeSticker(st.id, -0.15, "mindmap")} title="Smaller">
+                      <i className="fa-solid fa-minus" />
+                    </button>
+                    <button className="cy-sticker-delete" onClick={() => removeMindMapSticker(st.id)} title="Remove">
+                      <i className="fa-solid fa-xmark" />
+                    </button>
+                  </div>
+                </div>
+              ))}
 
               {mindMapNodes.map(n => (
                 <div key={n.id} id={`mmnode-${n.id}`}
@@ -2400,7 +2600,10 @@ export default function CyberLog() {
         <div className="cy-tag-grid">
           {STICKER_CATEGORIES[assetTab].map(s => (
             <div key={s.type} className="cy-tag"
-              onClick={() => { addSticker(s.type); if (section !== "journal") setSection("journal"); }}
+              onClick={() => {
+                if (section === "mindmap") { addSticker(s.type, "mindmap"); }
+                else { addSticker(s.type); if (section !== "journal") setSection("journal"); }
+              }}
               data-testid={`sticker-btn-${s.type}`}
             >
               {s.label}
