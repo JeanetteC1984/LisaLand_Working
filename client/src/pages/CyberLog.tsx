@@ -247,6 +247,12 @@ const STICKER_CATEGORIES = {
     { type: "stamp-iconic",     label: "ICONIC" },
     { type: "stamp-worthy",     label: "WORTHY" },
     { type: "stamp-main-char",  label: "MAIN CHARACTER" },
+    { type: "stamp-goddess",    label: "GODDESS" },
+    { type: "stamp-baddie",     label: "BADDIE" },
+    { type: "stamp-healer",     label: "HEALER" },
+    { type: "stamp-grateful",   label: "GRATEFUL" },
+    { type: "stamp-rising",     label: "RISING" },
+    { type: "stamp-limitless",  label: "LIMITLESS" },
   ],
   Symbols: [
     { type: "icon-heart",     label: "HEART" },
@@ -265,6 +271,10 @@ const STICKER_CATEGORIES = {
     { type: "icon-feather",   label: "FEATHER" },
     { type: "icon-clover",    label: "CLOVER" },
     { type: "icon-ribbon",    label: "RIBBON" },
+    { type: "icon-wand",      label: "WAND" },
+    { type: "icon-palette",   label: "PALETTE" },
+    { type: "icon-seedling",  label: "SEEDLING" },
+    { type: "icon-compass",   label: "COMPASS" },
   ],
   Emoji: [
     { type: "emoji-sparkles",   label: "SPARKLES" },
@@ -279,6 +289,18 @@ const STICKER_CATEGORIES = {
     { type: "emoji-cherries",   label: "CHERRIES" },
     { type: "emoji-blossom",    label: "BLOSSOM" },
     { type: "emoji-shooting",   label: "SHOOTING STAR" },
+    { type: "emoji-moon",       label: "MOON" },
+    { type: "emoji-sun",        label: "SUN" },
+    { type: "emoji-comet",      label: "COMET" },
+    { type: "emoji-gem",        label: "GEM" },
+    { type: "emoji-rose",       label: "ROSE" },
+    { type: "emoji-dove",       label: "DOVE" },
+    { type: "emoji-star2",      label: "GLOWING STAR" },
+    { type: "emoji-fairy",      label: "FAIRY" },
+    { type: "emoji-mermaid",    label: "MERMAID" },
+    { type: "emoji-cat",        label: "CAT" },
+    { type: "emoji-galaxy",     label: "GALAXY" },
+    { type: "emoji-lotus",      label: "LOTUS" },
   ],
   Notes: [
     { type: "note-pink",    label: "NOTE (Pink)" },
@@ -289,6 +311,10 @@ const STICKER_CATEGORIES = {
     { type: "note-sky",     label: "NOTE (Sky)" },
     { type: "note-rose",    label: "NOTE (Rose)" },
     { type: "note-neon",    label: "NOTE (Neon)" },
+    { type: "note-coral",   label: "NOTE (Coral)" },
+    { type: "note-sage",    label: "NOTE (Sage)" },
+    { type: "note-lavender",label: "NOTE (Lavender)" },
+    { type: "note-sunset",  label: "NOTE (Sunset)" },
   ],
   Art: [
     { type: "svg-butterfly", label: "BUTTERFLY" },
@@ -303,6 +329,14 @@ const STICKER_CATEGORIES = {
     { type: "svg-crescent",    label: "CRESCENT" },
     { type: "svg-lotus",       label: "LOTUS" },
     { type: "svg-cat",         label: "CAT" },
+  ],
+  Dividers: [
+    { type: "div-sparkle",  label: "SPARKLE LINE" },
+    { type: "div-hearts",   label: "HEARTS LINE" },
+    { type: "div-stars",    label: "STARS LINE" },
+    { type: "div-wave",     label: "WAVE LINE" },
+    { type: "div-rainbow",  label: "RAINBOW LINE" },
+    { type: "div-dots",     label: "DOTS LINE" },
   ],
 };
 
@@ -431,6 +465,70 @@ function getStickerContent(type: string): string {
       return `<span style="font-size:3.5rem;">🌸</span>`;
     case "emoji-shooting":
       return `<span style="font-size:3.5rem;">🌠</span>`;
+    case "emoji-moon":
+      return `<span style="font-size:3.5rem;">🌙</span>`;
+    case "emoji-sun":
+      return `<span style="font-size:3.5rem;">☀️</span>`;
+    case "emoji-comet":
+      return `<span style="font-size:3.5rem;">☄️</span>`;
+    case "emoji-gem":
+      return `<span style="font-size:3.5rem;">💎</span>`;
+    case "emoji-rose":
+      return `<span style="font-size:3.5rem;">🌹</span>`;
+    case "emoji-dove":
+      return `<span style="font-size:3.5rem;">🕊️</span>`;
+    case "emoji-star2":
+      return `<span style="font-size:3.5rem;">🌟</span>`;
+    case "emoji-fairy":
+      return `<span style="font-size:3.5rem;">🧚</span>`;
+    case "emoji-mermaid":
+      return `<span style="font-size:3.5rem;">🧜‍♀️</span>`;
+    case "emoji-cat":
+      return `<span style="font-size:3.5rem;">🐱</span>`;
+    case "emoji-galaxy":
+      return `<span style="font-size:3.5rem;">🌌</span>`;
+    case "emoji-lotus":
+      return `<span style="font-size:3.5rem;">🪷</span>`;
+    case "stamp-goddess":
+      return `<div class="stamp-secret" style="border-color:#e040fb;color:#e040fb;">GODDESS</div>`;
+    case "stamp-baddie":
+      return `<div class="stamp-approved" style="border-color:#ff4081;color:#ff4081;">BADDIE</div>`;
+    case "stamp-healer":
+      return `<div class="stamp-classified" style="border-color:#64ffda;color:#64ffda;">HEALER</div>`;
+    case "stamp-grateful":
+      return `<div class="stamp-secret" style="border-color:#ffd740;color:#ffd740;">GRATEFUL</div>`;
+    case "stamp-rising":
+      return `<div class="stamp-urgent" style="border-color:#69f0ae;color:#69f0ae;background:rgba(105,240,174,0.08);">RISING</div>`;
+    case "stamp-limitless":
+      return `<div class="stamp-approved" style="border-color:#00e5ff;color:#00e5ff;">LIMITLESS</div>`;
+    case "icon-wand":
+      return `<i class="fa-solid fa-wand-sparkles" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5);"></i>`;
+    case "icon-palette":
+      return `<i class="fa-solid fa-palette" style="font-size:3rem; color:#e040fb; text-shadow: 0 0 14px rgba(224,64,251,0.5);"></i>`;
+    case "icon-seedling":
+      return `<i class="fa-solid fa-seedling" style="font-size:3rem; color:#69f0ae; text-shadow: 0 0 14px rgba(105,240,174,0.5);"></i>`;
+    case "icon-compass":
+      return `<i class="fa-solid fa-compass" style="font-size:3rem; color:#81d4fa; text-shadow: 0 0 14px rgba(129,212,250,0.5);"></i>`;
+    case "note-coral":
+      return `<div class="sticky-note" style="background:#e65100;color:#fbe9e7;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "note-sage":
+      return `<div class="sticky-note" style="background:#2e7d32;color:#e8f5e9;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "note-lavender":
+      return `<div class="sticky-note" style="background:#5e35b1;color:#ede7f6;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "note-sunset":
+      return `<div class="sticky-note" style="background:#bf360c;color:#fff3e0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+    case "div-sparkle":
+      return `<div style="text-align:center;padding:8px 0;letter-spacing:8px;font-size:14px;opacity:0.7;">✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨</div>`;
+    case "div-hearts":
+      return `<div style="text-align:center;padding:8px 0;letter-spacing:6px;font-size:12px;opacity:0.7;">💖 💜 💙 💚 💛 🧡 💖 💜</div>`;
+    case "div-stars":
+      return `<div style="text-align:center;padding:8px 0;letter-spacing:6px;font-size:12px;opacity:0.7;">⭐ 🌟 ⭐ 🌟 ⭐ 🌟 ⭐ 🌟</div>`;
+    case "div-wave":
+      return `<div style="text-align:center;padding:8px 0;font-size:11px;color:var(--cy-primary);opacity:0.5;">〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️</div>`;
+    case "div-rainbow":
+      return `<div style="height:4px;border-radius:2px;background:linear-gradient(90deg,#ff4081,#ff6d00,#ffd740,#69f0ae,#00e5ff,#7c4dff,#e040fb);margin:12px 0;"></div>`;
+    case "div-dots":
+      return `<div style="text-align:center;padding:8px 0;letter-spacing:10px;font-size:8px;color:var(--cy-primary);opacity:0.4;">● ● ● ● ● ● ● ● ● ●</div>`;
     case "svg-heart-wings":
       return `<svg width="90" height="60" viewBox="0 0 90 60"><path d="M45 50 Q30 35 20 25 Q10 15 20 8 Q30 0 45 15 Q60 0 70 8 Q80 15 70 25 Q60 35 45 50Z" fill="rgba(255,64,129,0.2)" stroke="#ff4081" stroke-width="2"/><path d="M18 22 Q5 15 2 25 Q-1 35 15 30" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/><path d="M12 18 Q2 10 0 20 Q-2 28 12 25" fill="rgba(224,64,251,0.1)" stroke="#e040fb" stroke-width="1"/><path d="M72 22 Q85 15 88 25 Q91 35 75 30" fill="rgba(179,136,255,0.15)" stroke="#b388ff" stroke-width="1.5"/><path d="M78 18 Q88 10 90 20 Q92 28 78 25" fill="rgba(224,64,251,0.1)" stroke="#e040fb" stroke-width="1"/></svg>`;
     case "svg-crescent":
@@ -475,6 +573,14 @@ const DEFAULT_HABITS = [
   { id: "h5", name: "Hydrate", icon: "fa-solid fa-droplet", color: "#81d4fa" },
   { id: "h6", name: "Gratitude", icon: "fa-solid fa-heart", color: "#ff4081" },
 ];
+
+const HABIT_ICONS = [
+  "fa-solid fa-spa", "fa-solid fa-book-open", "fa-solid fa-dumbbell", "fa-solid fa-glasses",
+  "fa-solid fa-droplet", "fa-solid fa-heart", "fa-solid fa-moon", "fa-solid fa-sun",
+  "fa-solid fa-leaf", "fa-solid fa-music", "fa-solid fa-pen", "fa-solid fa-apple-whole",
+  "fa-solid fa-person-walking", "fa-solid fa-bed", "fa-solid fa-face-smile", "fa-solid fa-brain",
+];
+const HABIT_COLORS = ["#b388ff", "#e040fb", "#69f0ae", "#00e5ff", "#81d4fa", "#ff4081", "#ffd740", "#ffab40", "#64ffda", "#f48fb1", "#7c4dff", "#ff6d00"];
 
 type MoodEntry = { date: string; mood: number; note: string };
 type HabitDay = { date: string; completed: string[] };
@@ -528,6 +634,13 @@ export default function CyberLog() {
   const [habitDays, setHabitDays] = useState<HabitDay[]>([]);
   const [showAffirmation, setShowAffirmation] = useState(false);
   const [dailyAffirmation, setDailyAffirmation] = useState("");
+  const [customHabits, setCustomHabits] = useState<{id: string, name: string, icon: string, color: string}[]>([]);
+  const [showAddHabit, setShowAddHabit] = useState(false);
+  const [newHabitName, setNewHabitName] = useState("");
+  const [newHabitIcon, setNewHabitIcon] = useState(HABIT_ICONS[0]);
+  const [newHabitColor, setNewHabitColor] = useState(HABIT_COLORS[0]);
+  const [entryTitlePrompt, setEntryTitlePrompt] = useState(false);
+  const [entryTitleText, setEntryTitleText] = useState("");
   const profilePicRef = useRef<HTMLInputElement>(null);
   const [identity, setIdentity] = useState({
     handle: "Dreamer",
@@ -550,6 +663,7 @@ export default function CyberLog() {
         if (d.moodEntries) setMoodEntries(d.moodEntries);
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
+        if (d.customHabits) setCustomHabits(d.customHabits);
         if (d.visionImages) {
           const migrated: Record<string, {src: string, caption: string}[]> = {};
           for (const [k, v] of Object.entries(d.visionImages)) {
@@ -577,12 +691,12 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, paperPattern, canvasMode, crtEnabled,
+          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, paperPattern, canvasMode, crtEnabled]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -758,7 +872,12 @@ export default function CyberLog() {
     setNewNodeText("");
   };
 
+  const dragCleanups = useRef<Map<string, () => void>>(new Map());
+
   const initNodeDrag = useCallback((el: HTMLDivElement, nodeId: string) => {
+    if (dragCleanups.current.has(nodeId)) {
+      dragCleanups.current.get(nodeId)!();
+    }
     let sx = 0, sy = 0, ox = 0, oy = 0, dragged = false;
     const onDown = (e: MouseEvent) => {
       const tgt = e.target as HTMLElement;
@@ -766,7 +885,11 @@ export default function CyberLog() {
       e.preventDefault();
       e.stopPropagation();
       sx = e.clientX; sy = e.clientY;
-      ox = el.offsetLeft; oy = el.offsetTop;
+      const rect = el.getBoundingClientRect();
+      const container = el.parentElement;
+      const containerRect = container?.getBoundingClientRect() || { left: 0, top: 0 };
+      ox = rect.left - containerRect.left;
+      oy = rect.top - containerRect.top;
       dragged = false;
       document.addEventListener("mousemove", onMove);
       document.addEventListener("mouseup", onUp);
@@ -789,17 +912,30 @@ export default function CyberLog() {
       }
     };
     el.addEventListener("mousedown", onDown);
+    dragCleanups.current.set(nodeId, () => {
+      el.removeEventListener("mousedown", onDown);
+    });
   }, []);
 
   useEffect(() => {
-    mindMapNodes.forEach(n => {
-      const el = document.getElementById(`mmnode-${n.id}`) as HTMLDivElement | null;
-      if (el && !el.dataset.dragging) {
-        el.dataset.dragging = "1";
-        initNodeDrag(el, n.id);
+    if (section !== "mindmap") return;
+    const timer = setTimeout(() => {
+      const currentIds = new Set(mindMapNodes.map(n => n.id));
+      for (const [id, cleanup] of dragCleanups.current) {
+        if (!currentIds.has(id)) {
+          cleanup();
+          dragCleanups.current.delete(id);
+        }
       }
-    });
-  }, [mindMapNodes, initNodeDrag]);
+      mindMapNodes.forEach(n => {
+        const el = document.getElementById(`mmnode-${n.id}`) as HTMLDivElement | null;
+        if (el) initNodeDrag(el, n.id);
+      });
+    }, 50);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [mindMapNodes, initNodeDrag, section]);
 
   const handleProfilePic = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -845,14 +981,41 @@ export default function CyberLog() {
     }));
   };
 
+  const allHabits = [...DEFAULT_HABITS, ...customHabits];
+
+  const addCustomHabit = () => {
+    if (!newHabitName.trim()) return;
+    const id = "ch" + Math.random().toString(36).slice(2);
+    setCustomHabits(prev => [...prev, { id, name: newHabitName.trim(), icon: newHabitIcon, color: newHabitColor }]);
+    setNewHabitName("");
+    setNewHabitIcon(HABIT_ICONS[0]);
+    setNewHabitColor(HABIT_COLORS[0]);
+    setShowAddHabit(false);
+  };
+
+  const deleteCustomHabit = (id: string) => {
+    setCustomHabits(prev => prev.filter(h => h.id !== id));
+    setHabitDays(prev => prev.map(day => ({
+      ...day,
+      completed: day.completed.filter(hid => hid !== id),
+    })));
+  };
+
   const quickNewEntry = () => {
+    setEntryTitleText("");
+    setEntryTitlePrompt(true);
+  };
+
+  const confirmNewEntry = () => {
     const id = Date.now().toString();
     const now = new Date();
-    const name = "Entry " + now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const name = entryTitleText.trim() || "Entry " + now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
     const date = now.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-    setFiles(f => [...f, { id, name, date, content: "" }]);
+    setFiles(f => [...f, { id, name, date, content: `<h1 class="cy-doc-title" id="doc-title">${name}</h1>\n<p style="line-height:1.8;">Start writing your story here...</p>` }]);
     setActiveFileId(id);
     setSection("journal");
+    setEntryTitlePrompt(false);
+    setEntryTitleText("");
   };
 
   const logMood = (mood: number) => {
@@ -922,6 +1085,26 @@ export default function CyberLog() {
               <i className="fa-solid fa-heart" style={{ marginRight: 8 }} />
               Let's Go!
             </button>
+          </div>
+        </div>
+      )}
+
+      {entryTitlePrompt && (
+        <div className="cy-affirmation-overlay" data-testid="entry-title-overlay">
+          <div className="cy-affirmation-card" style={{ maxWidth: 380 }}>
+            <div className="cy-affirmation-sparkle">📝</div>
+            <div className="cy-affirmation-title">Name Your Entry</div>
+            <input className="cy-input" placeholder="My thoughts on..." value={entryTitleText}
+              onChange={e => setEntryTitleText(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && confirmNewEntry()}
+              autoFocus style={{ marginBottom: 16, textAlign: "center" }}
+              data-testid="entry-title-input" />
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+              <button className="cy-affirmation-close" onClick={confirmNewEntry} data-testid="entry-title-confirm">
+                <i className="fa-solid fa-plus" style={{ marginRight: 6 }} />Create
+              </button>
+              <button className="cy-back-btn" onClick={() => setEntryTitlePrompt(false)} data-testid="entry-title-cancel">Cancel</button>
+            </div>
           </div>
         </div>
       )}
@@ -1013,32 +1196,53 @@ export default function CyberLog() {
 
           <div className="cy-nav-group">
             <label>CANVAS</label>
-            <select className="cy-select" value={canvasMode} onChange={e => setCanvasMode(e.target.value)} data-testid="select-canvas">
-              <option value="canvas-default">Default</option>
-              <option value="canvas-tinted">Tinted</option>
-              <option value="canvas-blueprint">Gradient</option>
-              <option value="canvas-void">Deep Dark</option>
-              <option value="canvas-neon">Glow</option>
-              <option value="canvas-dreamy">Dreamy</option>
-              <option value="canvas-starfield">Starfield</option>
-              <option value="canvas-aurora">Aurora</option>
-              <option value="canvas-soft">Soft Focus</option>
-              <option value="canvas-minimal">Minimal</option>
-            </select>
+            <div className="cy-swatch-grid" data-testid="canvas-swatches">
+              {[
+                { id: "canvas-default", label: "Default", bg: "linear-gradient(135deg, #1a1a2e, #16213e)" },
+                { id: "canvas-tinted", label: "Tinted", bg: "linear-gradient(135deg, #1a1028, #0d1a2d)" },
+                { id: "canvas-blueprint", label: "Gradient", bg: "linear-gradient(135deg, #0d47a1, #1a237e)" },
+                { id: "canvas-void", label: "Deep", bg: "linear-gradient(135deg, #000, #0a0a14)" },
+                { id: "canvas-neon", label: "Glow", bg: "linear-gradient(135deg, #0a0014, #1a0028)" },
+                { id: "canvas-dreamy", label: "Dreamy", bg: "linear-gradient(135deg, #1a0028, #0d1a3d)" },
+                { id: "canvas-starfield", label: "Stars", bg: "linear-gradient(135deg, #000010, #0a0020)" },
+                { id: "canvas-aurora", label: "Aurora", bg: "linear-gradient(135deg, #001a0a, #0a0028)" },
+                { id: "canvas-soft", label: "Soft", bg: "linear-gradient(135deg, #1a1a24, #141420)" },
+                { id: "canvas-minimal", label: "Minimal", bg: "linear-gradient(135deg, #121218, #1a1a22)" },
+              ].map(c => (
+                <button key={c.id} className={`cy-swatch-btn${canvasMode === c.id ? " active" : ""}`}
+                  style={{ background: c.bg }}
+                  onClick={() => setCanvasMode(c.id)}
+                  title={c.label} data-testid={`swatch-${c.id}`}
+                >
+                  {canvasMode === c.id && <i className="fa-solid fa-check" />}
+                  <span className="cy-swatch-label">{c.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="cy-nav-group">
             <label>PAPER</label>
-            <select className="cy-select" value={paperPattern} onChange={e => setPaperPattern(e.target.value)} data-testid="select-paper">
-              <option value="paper-stars">Stars</option>
-              <option value="paper-hearts">Hearts</option>
-              <option value="paper-grid">Grid</option>
-              <option value="paper-dots">Dots</option>
-              <option value="paper-lines">Lined</option>
-              <option value="paper-blank">Blank</option>
-              <option value="paper-diamonds">Diamonds</option>
-              <option value="paper-waves">Waves</option>
-            </select>
+            <div className="cy-swatch-grid" data-testid="paper-swatches">
+              {[
+                { id: "paper-stars", label: "Stars", icon: "fa-solid fa-star" },
+                { id: "paper-hearts", label: "Hearts", icon: "fa-solid fa-heart" },
+                { id: "paper-grid", label: "Grid", icon: "fa-solid fa-border-all" },
+                { id: "paper-dots", label: "Dots", icon: "fa-solid fa-braille" },
+                { id: "paper-lines", label: "Lined", icon: "fa-solid fa-bars" },
+                { id: "paper-blank", label: "Blank", icon: "fa-solid fa-square" },
+                { id: "paper-diamonds", label: "Diamonds", icon: "fa-solid fa-diamond" },
+                { id: "paper-waves", label: "Waves", icon: "fa-solid fa-water" },
+              ].map(p => (
+                <button key={p.id} className={`cy-swatch-btn cy-swatch-paper${paperPattern === p.id ? " active" : ""}`}
+                  onClick={() => setPaperPattern(p.id)}
+                  title={p.label} data-testid={`swatch-${p.id}`}
+                >
+                  <i className={p.icon} />
+                  <span className="cy-swatch-label">{p.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </nav>
@@ -1083,6 +1287,16 @@ export default function CyberLog() {
                 <option value="Architects Daughter">Architect</option>
                 <option value="Shadows Into Light">Dreamy</option>
                 <option value="Righteous">Retro</option>
+                <option value="Pacifico">Pacifico</option>
+                <option value="Lobster">Lobster</option>
+                <option value="Gloria Hallelujah">Hallelujah</option>
+                <option value="Permanent Marker">Marker</option>
+                <option value="Reenie Beanie">Scribble</option>
+                <option value="Josefin Sans">Josefin</option>
+                <option value="Raleway">Raleway</option>
+                <option value="Playfair Display">Playfair</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Lora">Lora</option>
               </select>
 
               <div className="cy-tool-group">
@@ -1348,18 +1562,7 @@ export default function CyberLog() {
                 </div>
               </div>
               <div className="cy-page-body">
-                <div className="cy-vision-subpage">
-                  <div className="cy-vision-affirmations">
-                    <div className="cy-vision-section-title"><i className="fa-solid fa-star" style={{ marginRight: 8 }} />Daily Affirmations</div>
-                    <div className="cy-affirmation-list">
-                      {feature.affirmations.map((a, i) => (
-                        <div key={i} className="cy-affirmation-item" data-testid={`affirmation-${i}`}>
-                          <i className="fa-solid fa-star" style={{ color: "var(--cy-primary)", marginRight: 8, fontSize: 10 }} />
-                          {a}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <div className="cy-vision-subpage-grid">
                   <div className="cy-vision-prompts">
                     <div className="cy-vision-section-title"><i className="fa-solid fa-pen-fancy" style={{ marginRight: 8 }} />Journal Prompts</div>
                     <div className="cy-prompt-form">
@@ -1398,6 +1601,17 @@ export default function CyberLog() {
                         <i className="fa-solid fa-wand-magic-sparkles" style={{ marginRight: 8 }} />
                         Save as Journal Entry
                       </button>
+                    </div>
+                  </div>
+                  <div className="cy-vision-affirmations-compact">
+                    <div className="cy-vision-section-title"><i className="fa-solid fa-star" style={{ marginRight: 8 }} />Affirmations</div>
+                    <div className="cy-affirmation-grid">
+                      {feature.affirmations.map((a, i) => (
+                        <div key={i} className="cy-affirmation-chip" data-testid={`affirmation-${i}`}>
+                          <i className="fa-solid fa-sparkles" style={{ color: "var(--cy-primary)", marginRight: 6, fontSize: 10 }} />
+                          {a}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -1860,14 +2074,21 @@ export default function CyberLog() {
             </div>
             <div className="cy-page-body">
               <div className="cy-habit-grid" data-testid="habit-grid">
-                {DEFAULT_HABITS.map(h => {
+                {allHabits.map(h => {
                   const done = todayHabits?.completed.includes(h.id) || false;
                   const streak = getStreak(h.id);
+                  const isCustom = customHabits.some(ch => ch.id === h.id);
                   return (
                     <div key={h.id} className={`cy-habit-card${done ? " done" : ""}`}
                       style={{ "--habit-color": h.color } as React.CSSProperties}
                       onClick={() => toggleHabit(h.id)} data-testid={`habit-${h.id}`}
                     >
+                      {isCustom && (
+                        <button className="cy-habit-delete" onClick={(e) => { e.stopPropagation(); deleteCustomHabit(h.id); }}
+                          title="Remove habit" data-testid={`habit-delete-${h.id}`}>
+                          <i className="fa-solid fa-xmark" />
+                        </button>
+                      )}
                       <div className="cy-habit-icon"><i className={h.icon} /></div>
                       <div className="cy-habit-name">{h.name}</div>
                       <div className="cy-habit-check">
@@ -1882,7 +2103,44 @@ export default function CyberLog() {
                     </div>
                   );
                 })}
+                <div className="cy-habit-card cy-habit-add" onClick={() => setShowAddHabit(true)} data-testid="habit-add-btn">
+                  <div className="cy-habit-icon"><i className="fa-solid fa-plus" /></div>
+                  <div className="cy-habit-name">Add Habit</div>
+                </div>
               </div>
+
+              {showAddHabit && (
+                <div className="cy-habit-form" data-testid="habit-add-form">
+                  <div className="cy-field-label" style={{ marginBottom: 8 }}>NEW HABIT</div>
+                  <input className="cy-input" placeholder="Habit name..." value={newHabitName}
+                    onChange={e => setNewHabitName(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && addCustomHabit()}
+                    autoFocus data-testid="habit-name-input" />
+                  <div className="cy-field-label" style={{ marginTop: 12, marginBottom: 6 }}>ICON</div>
+                  <div className="cy-habit-icon-picker">
+                    {HABIT_ICONS.map(icon => (
+                      <button key={icon} className={`cy-icon-pick${newHabitIcon === icon ? " active" : ""}`}
+                        onClick={() => setNewHabitIcon(icon)} data-testid={`pick-icon-${icon}`}>
+                        <i className={icon} />
+                      </button>
+                    ))}
+                  </div>
+                  <div className="cy-field-label" style={{ marginTop: 12, marginBottom: 6 }}>COLOR</div>
+                  <div className="cy-habit-color-picker">
+                    {HABIT_COLORS.map(c => (
+                      <button key={c} className={`cy-color-pick${newHabitColor === c ? " active" : ""}`}
+                        style={{ background: c }} onClick={() => setNewHabitColor(c)} data-testid={`pick-color-${c}`} />
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+                    <button className="cy-quick-add-btn" onClick={addCustomHabit} data-testid="habit-confirm-add">
+                      <i className="fa-solid fa-plus" style={{ marginRight: 6 }} />Add
+                    </button>
+                    <button className="cy-back-btn" onClick={() => setShowAddHabit(false)} data-testid="habit-cancel-add">Cancel</button>
+                  </div>
+                </div>
+              )}
+
               <div className="cy-habit-history">
                 <div className="cy-vision-section-title" style={{ marginBottom: 16 }}>
                   <i className="fa-solid fa-chart-line" style={{ marginRight: 8 }} />Weekly Overview
@@ -1897,8 +2155,8 @@ export default function CyberLog() {
                     return (
                       <div key={i} className="cy-habit-week-day" data-testid={`habit-week-${i}`}>
                         <div className="cy-habit-week-label">{d.toLocaleDateString("en-US", { weekday: "short" })}</div>
-                        <div className="cy-habit-week-bar" style={{ height: `${Math.max(4, (count / DEFAULT_HABITS.length) * 60)}px`, background: count > 0 ? "var(--cy-primary)" : "var(--cy-surface)" }} />
-                        <div className="cy-habit-week-count">{count}/{DEFAULT_HABITS.length}</div>
+                        <div className="cy-habit-week-bar" style={{ height: `${Math.max(4, (count / allHabits.length) * 60)}px`, background: count > 0 ? "var(--cy-primary)" : "var(--cy-surface)" }} />
+                        <div className="cy-habit-week-count">{count}/{allHabits.length}</div>
                       </div>
                     );
                   })}
