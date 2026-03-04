@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "journal" | "profile" | "vision" | "goals" | "mindmap" | "mood" | "habits" | "settings";
+type Section = "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings";
 
 type JournalFile = {
   id: string;
@@ -814,7 +814,8 @@ export default function CyberLog() {
 
   const ICON_NAV: { icon: string; title: string; section: Section }[] = [
     { icon: "fa-solid fa-user-astronaut", title: "Profile",  section: "profile" },
-    { icon: "fa-solid fa-wand-magic-sparkles", title: "Vision", section: "vision" },
+    { icon: "fa-solid fa-wand-magic-sparkles", title: "Manifest", section: "vision" },
+    { icon: "fa-solid fa-images",        title: "Board",    section: "vboard" },
     { icon: "fa-solid fa-book-open",     title: "Journal",  section: "journal" },
     { icon: "fa-solid fa-bullseye",      title: "Goals",    section: "goals" },
     { icon: "fa-solid fa-diagram-project", title: "Mind Map", section: "mindmap" },
@@ -1237,11 +1238,6 @@ export default function CyberLog() {
                     <div className="cy-lab-desc">{lab.desc}</div>
                     <div className="cy-lab-status">
                       <span className="cy-badge cy-badge-online">{lab.status}</span>
-                      {(visionImages[lab.title]?.length || 0) > 0 && (
-                        <span className="cy-badge" style={{ background: "var(--cy-primary)", color: "var(--cy-bg)", marginLeft: 6, fontSize: 9 }}>
-                          <i className="fa-solid fa-image" style={{ marginRight: 3 }} />{visionImages[lab.title].length}
-                        </span>
-                      )}
                     </div>
                   </div>
                 ))}
@@ -1268,30 +1264,6 @@ export default function CyberLog() {
               </div>
               <div className="cy-page-body">
                 <div className="cy-vision-subpage">
-                  <div className="cy-vision-board-section">
-                    <div className="cy-vision-section-title">
-                      <i className="fa-solid fa-images" style={{ marginRight: 8 }} />My Vision Board
-                    </div>
-                    <input type="file" accept="image/*" multiple ref={visionImageRef} style={{ display: "none" }}
-                      onChange={e => addVisionImage(feature.title, e)} data-testid="vision-image-input" />
-                    <div className="cy-vision-gallery">
-                      {(visionImages[feature.title] || []).map((img, i) => (
-                        <div key={i} className="cy-vision-img-card" data-testid={`vision-img-${i}`}>
-                          <img src={img} alt={`Vision ${i + 1}`} />
-                          <button className="cy-vision-img-remove" onClick={() => removeVisionImage(feature.title, i)}
-                            data-testid={`vision-img-remove-${i}`}>
-                            <i className="fa-solid fa-xmark" />
-                          </button>
-                        </div>
-                      ))}
-                      <button className="cy-vision-upload-card" onClick={() => visionImageRef.current?.click()}
-                        data-testid="vision-upload-btn">
-                        <i className="fa-solid fa-plus" />
-                        <span>Add Images</span>
-                      </button>
-                    </div>
-                  </div>
-
                   <div className="cy-vision-affirmations">
                     <div className="cy-vision-section-title"><i className="fa-solid fa-star" style={{ marginRight: 8 }} />Daily Affirmations</div>
                     <div className="cy-affirmation-list">
@@ -1319,6 +1291,59 @@ export default function CyberLog() {
             </div>
           );
         })()}
+
+        {/* VISION BOARD (Images) */}
+        {section === "vboard" && (
+          <div className="cy-section">
+            <div className="cy-page-header">
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">Vision Board</div>
+                  <div className="cy-page-subtitle">Visualize Your Dream Life</div>
+                </div>
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input type="file" accept="image/*" multiple ref={visionImageRef} style={{ display: "none" }}
+                    onChange={e => addVisionImage("board", e)} data-testid="vboard-image-input" />
+                  <button className="cy-quick-add-btn" onClick={() => visionImageRef.current?.click()} data-testid="vboard-upload-btn">
+                    <i className="fa-solid fa-plus" />Add Images
+                  </button>
+                  <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-vboard">
+                    <i className="fa-solid fa-pen" />New Entry
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="cy-page-body">
+              {(visionImages["board"] || []).length === 0 ? (
+                <div className="cy-vboard-empty" data-testid="vboard-empty">
+                  <div className="cy-vboard-empty-icon"><i className="fa-solid fa-images" /></div>
+                  <div className="cy-vboard-empty-title">Your Vision Board is Empty</div>
+                  <div className="cy-vboard-empty-text">Upload images that inspire you — goals, places, quotes, aesthetics, anything that represents the life you're building.</div>
+                  <button className="cy-vboard-empty-btn" onClick={() => visionImageRef.current?.click()} data-testid="vboard-empty-upload">
+                    <i className="fa-solid fa-cloud-arrow-up" style={{ marginRight: 8 }} />Upload Your First Image
+                  </button>
+                </div>
+              ) : (
+                <div className="cy-vboard-gallery" data-testid="vboard-gallery">
+                  {(visionImages["board"] || []).map((img, i) => (
+                    <div key={i} className="cy-vboard-img-card" data-testid={`vboard-img-${i}`}>
+                      <img src={img} alt={`Vision ${i + 1}`} />
+                      <button className="cy-vision-img-remove" onClick={() => removeVisionImage("board", i)}
+                        data-testid={`vboard-img-remove-${i}`}>
+                        <i className="fa-solid fa-xmark" />
+                      </button>
+                    </div>
+                  ))}
+                  <button className="cy-vision-upload-card" onClick={() => visionImageRef.current?.click()}
+                    data-testid="vboard-add-more">
+                    <i className="fa-solid fa-plus" />
+                    <span>Add More</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* GOALS */}
         {section === "goals" && (
