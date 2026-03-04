@@ -323,6 +323,10 @@
   flex: 1;
 }
 
+.cy-sidebar-icon-toggle { opacity: 0.5; font-size: 11px !important; margin-bottom: 4px !important; }
+.cy-sidebar-icon-toggle:hover { opacity: 1; }
+.sidebar-collapsed .cy-sidebar-icon-toggle { opacity: 0.8; }
+
 /* ============================================
    FILE NAVIGATION
    ============================================ */
@@ -334,7 +338,33 @@
   flex-direction: column;
   z-index: 5;
   overflow: hidden;
+  transition: width 0.25s ease, min-width 0.25s ease, opacity 0.25s ease;
+  width: 270px;
+  min-width: 270px;
 }
+
+.sidebar-collapsed { grid-template-columns: 64px 0px 1fr; }
+.sidebar-collapsed .cy-file-nav { width: 0; min-width: 0; border-right: none; }
+.sidebar-collapsed .cy-nav-scroll { display: none; }
+.sidebar-collapsed .cy-brand span,
+.sidebar-collapsed .cy-brand .cy-brand-version { display: none; }
+.sidebar-collapsed .cy-brand { padding: 12px 6px; justify-content: center; border-bottom: none; }
+.sidebar-collapsed .cy-brand .fa-sparkles { display: none; }
+.sidebar-collapsed .cy-sidebar-toggle { margin: 0; }
+
+.cy-sidebar-toggle {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--cy-muted);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  -webkit-text-fill-color: unset;
+}
+.cy-sidebar-toggle:hover { color: var(--cy-primary); background: rgba(255,255,255,0.05); }
 
 .cy-brand {
   font-family: var(--cy-font-accent);
@@ -676,6 +706,7 @@
   color: var(--cy-text);
   font-size: 14px;
   line-height: 1.6;
+  max-width: 600px;
 }
 
 .paper-grid {

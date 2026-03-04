@@ -641,6 +641,7 @@ export default function CyberLog() {
   const [newHabitColor, setNewHabitColor] = useState(HABIT_COLORS[0]);
   const [entryTitlePrompt, setEntryTitlePrompt] = useState(false);
   const [entryTitleText, setEntryTitleText] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const profilePicRef = useRef<HTMLInputElement>(null);
   const [identity, setIdentity] = useState({
     handle: "Dreamer",
@@ -1072,7 +1073,7 @@ export default function CyberLog() {
   ];
 
   return (
-    <div className="cyber-app" data-cyber-theme={theme}>
+    <div className={`cyber-app${sidebarOpen ? "" : " sidebar-collapsed"}`} data-cyber-theme={theme}>
       {crtEnabled && <div className="crt-overlay" />}
 
       {showAffirmation && (
@@ -1111,6 +1112,10 @@ export default function CyberLog() {
 
       {/* ICON BAR */}
       <div className="cy-icon-bar">
+        <button className="cy-icon-btn cy-sidebar-icon-toggle" title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          onClick={() => setSidebarOpen(v => !v)} data-testid="sidebar-icon-toggle">
+          <i className={`fa-solid ${sidebarOpen ? "fa-angles-left" : "fa-angles-right"}`} />
+        </button>
         {ICON_NAV.map(n => (
           <button
             key={n.section}
@@ -1142,6 +1147,10 @@ export default function CyberLog() {
           <i className="fa-solid fa-sparkles" style={{ WebkitTextFillColor: "unset" }} />
           <span>Dream Log</span>
           <span className="cy-brand-version">v2</span>
+          <button className="cy-sidebar-toggle" onClick={() => setSidebarOpen(v => !v)}
+            title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"} data-testid="sidebar-toggle">
+            <i className={`fa-solid ${sidebarOpen ? "fa-chevron-left" : "fa-chevron-right"}`} />
+          </button>
         </div>
 
         <div className="cy-nav-scroll">
