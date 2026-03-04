@@ -1020,6 +1020,46 @@ export default function CyberLog() {
                     <i className={b.icon} />
                   </button>
                 ))}
+                <button className="cy-tool-btn" title="Quote / Side Bar" data-testid="btn-quote"
+                  onClick={() => {
+                    const sel = window.getSelection();
+                    if (sel && sel.rangeCount > 0) {
+                      const range = sel.getRangeAt(0);
+                      const div = document.createElement("div");
+                      div.className = "cy-quote-block";
+                      if (range.toString().trim()) {
+                        range.surroundContents(div);
+                      } else {
+                        div.innerHTML = "<br>";
+                        range.insertNode(div);
+                        range.selectNodeContents(div);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                      }
+                    }
+                  }}>
+                  <i className="fa-solid fa-grip-lines-vertical" />
+                </button>
+                <button className="cy-tool-btn" title="Highlight Bar" data-testid="btn-highlight-bar"
+                  onClick={() => {
+                    const sel = window.getSelection();
+                    if (sel && sel.rangeCount > 0) {
+                      const range = sel.getRangeAt(0);
+                      const div = document.createElement("div");
+                      div.className = "cy-highlight-bar";
+                      if (range.toString().trim()) {
+                        range.surroundContents(div);
+                      } else {
+                        div.innerHTML = "<br>";
+                        range.insertNode(div);
+                        range.selectNodeContents(div);
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                      }
+                    }
+                  }}>
+                  <i className="fa-solid fa-minus" style={{ transform: "rotate(90deg)" }} />
+                </button>
               </div>
 
               <button className="cy-glitch-btn" onClick={triggerGlitch} data-testid="btn-glitch">
