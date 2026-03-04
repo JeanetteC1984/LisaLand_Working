@@ -2416,12 +2416,66 @@
 
 /* Print */
 @media print {
-  .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal, .cy-quick-add-btn, .cy-back-btn, .cy-goal-add-btn, .cy-affirmation-overlay { display: none !important; }
-  .cy-print-title { display: block !important; font-family: var(--cy-font-header); font-size: 26px; font-weight: 700; color: #222 !important; padding: 24px 30px 12px; border-bottom: 2px solid #ccc; margin-bottom: 8px; }
-  .cyber-app { grid-template-columns: 1fr; background: white; color: #222; height: auto; overflow: visible; }
-  .cy-main-stage { background: white !important; overflow: visible !important; }
+  .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal,
+  .cy-quick-add-btn, .cy-back-btn, .cy-goal-add-btn, .cy-affirmation-overlay,
+  .cy-sticker-layer, .cy-sticker-palette { display: none !important; }
+
+  .cy-print-title {
+    display: block !important;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #222 !important;
+    padding: 24px 30px 12px;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 8px;
+  }
+
+  .cyber-app {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: white !important;
+    color: #222 !important;
+  }
+
+  .cy-main-stage {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  .cy-section {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    min-height: 0 !important;
+  }
+
+  .cy-editor-wrap {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .cy-editor, .cy-active-page {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .cy-page-body {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
   .cy-page-header { background: none !important; border-bottom: 2px solid #ccc; }
   .cy-page-title { background: none !important; -webkit-text-fill-color: #222 !important; background-clip: unset !important; -webkit-background-clip: unset !important; color: #222 !important; font-size: 24px !important; }
   .cy-page-subtitle { color: #555 !important; -webkit-text-fill-color: #555 !important; font-style: normal !important; }
-  .cy-section { overflow: visible !important; }
 }

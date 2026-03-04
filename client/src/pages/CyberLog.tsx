@@ -1267,7 +1267,7 @@ export default function CyberLog() {
         {/* JOURNAL */}
         {section === "journal" && (
           <div className="cy-section">
-            <div className="cy-print-title">{activeFile.title}</div>
+            <div className="cy-print-title" data-testid="print-title">{activeFile.name}</div>
             <div className="cy-toolbar">
               <div className="cy-tool-group">
                 {[
