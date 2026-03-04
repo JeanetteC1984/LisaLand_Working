@@ -420,6 +420,102 @@ const STICKER_CATEGORIES = {
     { type: "stamp-breathe",    label: "BREATHE" },
     { type: "stamp-trust",      label: "TRUST" },
   ],
+  Animals: [
+    { type: "emoji-dog",        label: "DOG" },
+    { type: "emoji-bunny",      label: "BUNNY" },
+    { type: "emoji-bear",       label: "BEAR" },
+    { type: "emoji-panda",      label: "PANDA" },
+    { type: "emoji-fox",        label: "FOX" },
+    { type: "emoji-owl",        label: "OWL" },
+    { type: "emoji-koala",      label: "KOALA" },
+    { type: "emoji-penguin",    label: "PENGUIN" },
+    { type: "emoji-frog",       label: "FROG" },
+    { type: "emoji-ladybug",    label: "LADYBUG" },
+    { type: "emoji-octopus",    label: "OCTOPUS" },
+    { type: "emoji-whale",      label: "WHALE" },
+    { type: "emoji-flamingo",   label: "FLAMINGO" },
+    { type: "emoji-bee",        label: "BEE" },
+    { type: "emoji-snail",      label: "SNAIL" },
+    { type: "emoji-hedgehog",   label: "HEDGEHOG" },
+  ],
+  Travel: [
+    { type: "emoji-airplane",   label: "AIRPLANE" },
+    { type: "emoji-rocket",     label: "ROCKET" },
+    { type: "emoji-globe",      label: "GLOBE" },
+    { type: "emoji-compass2",   label: "COMPASS" },
+    { type: "emoji-tent",       label: "TENT" },
+    { type: "emoji-castle",     label: "CASTLE" },
+    { type: "emoji-ferris",     label: "FERRIS WHEEL" },
+    { type: "emoji-sunrise",    label: "SUNRISE" },
+    { type: "emoji-train",      label: "TRAIN" },
+    { type: "emoji-sailboat",   label: "SAILBOAT" },
+    { type: "emoji-palm",       label: "PALM TREE" },
+    { type: "emoji-beach",      label: "BEACH" },
+  ],
+  Celebration: [
+    { type: "emoji-party",      label: "PARTY" },
+    { type: "emoji-confetti",   label: "CONFETTI" },
+    { type: "emoji-balloon",    label: "BALLOON" },
+    { type: "emoji-cake",       label: "CAKE" },
+    { type: "emoji-gift",       label: "GIFT" },
+    { type: "emoji-trophy",     label: "TROPHY" },
+    { type: "emoji-medal",      label: "MEDAL" },
+    { type: "emoji-clap",       label: "CLAPPING" },
+    { type: "emoji-tada",       label: "TADA" },
+    { type: "emoji-fireworks",  label: "FIREWORKS" },
+    { type: "emoji-disco",      label: "DISCO" },
+    { type: "emoji-champagne",  label: "CHAMPAGNE" },
+  ],
+  Hearts: [
+    { type: "emoji-heart-red",     label: "RED HEART" },
+    { type: "emoji-heart-orange",  label: "ORANGE" },
+    { type: "emoji-heart-yellow",  label: "YELLOW" },
+    { type: "emoji-heart-green",   label: "GREEN" },
+    { type: "emoji-heart-blue",    label: "BLUE" },
+    { type: "emoji-heart-purple",  label: "PURPLE" },
+    { type: "emoji-heart-pink",    label: "PINK" },
+    { type: "emoji-heart-black",   label: "BLACK" },
+    { type: "emoji-heart-white",   label: "WHITE" },
+    { type: "emoji-heart-spark",   label: "SPARKLING" },
+    { type: "emoji-heart-ribbon",  label: "RIBBON" },
+    { type: "emoji-heart-arrow",   label: "ARROW" },
+    { type: "emoji-heart-grow",    label: "GROWING" },
+    { type: "emoji-heart-revolve", label: "REVOLVING" },
+  ],
+  Music: [
+    { type: "emoji-music-note",   label: "NOTE" },
+    { type: "emoji-music-notes",  label: "NOTES" },
+    { type: "emoji-headphones",   label: "HEADPHONES" },
+    { type: "emoji-microphone",   label: "MICROPHONE" },
+    { type: "emoji-guitar",       label: "GUITAR" },
+    { type: "emoji-piano",        label: "PIANO" },
+    { type: "emoji-drum",         label: "DRUM" },
+    { type: "emoji-violin",       label: "VIOLIN" },
+    { type: "emoji-saxophone",    label: "SAXOPHONE" },
+    { type: "emoji-trumpet",      label: "TRUMPET" },
+  ],
+  Frames: [
+    { type: "frame-hearts",     label: "HEARTS FRAME" },
+    { type: "frame-stars",      label: "STARS FRAME" },
+    { type: "frame-rainbow",    label: "RAINBOW FRAME" },
+    { type: "frame-floral",     label: "FLORAL FRAME" },
+    { type: "frame-sparkle",    label: "SPARKLE FRAME" },
+    { type: "frame-neon",       label: "NEON FRAME" },
+    { type: "frame-cloud",      label: "CLOUD FRAME" },
+    { type: "frame-gradient",   label: "GRADIENT FRAME" },
+  ],
+  Washi: [
+    { type: "washi-pink",       label: "PINK TAPE" },
+    { type: "washi-purple",     label: "PURPLE TAPE" },
+    { type: "washi-mint",       label: "MINT TAPE" },
+    { type: "washi-gold",       label: "GOLD TAPE" },
+    { type: "washi-rainbow",    label: "RAINBOW TAPE" },
+    { type: "washi-hearts",     label: "HEARTS TAPE" },
+    { type: "washi-stars",      label: "STARS TAPE" },
+    { type: "washi-dots",       label: "DOTS TAPE" },
+    { type: "washi-stripes",    label: "STRIPES TAPE" },
+    { type: "washi-floral",     label: "FLORAL TAPE" },
+  ],
 };
 
 const AFFIRMATION_CMDS: Record<string, { response: string; cls?: string }> = {
@@ -685,6 +781,88 @@ function getStickerContent(type: string): string {
     case "stamp-focus": return `<div class="stamp-classified" style="border-color:#ffd740;color:#ffd740;">FOCUS 🎯</div>`;
     case "stamp-breathe": return `<div class="stamp-approved" style="border-color:#81d4fa;color:#81d4fa;">BREATHE 🧘</div>`;
     case "stamp-trust": return `<div class="stamp-secret" style="border-color:#b388ff;color:#b388ff;">TRUST ∞</div>`;
+    case "emoji-dog": return `<span style="font-size:3.5rem;">🐶</span>`;
+    case "emoji-bunny": return `<span style="font-size:3.5rem;">🐰</span>`;
+    case "emoji-bear": return `<span style="font-size:3.5rem;">🐻</span>`;
+    case "emoji-panda": return `<span style="font-size:3.5rem;">🐼</span>`;
+    case "emoji-fox": return `<span style="font-size:3.5rem;">🦊</span>`;
+    case "emoji-owl": return `<span style="font-size:3.5rem;">🦉</span>`;
+    case "emoji-koala": return `<span style="font-size:3.5rem;">🐨</span>`;
+    case "emoji-penguin": return `<span style="font-size:3.5rem;">🐧</span>`;
+    case "emoji-frog": return `<span style="font-size:3.5rem;">🐸</span>`;
+    case "emoji-ladybug": return `<span style="font-size:3.5rem;">🐞</span>`;
+    case "emoji-octopus": return `<span style="font-size:3.5rem;">🐙</span>`;
+    case "emoji-whale": return `<span style="font-size:3.5rem;">🐳</span>`;
+    case "emoji-flamingo": return `<span style="font-size:3.5rem;">🦩</span>`;
+    case "emoji-bee": return `<span style="font-size:3.5rem;">🐝</span>`;
+    case "emoji-snail": return `<span style="font-size:3.5rem;">🐌</span>`;
+    case "emoji-hedgehog": return `<span style="font-size:3.5rem;">🦔</span>`;
+    case "emoji-airplane": return `<span style="font-size:3.5rem;">✈️</span>`;
+    case "emoji-rocket": return `<span style="font-size:3.5rem;">🚀</span>`;
+    case "emoji-globe": return `<span style="font-size:3.5rem;">🌍</span>`;
+    case "emoji-compass2": return `<span style="font-size:3.5rem;">🧭</span>`;
+    case "emoji-tent": return `<span style="font-size:3.5rem;">⛺</span>`;
+    case "emoji-castle": return `<span style="font-size:3.5rem;">🏰</span>`;
+    case "emoji-ferris": return `<span style="font-size:3.5rem;">🎡</span>`;
+    case "emoji-sunrise": return `<span style="font-size:3.5rem;">🌅</span>`;
+    case "emoji-train": return `<span style="font-size:3.5rem;">🚂</span>`;
+    case "emoji-sailboat": return `<span style="font-size:3.5rem;">⛵</span>`;
+    case "emoji-palm": return `<span style="font-size:3.5rem;">🌴</span>`;
+    case "emoji-beach": return `<span style="font-size:3.5rem;">🏖️</span>`;
+    case "emoji-party": return `<span style="font-size:3.5rem;">🥳</span>`;
+    case "emoji-confetti": return `<span style="font-size:3.5rem;">🎊</span>`;
+    case "emoji-balloon": return `<span style="font-size:3.5rem;">🎈</span>`;
+    case "emoji-cake": return `<span style="font-size:3.5rem;">🎂</span>`;
+    case "emoji-gift": return `<span style="font-size:3.5rem;">🎁</span>`;
+    case "emoji-trophy": return `<span style="font-size:3.5rem;">🏆</span>`;
+    case "emoji-medal": return `<span style="font-size:3.5rem;">🏅</span>`;
+    case "emoji-clap": return `<span style="font-size:3.5rem;">👏</span>`;
+    case "emoji-tada": return `<span style="font-size:3.5rem;">🎉</span>`;
+    case "emoji-fireworks": return `<span style="font-size:3.5rem;">🎆</span>`;
+    case "emoji-disco": return `<span style="font-size:3.5rem;">🪩</span>`;
+    case "emoji-champagne": return `<span style="font-size:3.5rem;">🍾</span>`;
+    case "emoji-heart-red": return `<span style="font-size:3.5rem;">❤️</span>`;
+    case "emoji-heart-orange": return `<span style="font-size:3.5rem;">🧡</span>`;
+    case "emoji-heart-yellow": return `<span style="font-size:3.5rem;">💛</span>`;
+    case "emoji-heart-green": return `<span style="font-size:3.5rem;">💚</span>`;
+    case "emoji-heart-blue": return `<span style="font-size:3.5rem;">💙</span>`;
+    case "emoji-heart-purple": return `<span style="font-size:3.5rem;">💜</span>`;
+    case "emoji-heart-pink": return `<span style="font-size:3.5rem;">💗</span>`;
+    case "emoji-heart-black": return `<span style="font-size:3.5rem;">🖤</span>`;
+    case "emoji-heart-white": return `<span style="font-size:3.5rem;">🤍</span>`;
+    case "emoji-heart-spark": return `<span style="font-size:3.5rem;">💖</span>`;
+    case "emoji-heart-ribbon": return `<span style="font-size:3.5rem;">💝</span>`;
+    case "emoji-heart-arrow": return `<span style="font-size:3.5rem;">💘</span>`;
+    case "emoji-heart-grow": return `<span style="font-size:3.5rem;">💓</span>`;
+    case "emoji-heart-revolve": return `<span style="font-size:3.5rem;">💞</span>`;
+    case "emoji-music-note": return `<span style="font-size:3.5rem;">🎵</span>`;
+    case "emoji-music-notes": return `<span style="font-size:3.5rem;">🎶</span>`;
+    case "emoji-headphones": return `<span style="font-size:3.5rem;">🎧</span>`;
+    case "emoji-microphone": return `<span style="font-size:3.5rem;">🎤</span>`;
+    case "emoji-guitar": return `<span style="font-size:3.5rem;">🎸</span>`;
+    case "emoji-piano": return `<span style="font-size:3.5rem;">🎹</span>`;
+    case "emoji-drum": return `<span style="font-size:3.5rem;">🥁</span>`;
+    case "emoji-violin": return `<span style="font-size:3.5rem;">🎻</span>`;
+    case "emoji-saxophone": return `<span style="font-size:3.5rem;">🎷</span>`;
+    case "emoji-trumpet": return `<span style="font-size:3.5rem;">🎺</span>`;
+    case "frame-hearts": return `<div class="cy-frame" style="border:3px solid #ff4081;border-radius:12px;padding:20px;box-shadow:0 0 15px rgba(255,64,129,0.3),inset 0 0 15px rgba(255,64,129,0.1);position:relative;width:120px;height:80px;"><span style="position:absolute;top:-8px;left:10px;font-size:14px;">💖</span><span style="position:absolute;top:-8px;right:10px;font-size:14px;">💖</span><span style="position:absolute;bottom:-8px;left:10px;font-size:14px;">💖</span><span style="position:absolute;bottom:-8px;right:10px;font-size:14px;">💖</span></div>`;
+    case "frame-stars": return `<div class="cy-frame" style="border:3px solid #ffd740;border-radius:12px;padding:20px;box-shadow:0 0 15px rgba(255,215,64,0.3),inset 0 0 15px rgba(255,215,64,0.1);width:120px;height:80px;position:relative;"><span style="position:absolute;top:-8px;left:10px;font-size:14px;">⭐</span><span style="position:absolute;top:-8px;right:10px;font-size:14px;">⭐</span><span style="position:absolute;bottom:-8px;left:10px;font-size:14px;">⭐</span><span style="position:absolute;bottom:-8px;right:10px;font-size:14px;">⭐</span></div>`;
+    case "frame-rainbow": return `<div class="cy-frame" style="border:3px solid transparent;border-image:linear-gradient(90deg,#ff4081,#ff6d00,#ffd740,#69f0ae,#00e5ff,#7c4dff,#e040fb) 1;padding:20px;width:120px;height:80px;"></div>`;
+    case "frame-floral": return `<div class="cy-frame" style="border:3px solid #f48fb1;border-radius:16px;padding:20px;box-shadow:0 0 15px rgba(244,143,177,0.3);width:120px;height:80px;position:relative;"><span style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:16px;">🌸</span><span style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);font-size:16px;">🌺</span><span style="position:absolute;left:-10px;top:50%;transform:translateY(-50%);font-size:16px;">🌷</span><span style="position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:16px;">🌹</span></div>`;
+    case "frame-sparkle": return `<div class="cy-frame" style="border:2px solid #e040fb;border-radius:12px;padding:20px;box-shadow:0 0 20px rgba(224,64,251,0.4),0 0 40px rgba(124,77,255,0.2);width:120px;height:80px;position:relative;"><span style="position:absolute;top:-6px;left:-6px;font-size:14px;">✨</span><span style="position:absolute;top:-6px;right:-6px;font-size:14px;">✨</span><span style="position:absolute;bottom:-6px;left:-6px;font-size:14px;">✨</span><span style="position:absolute;bottom:-6px;right:-6px;font-size:14px;">✨</span></div>`;
+    case "frame-neon": return `<div class="cy-frame" style="border:2px solid #00e5ff;border-radius:8px;padding:20px;box-shadow:0 0 10px #00e5ff,0 0 20px rgba(0,229,255,0.4),0 0 30px rgba(0,229,255,0.2),inset 0 0 10px rgba(0,229,255,0.1);width:120px;height:80px;"></div>`;
+    case "frame-cloud": return `<div class="cy-frame" style="border:3px solid #b388ff;border-radius:30px 30px 20px 20px;padding:20px;box-shadow:0 4px 20px rgba(179,136,255,0.3);width:120px;height:80px;position:relative;"><span style="position:absolute;top:-8px;left:20px;font-size:14px;">☁️</span><span style="position:absolute;top:-8px;right:20px;font-size:14px;">☁️</span></div>`;
+    case "frame-gradient": return `<div class="cy-frame" style="border:3px solid transparent;background:linear-gradient(#1a0a2e,#1a0a2e) padding-box,linear-gradient(135deg,#ff4081,#e040fb,#7c4dff,#00e5ff) border-box;border-radius:12px;padding:20px;width:120px;height:80px;"></div>`;
+    case "washi-pink": return `<div class="cy-washi" style="background:linear-gradient(90deg,rgba(255,64,129,0.5),rgba(244,143,177,0.5));height:24px;width:160px;transform:rotate(-2deg);"></div>`;
+    case "washi-purple": return `<div class="cy-washi" style="background:linear-gradient(90deg,rgba(124,77,255,0.5),rgba(179,136,255,0.5));height:24px;width:160px;transform:rotate(1deg);"></div>`;
+    case "washi-mint": return `<div class="cy-washi" style="background:linear-gradient(90deg,rgba(0,229,255,0.4),rgba(100,255,218,0.4));height:24px;width:160px;transform:rotate(-1deg);"></div>`;
+    case "washi-gold": return `<div class="cy-washi" style="background:linear-gradient(90deg,rgba(255,215,64,0.5),rgba(255,171,64,0.5));height:24px;width:160px;transform:rotate(2deg);"></div>`;
+    case "washi-rainbow": return `<div class="cy-washi" style="background:linear-gradient(90deg,rgba(255,64,129,0.4),rgba(255,109,0,0.4),rgba(255,215,64,0.4),rgba(105,240,174,0.4),rgba(0,229,255,0.4),rgba(124,77,255,0.4),rgba(224,64,251,0.4));height:24px;width:160px;transform:rotate(-1deg);"></div>`;
+    case "washi-hearts": return `<div class="cy-washi" style="background:rgba(255,64,129,0.35);height:24px;width:160px;transform:rotate(1deg);font-size:10px;line-height:24px;text-align:center;letter-spacing:8px;">♥♥♥♥♥♥♥♥</div>`;
+    case "washi-stars": return `<div class="cy-washi" style="background:rgba(255,215,64,0.35);height:24px;width:160px;transform:rotate(-2deg);font-size:10px;line-height:24px;text-align:center;letter-spacing:8px;">★★★★★★★★</div>`;
+    case "washi-dots": return `<div class="cy-washi" style="background:rgba(179,136,255,0.35);height:24px;width:160px;transform:rotate(1deg);font-size:8px;line-height:24px;text-align:center;letter-spacing:6px;">● ● ● ● ● ● ● ●</div>`;
+    case "washi-stripes": return `<div class="cy-washi" style="background:repeating-linear-gradient(45deg,rgba(224,64,251,0.3),rgba(224,64,251,0.3) 4px,rgba(0,229,255,0.3) 4px,rgba(0,229,255,0.3) 8px);height:24px;width:160px;transform:rotate(-1deg);"></div>`;
+    case "washi-floral": return `<div class="cy-washi" style="background:rgba(244,143,177,0.35);height:24px;width:160px;transform:rotate(2deg);font-size:12px;line-height:24px;text-align:center;letter-spacing:4px;">🌸🌷🌺🌸🌷🌺🌸</div>`;
     default:
       return `<div style="color:var(--cy-primary);font-size:12px;">~</div>`;
   }
@@ -774,6 +952,10 @@ export default function CyberLog() {
   const [newFileName, setNewFileName] = useState("");
   const [crtEnabled, setCrtEnabled] = useState(true);
   const [fontChoice, setFontChoice] = useState("Nunito");
+  const [editorFontSize, setEditorFontSize] = useState(16);
+  const [accentColor, setAccentColor] = useState("");
+  const [borderStyle, setBorderStyle] = useState("default");
+  const [cursorGlow, setCursorGlow] = useState(false);
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [visionSubpage, setVisionSubpage] = useState<string | null>(null);
   const [visionImages, setVisionImages] = useState<Record<string, {src: string, caption: string}[]>>({});
@@ -827,6 +1009,10 @@ export default function CyberLog() {
         if (d.paperPattern) setPaperPattern(d.paperPattern);
         if (d.canvasMode) setCanvasMode(d.canvasMode);
         if (d.crtEnabled !== undefined) setCrtEnabled(d.crtEnabled);
+        if (d.editorFontSize) setEditorFontSize(d.editorFontSize);
+        if (d.accentColor) setAccentColor(d.accentColor);
+        if (d.borderStyle) setBorderStyle(d.borderStyle);
+        if (d.cursorGlow !== undefined) setCursorGlow(d.cursorGlow);
       }
     } catch {}
     const lastShown = localStorage.getItem("dreamlog-affirmation-date");
@@ -842,12 +1028,12 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers,
+          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -926,6 +1112,30 @@ export default function CyberLog() {
       }
     });
   }, [mindMapStickers, initDrag]);
+
+  useEffect(() => {
+    if (!cursorGlow) {
+      const existing = document.getElementById("cursor-glow-orb");
+      if (existing) existing.remove();
+      return;
+    }
+    let orb = document.getElementById("cursor-glow-orb") as HTMLDivElement;
+    if (!orb) {
+      orb = document.createElement("div");
+      orb.id = "cursor-glow-orb";
+      document.body.appendChild(orb);
+    }
+    const onMove = (e: MouseEvent) => {
+      orb.style.left = e.clientX + "px";
+      orb.style.top = e.clientY + "px";
+      orb.style.opacity = "1";
+    };
+    document.addEventListener("mousemove", onMove);
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      orb.style.opacity = "0";
+    };
+  }, [cursorGlow]);
 
   const formatDoc = (cmd: string, value?: string) => {
     document.execCommand(cmd, false, value ?? undefined);
@@ -1245,7 +1455,9 @@ export default function CyberLog() {
   ];
 
   return (
-    <div className={`cyber-app${sidebarOpen ? "" : " sidebar-collapsed"}`} data-cyber-theme={theme}>
+    <div className={`cyber-app${sidebarOpen ? "" : " sidebar-collapsed"}${cursorGlow ? " cursor-glow" : ""}`} data-cyber-theme={theme}
+      style={accentColor ? { "--cy-accent-custom": accentColor } as React.CSSProperties : undefined}
+    >
       {crtEnabled && <div className="crt-overlay" />}
 
       {showAffirmation && (
@@ -1578,7 +1790,8 @@ export default function CyberLog() {
                 ))}
               </div>
               <div ref={editorRef} contentEditable suppressContentEditableWarning
-                className={`cy-active-page ${paperPattern} ${glitching ? "glitch-anim" : ""}`}
+                className={`cy-active-page ${paperPattern} ${glitching ? "glitch-anim" : ""} ${borderStyle !== "default" ? `border-${borderStyle}` : ""}`}
+                style={{ fontSize: editorFontSize }}
                 data-testid="editor-page"
               />
             </div>
@@ -2515,6 +2728,86 @@ export default function CyberLog() {
                     </div>
                     <button className={`cy-toggle-switch${crtEnabled ? " on" : ""}`}
                       onClick={() => setCrtEnabled(v => !v)} data-testid="toggle-crt" />
+                  </div>
+                  <div className="cy-toggle-row">
+                    <div>
+                      <div className="cy-toggle-label">Cursor Glow</div>
+                      <div className="cy-toggle-sub">Neon glow effect follows your cursor</div>
+                    </div>
+                    <button className={`cy-toggle-switch${cursorGlow ? " on" : ""}`}
+                      onClick={() => setCursorGlow(v => !v)} data-testid="toggle-cursor-glow" />
+                  </div>
+                </div>
+
+                <div className="cy-settings-card">
+                  <div className="cy-settings-card-title">TYPOGRAPHY</div>
+                  <div className="cy-identity-field">
+                    <div className="cy-field-label">EDITOR FONT SIZE</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <input type="range" min={12} max={28} value={editorFontSize}
+                        onChange={e => setEditorFontSize(Number(e.target.value))}
+                        className="cy-range-input" data-testid="settings-font-size"
+                        style={{ flex: 1 }}
+                      />
+                      <span style={{ fontFamily: "var(--cy-font-ui)", fontSize: 13, fontWeight: 700, color: "var(--cy-primary)", minWidth: 36, textAlign: "center" }}>{editorFontSize}px</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="cy-settings-card">
+                  <div className="cy-settings-card-title">ACCENT COLOR</div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {[
+                      { color: "", label: "Default" },
+                      { color: "#ff4081", label: "Pink" },
+                      { color: "#e040fb", label: "Purple" },
+                      { color: "#7c4dff", label: "Violet" },
+                      { color: "#00e5ff", label: "Cyan" },
+                      { color: "#69f0ae", label: "Mint" },
+                      { color: "#ffd740", label: "Gold" },
+                      { color: "#ff6d00", label: "Orange" },
+                      { color: "#64ffda", label: "Teal" },
+                      { color: "#f48fb1", label: "Rose" },
+                      { color: "#81d4fa", label: "Sky" },
+                      { color: "#ea80fc", label: "Orchid" },
+                    ].map(c => (
+                      <button key={c.label}
+                        className={`cy-accent-btn${accentColor === c.color ? " selected" : ""}`}
+                        onClick={() => setAccentColor(c.color)}
+                        data-testid={`accent-${c.label.toLowerCase()}`}
+                        style={{ background: c.color || "var(--cy-primary)", borderColor: accentColor === c.color ? "#fff" : "transparent" }}
+                        title={c.label}
+                      />
+                    ))}
+                  </div>
+                  <div className="cy-identity-field" style={{ marginTop: 10 }}>
+                    <div className="cy-field-label">CUSTOM COLOR</div>
+                    <input type="color" value={accentColor || "#e040fb"}
+                      onChange={e => setAccentColor(e.target.value)}
+                      className="cy-color-input" data-testid="settings-accent-custom"
+                    />
+                  </div>
+                </div>
+
+                <div className="cy-settings-card">
+                  <div className="cy-settings-card-title">BORDERS</div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {[
+                      { id: "default", label: "Default" },
+                      { id: "rounded", label: "Rounded" },
+                      { id: "sharp", label: "Sharp" },
+                      { id: "dashed", label: "Dashed" },
+                      { id: "double", label: "Double" },
+                      { id: "glow", label: "Glow" },
+                    ].map(b => (
+                      <button key={b.id}
+                        className={`cy-border-btn${borderStyle === b.id ? " selected" : ""}`}
+                        onClick={() => setBorderStyle(b.id)}
+                        data-testid={`border-${b.id}`}
+                      >
+                        {b.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
 

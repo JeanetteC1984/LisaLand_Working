@@ -958,6 +958,17 @@
 }
 .cy-sticker-delete:hover { background: #e91e63; transform: scale(1.2); }
 
+.cy-washi {
+  border-radius: 2px;
+  opacity: 0.85;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+
+.cy-frame {
+  pointer-events: none;
+}
+
 /* Sticker styles - Lisa Frank vibes */
 .stamp-secret {
   border: 3px solid #ff4081;
@@ -1150,12 +1161,14 @@
 
 .cy-asset-tabs {
   display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px;
   border-bottom: 1px solid rgba(224,64,251,0.08);
 }
 
 .cy-asset-tab {
-  flex: 1;
-  padding: 9px;
+  padding: 5px 8px;
   font-family: var(--cy-font-ui);
   font-size: 10px;
   font-weight: 600;
@@ -2532,6 +2545,101 @@
 }
 
 .cy-print-title { display: none; }
+
+/* Range input */
+.cy-range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: rgba(224,64,251,0.2);
+  border-radius: 3px;
+  outline: none;
+}
+.cy-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--cy-primary);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(224,64,251,0.4);
+}
+
+/* Accent color buttons */
+.cy-accent-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.cy-accent-btn:hover { transform: scale(1.15); }
+.cy-accent-btn.selected {
+  border-color: #fff !important;
+  box-shadow: 0 0 12px currentColor;
+  transform: scale(1.15);
+}
+
+/* Color input */
+.cy-color-input {
+  width: 100%;
+  height: 36px;
+  border: 1px solid rgba(224,64,251,0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  padding: 2px;
+}
+.cy-color-input::-webkit-color-swatch-wrapper { padding: 2px; }
+.cy-color-input::-webkit-color-swatch { border-radius: 6px; border: none; }
+
+/* Border style buttons */
+.cy-border-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(224,64,251,0.2);
+  background: rgba(224,64,251,0.05);
+  color: var(--cy-text-muted);
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.cy-border-btn:hover { background: rgba(224,64,251,0.12); color: var(--cy-primary); }
+.cy-border-btn.selected {
+  background: rgba(224,64,251,0.2);
+  color: var(--cy-primary);
+  border-color: var(--cy-primary);
+  box-shadow: 0 0 8px rgba(224,64,251,0.2);
+}
+
+/* Border styles on editor */
+.border-rounded { border-radius: 20px !important; }
+.border-sharp { border-radius: 0 !important; }
+.border-dashed { border-style: dashed !important; border-width: 2px !important; border-color: var(--cy-primary) !important; }
+.border-double { border-style: double !important; border-width: 4px !important; border-color: var(--cy-primary) !important; }
+.border-glow { box-shadow: 0 0 15px rgba(224,64,251,0.4), 0 0 30px rgba(124,77,255,0.2), inset 0 0 15px rgba(224,64,251,0.05) !important; border-color: var(--cy-primary) !important; }
+
+/* Accent color override */
+.cyber-app[style*="--cy-accent-custom"] {
+  --cy-primary: var(--cy-accent-custom) !important;
+}
+
+/* Cursor glow effect */
+#cursor-glow-orb {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,64,251,0.15) 0%, rgba(124,77,255,0.08) 40%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+  mix-blend-mode: screen;
+}
 
 /* Print */
 @media print {

@@ -15,7 +15,8 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 24 font choices, alignment, lists
 - **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral — visual icon swatch selectors
 - **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal — visual gradient swatch selectors
-- **Sticker System (170+ stickers)**: 13 categories — Vibes (18), Symbols (20), Emoji (24), Notes (12), Art (12), Dividers (6), Weather (10), Nature (12), Food (12), Zodiac (12), Shapes (10), Badges (10). All draggable with position persistence, resizable (scale 0.3x–3x via +/- controls on hover). Available in both Journal and Mind Map sections.
+- **Sticker System (300+ stickers)**: 20 categories — Vibes (18), Symbols (20), Emoji (24), Notes (12), Art (12), Dividers (6), Weather (10), Nature (12), Food (12), Zodiac (12), Shapes (10), Badges (10), Animals (16), Travel (12), Celebration (12), Hearts (14), Music (10), Frames (8), Washi Tape (10). All draggable with position persistence, resizable (scale 0.3x–3x via +/- controls on hover). Available in both Journal and Mind Map sections. Tabs wrap for usability.
+- **Customization Options**: Editor font size slider (12–28px), 12 accent color presets + custom color picker, 6 border styles (Default, Rounded, Sharp, Dashed, Double, Glow), cursor glow effect (mouse-tracking neon orb).
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load
