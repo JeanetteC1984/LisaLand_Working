@@ -11,7 +11,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 ## Features
 
 - **19 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 3 dark-light (Cotton Candy, Lemonade, Lavender Mist) + 3 warm/cool (Peach Sorbet, Mint Chip, Rose Quartz) + 3 truly light-mode (☁️ Cloud Nine, 🍯 Honey Glow, 🌤️ Sky Bloom — white/pastel backgrounds with dark text, full CSS override block)
-- **9 Sections**: Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Settings/Customize
+- **10 Sections**: Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Music Player, Settings/Customize
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 24 font choices, alignment, lists
 - **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral — visual icon swatch selectors
 - **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal — visual gradient swatch selectors
@@ -20,6 +20,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Calendar**: Daily/Weekly/Monthly views with navigation, time blocking (6AM–11PM hourly slots), drag-and-drop events between days and time slots, event form with title, date, start/end time, color (12 options), location, description, category (8 types), and all-day toggle. Events persist in localStorage.
 - **Sparkle Button**: Triggers glitch animation + random theme change + 60-particle glitter explosion burst.
 - **Journal Icon**: Clicking the Journal icon in the sidebar opens the "Name Your Entry" popup instead of just switching sections.
+- **Music Player**: Audio player with IndexedDB-persisted playlist, file upload, play/pause/prev/next controls, animated reactor core visualization, color-cycling visualizer bars, playlist management with purge. Uses DreamLogMusicDB IndexedDB store.
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load

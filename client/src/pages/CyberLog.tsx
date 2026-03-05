@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar";
+type Section = "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar" | "music";
 
 type CalendarEvent = {
   id: string;
@@ -1538,6 +1538,145 @@ export default function CyberLog() {
 
   const [dragEventId, setDragEventId] = useState<string | null>(null);
 
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [musicPlaylist, setMusicPlaylist] = useState<{ name: string; src: string; id?: number }[]>([]);
+  const [musicTrackIndex, setMusicTrackIndex] = useState(0);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicVisualizerActive, setMusicVisualizerActive] = useState(false);
+  const musicDbRef = useRef<IDBDatabase | null>(null);
+  const musicFileRef = useRef<HTMLInputElement>(null);
+  const musicUrlsRef = useRef<string[]>([]);
+
+  useEffect(() => {
+    const req = indexedDB.open("DreamLogMusicDB", 1);
+    req.onupgradeneeded = (e: any) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("tracks")) {
+        db.createObjectStore("tracks", { keyPath: "id", autoIncrement: true });
+      }
+    };
+    req.onsuccess = (e: any) => {
+      musicDbRef.current = e.target.result;
+      loadMusicFromDB();
+    };
+    return () => {
+      musicUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
+      musicUrlsRef.current = [];
+      if (musicDbRef.current) musicDbRef.current.close();
+    };
+  }, []);
+
+  const loadMusicFromDB = () => {
+    const db = musicDbRef.current;
+    if (!db) return;
+    const tx = db.transaction(["tracks"], "readonly");
+    const store = tx.objectStore("tracks");
+    const req = store.getAll();
+    req.onsuccess = () => {
+      musicUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
+      const tracks = req.result;
+      const newUrls: string[] = [];
+      const list = tracks.map((t: any) => {
+        const url = URL.createObjectURL(t.blob);
+        newUrls.push(url);
+        return { name: t.name, src: url, id: t.id };
+      });
+      musicUrlsRef.current = newUrls;
+      setMusicPlaylist(list);
+    };
+  };
+
+  const musicUploadFiles = (fileList: FileList) => {
+    const db = musicDbRef.current;
+    if (!db) return;
+    const tx = db.transaction(["tracks"], "readwrite");
+    const store = tx.objectStore("tracks");
+    Array.from(fileList).forEach(file => {
+      store.add({ name: file.name.replace(/\.[^/.]+$/, ""), blob: file });
+    });
+    tx.oncomplete = () => loadMusicFromDB();
+  };
+
+  const musicClearAll = () => {
+    const db = musicDbRef.current;
+    if (!db) return;
+    const tx = db.transaction(["tracks"], "readwrite");
+    const store = tx.objectStore("tracks");
+    store.clear().onsuccess = () => {
+      musicUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
+      musicUrlsRef.current = [];
+      setMusicPlaylist([]);
+      setMusicTrackIndex(0);
+      setMusicPlaying(false);
+      setMusicVisualizerActive(false);
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
+    };
+  };
+
+  const musicLoadTrack = (index: number, autoPlay = true) => {
+    if (index < 0 || index >= musicPlaylist.length) return;
+    setMusicTrackIndex(index);
+    if (audioRef.current) {
+      audioRef.current.src = musicPlaylist[index].src;
+      if (autoPlay) {
+        audioRef.current.play().catch(() => {
+          setMusicPlaying(false);
+          setMusicVisualizerActive(false);
+        });
+      }
+    }
+  };
+
+  const musicTogglePlay = () => {
+    if (musicPlaylist.length === 0) return;
+    if (!audioRef.current) return;
+    if (audioRef.current.paused) {
+      if (!audioRef.current.src || audioRef.current.src === window.location.href) {
+        musicLoadTrack(0, true);
+        return;
+      }
+      audioRef.current.play().catch(() => {
+        setMusicPlaying(false);
+        setMusicVisualizerActive(false);
+      });
+    } else {
+      audioRef.current.pause();
+    }
+  };
+
+  const musicNext = () => {
+    if (musicPlaylist.length === 0) return;
+    musicLoadTrack((musicTrackIndex + 1) % musicPlaylist.length);
+  };
+
+  const musicPrev = () => {
+    if (musicPlaylist.length === 0) return;
+    musicLoadTrack((musicTrackIndex - 1 + musicPlaylist.length) % musicPlaylist.length);
+  };
+
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    const onEnd = () => {
+      if (musicPlaylist.length === 0) return;
+      const next = (musicTrackIndex + 1) % musicPlaylist.length;
+      musicLoadTrack(next);
+    };
+    const onPlay = () => { setMusicPlaying(true); setMusicVisualizerActive(true); };
+    const onPause = () => { setMusicPlaying(false); setMusicVisualizerActive(false); };
+    const onError = () => { setMusicPlaying(false); setMusicVisualizerActive(false); };
+    a.addEventListener("ended", onEnd);
+    a.addEventListener("play", onPlay);
+    a.addEventListener("pause", onPause);
+    a.addEventListener("error", onError);
+    return () => {
+      a.removeEventListener("ended", onEnd);
+      a.removeEventListener("play", onPlay);
+      a.removeEventListener("pause", onPause);
+      a.removeEventListener("error", onError);
+    };
+  }, [musicTrackIndex, musicPlaylist.length]);
+
   const logMood = (mood: number) => {
     const today = getToday();
     setMoodEntries(prev => {
@@ -1590,6 +1729,7 @@ export default function CyberLog() {
     { icon: "fa-solid fa-face-smile",     title: "Mood",     section: "mood" },
     { icon: "fa-solid fa-fire",           title: "Habits",   section: "habits" },
     { icon: "fa-solid fa-calendar-days",  title: "Calendar", section: "calendar" },
+    { icon: "fa-solid fa-headphones",     title: "Music",    section: "music" },
   ];
 
   return (
@@ -3135,6 +3275,86 @@ export default function CyberLog() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {section === "music" && (
+          <div className="cy-section">
+            <div className="cy-page-header">
+              <div className="cy-page-header-row">
+                <h2 className="cy-page-title"><i className="fa-solid fa-headphones" style={{ marginRight: 10 }} />Music Player</h2>
+              </div>
+            </div>
+
+            <audio ref={audioRef} />
+            <input ref={musicFileRef} type="file" accept="audio/*" multiple style={{ display: "none" }}
+              onChange={e => { if (e.target.files) musicUploadFiles(e.target.files); e.target.value = ""; }}
+              data-testid="music-file-input"
+            />
+
+            <div className="cy-music-layout">
+              <div className="cy-music-player-card">
+                <div className={`cy-music-reactor${musicPlaying ? " spinning" : ""}`} data-testid="music-reactor">
+                  <div className="cy-music-reactor-ring outer" />
+                  <div className="cy-music-reactor-ring inner" />
+                  <div className="cy-music-reactor-label" data-testid="music-track-label">
+                    {musicPlaying && musicPlaylist[musicTrackIndex]
+                      ? musicPlaylist[musicTrackIndex].name.length > 18
+                        ? musicPlaylist[musicTrackIndex].name.slice(0, 18) + "…"
+                        : musicPlaylist[musicTrackIndex].name
+                      : "IDLE"}
+                  </div>
+                </div>
+
+                <div className="cy-music-controls">
+                  <button className="cy-music-btn" onClick={musicPrev} data-testid="music-prev">
+                    <i className="fa-solid fa-backward-step" />
+                  </button>
+                  <button className="cy-music-btn play" onClick={musicTogglePlay} data-testid="music-play">
+                    <i className={`fa-solid ${musicPlaying ? "fa-pause" : "fa-play"}`} />
+                  </button>
+                  <button className="cy-music-btn" onClick={musicNext} data-testid="music-next">
+                    <i className="fa-solid fa-forward-step" />
+                  </button>
+                </div>
+
+                <div className={`cy-music-visualizer${musicVisualizerActive ? " active" : ""}`} data-testid="music-visualizer">
+                  {Array.from({ length: 20 }).map((_, i) => (
+                    <div key={i} className="cy-music-bar" style={{ animationDelay: `${i * 0.08}s` }} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="cy-music-playlist-card">
+                <div className="cy-music-playlist-header">
+                  <i className="fa-solid fa-database" style={{ marginRight: 8 }} />Audio Database
+                </div>
+                <div className="cy-music-playlist-scroll" data-testid="music-playlist">
+                  {musicPlaylist.length === 0 ? (
+                    <div className="cy-music-empty">[NO DATA FOUND]</div>
+                  ) : (
+                    musicPlaylist.map((track, i) => (
+                      <div key={i}
+                        className={`cy-music-track${i === musicTrackIndex ? " active" : ""}`}
+                        onClick={() => musicLoadTrack(i)}
+                        data-testid={`music-track-${i}`}
+                      >
+                        <span className="cy-music-track-name">{track.name}</span>
+                        {i === musicTrackIndex && <span className="cy-music-track-status">{musicPlaying ? "PLAYING" : "SELECTED"}</span>}
+                      </div>
+                    ))
+                  )}
+                </div>
+                <div className="cy-music-btn-group">
+                  <button className="cy-music-upload-btn" onClick={() => musicFileRef.current?.click()} data-testid="music-upload">
+                    <i className="fa-solid fa-plus" style={{ marginRight: 6 }} />Upload
+                  </button>
+                  <button className="cy-music-purge-btn" onClick={musicClearAll} data-testid="music-clear">
+                    <i className="fa-solid fa-trash" style={{ marginRight: 6 }} />Purge
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
