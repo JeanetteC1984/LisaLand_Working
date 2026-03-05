@@ -1723,7 +1723,10 @@ export default function CyberLog() {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
   const vizFrameRef = useRef<number>(0);
-  const vizBarsRef = useRef<HTMLDivElement>(null);
+  const vizCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [vizMode, setVizMode] = useState<"bars" | "circular" | "wave">("bars");
+  const vizModeRef = useRef(vizMode);
+  vizModeRef.current = vizMode;
 
   useEffect(() => {
     const req = indexedDB.open("DreamLogMusicDB", 1);
@@ -1754,30 +1757,129 @@ export default function CyberLog() {
     if (!sourceRef.current) {
       sourceRef.current = audioCtxRef.current.createMediaElementSource(audioRef.current);
       analyserRef.current = audioCtxRef.current.createAnalyser();
-      analyserRef.current.fftSize = 64;
+      analyserRef.current.fftSize = 256;
+      analyserRef.current.smoothingTimeConstant = 0.8;
       sourceRef.current.connect(analyserRef.current);
       analyserRef.current.connect(audioCtxRef.current.destination);
     }
   };
 
+  const VIZ_COLORS = ["#e040fb","#ff00ff","#0aff0a","#00f3ff","#ffd740","#ff4081","#7c4dff","#00e5ff","#ff6d00","#76ff03"];
+
   const startVisualizerLoop = () => {
     if (vizFrameRef.current) return;
     const analyser = analyserRef.current;
-    const container = vizBarsRef.current;
-    if (!analyser || !container) return;
+    if (!analyser) return;
     const bufLen = analyser.frequencyBinCount;
-    const dataArr = new Uint8Array(bufLen);
-    const bars = container.querySelectorAll<HTMLElement>(".cy-music-bar");
-    const barCount = bars.length;
+    const freqData = new Uint8Array(bufLen);
+    const waveData = new Uint8Array(bufLen);
+    let hueShift = 0;
+
     const draw = () => {
       vizFrameRef.current = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArr);
-      for (let i = 0; i < barCount; i++) {
-        const idx = Math.floor((i / barCount) * bufLen);
-        const val = dataArr[idx] / 255;
-        const h = Math.max(3, val * 58);
-        bars[i].style.height = h + "px";
-        bars[i].style.opacity = String(0.4 + val * 0.6);
+      const canvas = vizCanvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      const W = canvas.width = canvas.offsetWidth * 2;
+      const H = canvas.height = canvas.offsetHeight * 2;
+      ctx.clearRect(0, 0, W, H);
+      analyser.getByteFrequencyData(freqData);
+      analyser.getByteTimeDomainData(waveData);
+      hueShift += 0.5;
+
+      const mode = vizModeRef.current;
+
+      if (mode === "bars") {
+        const barCount = 48;
+        const barW = (W / barCount) * 0.7;
+        const gap = (W / barCount) * 0.3;
+        for (let i = 0; i < barCount; i++) {
+          const idx = Math.floor((i / barCount) * bufLen * 0.7);
+          const val = freqData[idx] / 255;
+          const h = Math.max(2, val * H * 0.8);
+          const ci = (i + Math.floor(hueShift / 20)) % VIZ_COLORS.length;
+          const color = VIZ_COLORS[ci];
+          const x = i * (barW + gap) + gap / 2;
+          ctx.fillStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 12 + val * 20;
+          ctx.beginPath();
+          ctx.roundRect(x, H / 2 - h / 2, barW, h / 2, [barW / 2, barW / 2, 0, 0]);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.roundRect(x, H / 2, barW, h / 2, [0, 0, barW / 2, barW / 2]);
+          ctx.fill();
+          ctx.globalAlpha = 0.25;
+          ctx.beginPath();
+          ctx.roundRect(x, H / 2 + h / 2 + 2, barW, h * 0.3, [0, 0, barW / 2, barW / 2]);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.shadowBlur = 0;
+        }
+      } else if (mode === "circular") {
+        const cx = W / 2, cy = H / 2;
+        const baseR = Math.min(W, H) * 0.2;
+        const segments = 64;
+        for (let i = 0; i < segments; i++) {
+          const val = freqData[Math.floor((i / segments) * bufLen * 0.6)] / 255;
+          const angle = (i / segments) * Math.PI * 2 - Math.PI / 2;
+          const r = baseR + val * baseR * 1.5;
+          const x1 = cx + Math.cos(angle) * baseR * 0.7;
+          const y1 = cy + Math.sin(angle) * baseR * 0.7;
+          const x2 = cx + Math.cos(angle) * r;
+          const y2 = cy + Math.sin(angle) * r;
+          const ci = (i + Math.floor(hueShift / 10)) % VIZ_COLORS.length;
+          ctx.strokeStyle = VIZ_COLORS[ci];
+          ctx.shadowColor = VIZ_COLORS[ci];
+          ctx.shadowBlur = 8 + val * 18;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "rgba(224,64,251,0.3)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(cx, cy, baseR * 0.7, 0, Math.PI * 2);
+        ctx.stroke();
+        let avg = 0;
+        for (let i = 0; i < bufLen; i++) avg += freqData[i];
+        avg /= bufLen;
+        const pulseR = baseR * 0.5 + (avg / 255) * baseR * 0.3;
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, pulseR);
+        grad.addColorStop(0, `rgba(224,64,251,${0.1 + (avg / 255) * 0.2})`);
+        grad.addColorStop(1, "transparent");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, pulseR, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.lineWidth = 3;
+        const sliceW = W / bufLen;
+        for (let pass = 0; pass < 2; pass++) {
+          ctx.beginPath();
+          for (let i = 0; i < bufLen; i++) {
+            const v = waveData[i] / 128.0;
+            const y = pass === 0 ? (v * H / 2) : H - (v * H / 2);
+            const ci = (Math.floor(i / 8) + Math.floor(hueShift / 15)) % VIZ_COLORS.length;
+            if (i === 0) ctx.moveTo(0, y);
+            else ctx.lineTo(i * sliceW, y);
+            ctx.strokeStyle = VIZ_COLORS[ci];
+            ctx.shadowColor = VIZ_COLORS[ci];
+            ctx.shadowBlur = 10;
+          }
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+        const grad = ctx.createLinearGradient(0, H * 0.3, 0, H * 0.7);
+        grad.addColorStop(0, "rgba(224,64,251,0.03)");
+        grad.addColorStop(0.5, "rgba(124,77,255,0.06)");
+        grad.addColorStop(1, "rgba(224,64,251,0.03)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
       }
     };
     draw();
@@ -1788,12 +1890,10 @@ export default function CyberLog() {
       cancelAnimationFrame(vizFrameRef.current);
       vizFrameRef.current = 0;
     }
-    const container = vizBarsRef.current;
-    if (container) {
-      container.querySelectorAll<HTMLElement>(".cy-music-bar").forEach(b => {
-        b.style.height = "3px";
-        b.style.opacity = "0.4";
-      });
+    const canvas = vizCanvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   };
 
@@ -3842,6 +3942,12 @@ export default function CyberLog() {
           </div>
         )}
 
+        <audio ref={audioRef} style={{ display: "none" }} />
+        <input ref={musicFileRef} type="file" accept="audio/*" multiple style={{ display: "none" }}
+          onChange={e => { if (e.target.files) musicUploadFiles(e.target.files); e.target.value = ""; }}
+          data-testid="music-file-input"
+        />
+
         {section === "music" && (
           <div className="cy-section">
             <div className="cy-page-header">
@@ -3849,12 +3955,6 @@ export default function CyberLog() {
                 <h2 className="cy-page-title"><i className="fa-solid fa-headphones" style={{ marginRight: 10 }} />Music Player</h2>
               </div>
             </div>
-
-            <audio ref={audioRef} />
-            <input ref={musicFileRef} type="file" accept="audio/*" multiple style={{ display: "none" }}
-              onChange={e => { if (e.target.files) musicUploadFiles(e.target.files); e.target.value = ""; }}
-              data-testid="music-file-input"
-            />
 
             <div className="cy-music-layout">
               <div className="cy-music-player-card">
@@ -3882,10 +3982,17 @@ export default function CyberLog() {
                   </button>
                 </div>
 
-                <div ref={vizBarsRef} className={`cy-music-visualizer${musicVisualizerActive ? " active" : ""}`} data-testid="music-visualizer">
-                  {Array.from({ length: 20 }).map((_, i) => (
-                    <div key={i} className="cy-music-bar" />
-                  ))}
+                <div className="cy-music-viz-wrap" data-testid="music-visualizer">
+                  <canvas ref={vizCanvasRef} className="cy-music-viz-canvas" />
+                  <div className="cy-viz-mode-btns">
+                    {(["bars", "circular", "wave"] as const).map(m => (
+                      <button key={m} className={`cy-viz-mode-btn${vizMode === m ? " active" : ""}`}
+                        onClick={() => setVizMode(m)} data-testid={`viz-mode-${m}`}
+                      >
+                        <i className={`fa-solid ${m === "bars" ? "fa-chart-bar" : m === "circular" ? "fa-circle-notch" : "fa-wave-square"}`} />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
