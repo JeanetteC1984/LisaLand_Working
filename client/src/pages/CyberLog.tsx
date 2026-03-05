@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar" | "music";
+type Section = "dashboard" | "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar" | "music";
 
 type CalendarEvent = {
   id: string;
@@ -1231,28 +1231,37 @@ export default function CyberLog() {
 
   const triggerGlitch = () => {
     setGlitching(true);
-    setTimeout(() => setGlitching(false), 600);
+    setTimeout(() => setGlitching(false), 800);
     const otherThemes = THEMES.filter(t => t.id !== theme);
     const randomTheme = otherThemes[Math.floor(Math.random() * otherThemes.length)];
     setTheme(randomTheme.id);
     const container = document.querySelector(".cyber-app");
     if (container) {
+      const flash = document.createElement("div");
+      flash.className = "sparkle-flash";
+      container.appendChild(flash);
+      setTimeout(() => flash.remove(), 600);
+
       const burst = document.createElement("div");
       burst.className = "glitter-explosion";
-      for (let i = 0; i < 60; i++) {
+      const shapes = ["circle", "star", "diamond"];
+      for (let i = 0; i < 100; i++) {
         const p = document.createElement("span");
-        p.className = "glitter-particle";
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        p.className = `glitter-particle glitter-${shape}`;
         const angle = Math.random() * 360;
-        const dist = 80 + Math.random() * 300;
+        const dist = 60 + Math.random() * 400;
         const dx = Math.cos(angle * Math.PI / 180) * dist;
         const dy = Math.sin(angle * Math.PI / 180) * dist;
-        const colors = ["#ff4081","#e040fb","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#ea80fc"];
+        const colors = ["#ff4081","#e040fb","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#ea80fc","#fff","#ff69b4","#00ffcc"];
         p.style.setProperty("--dx", dx + "px");
         p.style.setProperty("--dy", dy + "px");
+        p.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
         p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.animationDelay = (Math.random() * 0.15) + "s";
-        p.style.animationDuration = (0.8 + Math.random() * 0.8) + "s";
-        const size = 4 + Math.random() * 8;
+        p.style.color = p.style.background;
+        p.style.animationDelay = (Math.random() * 0.3) + "s";
+        p.style.animationDuration = (1.0 + Math.random() * 1.2) + "s";
+        const size = 3 + Math.random() * 10;
         p.style.width = size + "px";
         p.style.height = size + "px";
         burst.appendChild(p);
@@ -1825,6 +1834,7 @@ export default function CyberLog() {
   const todayMood = moodEntries.find(e => e.date === getToday());
 
   const ICON_NAV: { icon: string; title: string; section: Section }[] = [
+    { icon: "fa-solid fa-gauge-high",     title: "Dashboard", section: "dashboard" },
     { icon: "fa-solid fa-user-astronaut", title: "Profile",  section: "profile" },
     { icon: "fa-solid fa-wand-magic-sparkles", title: "Manifest", section: "vision" },
     { icon: "fa-solid fa-images",        title: "Board",    section: "vboard" },
@@ -2013,6 +2023,223 @@ export default function CyberLog() {
 
       {/* MAIN STAGE */}
       <main className={`cy-main-stage ${canvasMode}`}>
+
+        {/* DASHBOARD */}
+        {section === "dashboard" && (() => {
+          const today = getToday();
+          const todayEvents = calendarEvents.filter(e => e.date === today);
+          const allHabits = [...DEFAULT_HABITS, ...customHabits];
+          const todayHabitDay = habitDays.find(d => d.date === today);
+          const habitsCompletedToday = todayHabitDay ? todayHabitDay.completed.length : 0;
+          const totalHabits = allHabits.length;
+          const goalsDone = goals.filter(g => g.progress >= 100).length;
+          const goalsInProgress = goals.filter(g => g.progress > 0 && g.progress < 100).length;
+          const avgGoalProgress = goals.length > 0 ? Math.round(goals.reduce((a, g) => a + g.progress, 0) / goals.length) : 0;
+          const moodToday = moodEntries.find(e => e.date === today);
+          const moodEmojis = ["😢", "😔", "😐", "😊", "🤩"];
+          const last7 = Array.from({ length: 7 }, (_, i) => {
+            const d = new Date(); d.setDate(d.getDate() - (6 - i));
+            return d.toISOString().split("T")[0];
+          });
+          const streakDays = (() => {
+            let streak = 0;
+            const d = new Date();
+            while (true) {
+              const ds = d.toISOString().split("T")[0];
+              const hd = habitDays.find(h => h.date === ds);
+              if (hd && hd.completed.length > 0) { streak++; d.setDate(d.getDate() - 1); }
+              else break;
+            }
+            return streak;
+          })();
+          const journalCount = files.length;
+          return (
+            <div className="cy-section">
+              <div className="cy-page-header">
+                <div className="cy-page-header-row">
+                  <div>
+                    <div className="cy-page-title"><i className="fa-solid fa-gauge-high" style={{ marginRight: 10 }} />Dashboard</div>
+                    <div className="cy-page-subtitle">Your Daily Overview ~ {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="cy-page-body">
+
+                <div className="cy-dash-stats" data-testid="dash-stats">
+                  <div className="cy-dash-stat-card" onClick={() => setSection("journal")} data-testid="dash-stat-journal">
+                    <div className="cy-dash-stat-icon" style={{ background: "rgba(224,64,251,0.15)", color: "#e040fb" }}>
+                      <i className="fa-solid fa-book-open" />
+                    </div>
+                    <div className="cy-dash-stat-value">{journalCount}</div>
+                    <div className="cy-dash-stat-label">Journal Entries</div>
+                  </div>
+                  <div className="cy-dash-stat-card" onClick={() => setSection("goals")} data-testid="dash-stat-goals">
+                    <div className="cy-dash-stat-icon" style={{ background: "rgba(105,240,174,0.15)", color: "#69f0ae" }}>
+                      <i className="fa-solid fa-bullseye" />
+                    </div>
+                    <div className="cy-dash-stat-value">{goalsDone}<span className="cy-dash-stat-sub">/{goals.length}</span></div>
+                    <div className="cy-dash-stat-label">Goals Complete</div>
+                  </div>
+                  <div className="cy-dash-stat-card" onClick={() => setSection("habits")} data-testid="dash-stat-habits">
+                    <div className="cy-dash-stat-icon" style={{ background: "rgba(0,229,255,0.15)", color: "#00e5ff" }}>
+                      <i className="fa-solid fa-fire" />
+                    </div>
+                    <div className="cy-dash-stat-value">{streakDays}</div>
+                    <div className="cy-dash-stat-label">Day Streak</div>
+                  </div>
+                  <div className="cy-dash-stat-card" onClick={() => setSection("mood")} data-testid="dash-stat-mood">
+                    <div className="cy-dash-stat-icon" style={{ background: "rgba(255,64,129,0.15)", color: "#ff4081" }}>
+                      <i className="fa-solid fa-face-smile" />
+                    </div>
+                    <div className="cy-dash-stat-value">{moodToday ? moodEmojis[moodToday.mood - 1] : "—"}</div>
+                    <div className="cy-dash-stat-label">Today's Mood</div>
+                  </div>
+                </div>
+
+                <div className="cy-dash-grid">
+                  <div className="cy-dash-card" data-testid="dash-today-events">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-calendar-day" style={{ marginRight: 8 }} />Today's Schedule
+                      <span className="cy-badge cy-badge-online" style={{ fontSize: 9, marginLeft: "auto" }}>{todayEvents.length}</span>
+                    </div>
+                    <div className="cy-dash-card-body">
+                      {todayEvents.length === 0 ? (
+                        <div className="cy-dash-empty">No events today — enjoy a free day!</div>
+                      ) : (
+                        todayEvents.slice(0, 5).map(ev => (
+                          <div key={ev.id} className="cy-dash-event-item"
+                            onClick={() => { setSection("calendar"); setSelectedDate(today); }}
+                            data-testid={`dash-event-${ev.id}`}
+                          >
+                            <div className="cy-dash-event-dot" style={{ background: ev.color }} />
+                            <div className="cy-dash-event-info">
+                              <div className="cy-dash-event-title">{ev.title}</div>
+                              <div className="cy-dash-event-time">{ev.allDay ? "All Day" : `${ev.startTime} – ${ev.endTime}`}</div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="cy-dash-card" data-testid="dash-habits-today">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-check-double" style={{ marginRight: 8 }} />Habits Today
+                      <span className="cy-badge cy-badge-online" style={{ fontSize: 9, marginLeft: "auto" }}>{habitsCompletedToday}/{totalHabits}</span>
+                    </div>
+                    <div className="cy-dash-card-body">
+                      {allHabits.map(h => {
+                        const done = todayHabitDay?.completed.includes(h.id);
+                        return (
+                          <div key={h.id} className={`cy-dash-habit-item${done ? " done" : ""}`} data-testid={`dash-habit-${h.id}`}>
+                            <i className={h.icon} style={{ color: h.color, marginRight: 8, fontSize: 14 }} />
+                            <span>{h.name}</span>
+                            {done && <i className="fa-solid fa-circle-check" style={{ marginLeft: "auto", color: "#69f0ae", fontSize: 14 }} />}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="cy-dash-card" data-testid="dash-goals-progress">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-bullseye" style={{ marginRight: 8 }} />Goal Progress
+                      <span className="cy-badge cy-badge-warn" style={{ fontSize: 9, marginLeft: "auto" }}>AVG {avgGoalProgress}%</span>
+                    </div>
+                    <div className="cy-dash-card-body">
+                      {goals.length === 0 ? (
+                        <div className="cy-dash-empty">No goals yet — set one to get started!</div>
+                      ) : (
+                        goals.slice(0, 5).map(g => {
+                          const barColor = g.progress >= 70 ? "#69f0ae" : g.progress >= 40 ? "#ffd740" : "#ff4081";
+                          return (
+                            <div key={g.id} className="cy-dash-goal-item"
+                              onClick={() => { setSection("goals"); setExpandedGoal(g.id); }}
+                              data-testid={`dash-goal-${g.id}`}
+                            >
+                              <div className="cy-dash-goal-name">{g.name}</div>
+                              <div className="cy-dash-goal-bar">
+                                <div className="cy-dash-goal-fill" style={{ width: `${g.progress}%`, background: barColor }} />
+                              </div>
+                              <span className="cy-dash-goal-pct" style={{ color: barColor }}>{g.progress}%</span>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="cy-dash-card" data-testid="dash-mood-week">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-chart-line" style={{ marginRight: 8 }} />Mood This Week
+                    </div>
+                    <div className="cy-dash-card-body">
+                      <div className="cy-dash-mood-week">
+                        {last7.map(d => {
+                          const entry = moodEntries.find(e => e.date === d);
+                          const dayLabel = new Date(d + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" });
+                          return (
+                            <div key={d} className="cy-dash-mood-day" data-testid={`dash-mood-${d}`}>
+                              <div className="cy-dash-mood-emoji">{entry ? moodEmojis[entry.mood - 1] : "·"}</div>
+                              <div className="cy-dash-mood-label">{dayLabel}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="cy-dash-card" data-testid="dash-recent-entries">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-clock-rotate-left" style={{ marginRight: 8 }} />Recent Entries
+                    </div>
+                    <div className="cy-dash-card-body">
+                      {files.slice(0, 5).map(f => (
+                        <div key={f.id} className="cy-dash-entry-item"
+                          onClick={() => { selectFile(f.id); setSection("journal"); }}
+                          data-testid={`dash-entry-${f.id}`}
+                        >
+                          <i className="fa-solid fa-file-lines" style={{ color: "var(--cy-primary)", marginRight: 8, fontSize: 12 }} />
+                          <span className="cy-dash-entry-name">{f.name}</span>
+                          <span className="cy-dash-entry-date">{f.date}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="cy-dash-card" data-testid="dash-quick-actions">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-bolt" style={{ marginRight: 8 }} />Quick Actions
+                    </div>
+                    <div className="cy-dash-card-body">
+                      <div className="cy-dash-actions">
+                        <button className="cy-dash-action-btn" onClick={quickNewEntry} data-testid="dash-action-journal">
+                          <i className="fa-solid fa-pen" /><span>New Entry</span>
+                        </button>
+                        <button className="cy-dash-action-btn" onClick={() => { setSection("goals"); setShowGoalForm(true); }} data-testid="dash-action-goal">
+                          <i className="fa-solid fa-bullseye" /><span>New Goal</span>
+                        </button>
+                        <button className="cy-dash-action-btn" onClick={() => setSection("mood")} data-testid="dash-action-mood">
+                          <i className="fa-solid fa-face-smile" /><span>Log Mood</span>
+                        </button>
+                        <button className="cy-dash-action-btn" onClick={() => setSection("habits")} data-testid="dash-action-habits">
+                          <i className="fa-solid fa-fire" /><span>Track Habits</span>
+                        </button>
+                        <button className="cy-dash-action-btn" onClick={() => { setSection("calendar"); setShowEventForm(true); }} data-testid="dash-action-event">
+                          <i className="fa-solid fa-calendar-plus" /><span>Add Event</span>
+                        </button>
+                        <button className="cy-dash-action-btn" onClick={() => setSection("mindmap")} data-testid="dash-action-mindmap">
+                          <i className="fa-solid fa-diagram-project" /><span>Mind Map</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
 
         {/* JOURNAL */}
         {section === "journal" && (
