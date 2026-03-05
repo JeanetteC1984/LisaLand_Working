@@ -1311,6 +1311,7 @@
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   backdrop-filter: blur(14px);
   overflow: hidden;
+  color: #e0d6f0;
 }
 
 .cy-asset-panel.open { transform: translateY(0); }
@@ -1356,7 +1357,7 @@
   letter-spacing: 1px;
   text-align: center;
   cursor: pointer;
-  color: var(--cy-text-muted);
+  color: rgba(200,180,230,0.6);
   border-bottom: 2px solid transparent;
   transition: 0.2s;
   background: none;
@@ -1371,7 +1372,7 @@
 }
 
 .cy-asset-tab:hover:not(.active) {
-  color: var(--cy-text-main);
+  color: #e0d6f0;
   background: rgba(224,64,251,0.03);
 }
 
@@ -1395,7 +1396,7 @@
   border-radius: 10px;
   transition: 0.25s;
   text-align: center;
-  color: var(--cy-text-main);
+  color: rgba(220,200,245,0.85);
   letter-spacing: 0.5px;
 }
 
