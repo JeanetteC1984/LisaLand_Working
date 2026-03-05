@@ -1991,6 +1991,41 @@
 /* ============================================
    MIND MAP
    ============================================ */
+.cy-mindmap-themes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(224,64,251,0.06);
+}
+.cy-mindmap-themes-label {
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cy-text-muted);
+  letter-spacing: 1px;
+  margin-right: 4px;
+}
+.cy-mindmap-theme-btn {
+  padding: 5px 12px;
+  border: 1px solid rgba(224,64,251,0.12);
+  background: rgba(224,64,251,0.04);
+  color: var(--cy-text-main);
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cy-mindmap-theme-btn:hover {
+  background: rgba(224,64,251,0.12);
+  border-color: rgba(224,64,251,0.25);
+  color: var(--cy-primary);
+  box-shadow: 0 0 8px rgba(224,64,251,0.15);
+}
+
 .cy-mindmap-container {
   flex: 1;
   position: relative;

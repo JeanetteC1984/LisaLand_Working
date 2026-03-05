@@ -944,6 +944,71 @@ export default function CyberLog() {
   const [expandedGoal, setExpandedGoal] = useState<string | null>(null);
   const [milestoneInput, setMilestoneInput] = useState("");
   const NODE_COLORS = ["#e040fb", "#7c4dff", "#00e5ff", "#69f0ae", "#ffd740", "#ff4081", "#ffab40", "#b388ff", "#64ffda", "#ff6d00"];
+
+  const MINDMAP_THEMES: { name: string; icon: string; root: string; rootColor: string; branches: { text: string; color: string }[] }[] = [
+    { name: "Dream Life", icon: "fa-sparkles", root: "My Dream Life", rootColor: "#e040fb",
+      branches: [
+        { text: "Career Goals", color: "#7c4dff" }, { text: "Health & Wellness", color: "#69f0ae" },
+        { text: "Relationships", color: "#ff4081" }, { text: "Personal Growth", color: "#00e5ff" },
+        { text: "Financial Freedom", color: "#ffd740" },
+      ] },
+    { name: "Business Plan", icon: "fa-briefcase", root: "My Business", rootColor: "#00e5ff",
+      branches: [
+        { text: "Product / Service", color: "#e040fb" }, { text: "Target Market", color: "#69f0ae" },
+        { text: "Revenue Model", color: "#ffd740" }, { text: "Marketing", color: "#ff4081" },
+        { text: "Operations", color: "#7c4dff" },
+      ] },
+    { name: "Self Care", icon: "fa-heart", root: "Self Care Plan", rootColor: "#ff4081",
+      branches: [
+        { text: "Mental Health", color: "#b388ff" }, { text: "Physical Health", color: "#69f0ae" },
+        { text: "Social Life", color: "#00e5ff" }, { text: "Hobbies & Joy", color: "#ffd740" },
+        { text: "Rest & Recovery", color: "#64ffda" },
+      ] },
+    { name: "Study Plan", icon: "fa-graduation-cap", root: "Study Goals", rootColor: "#7c4dff",
+      branches: [
+        { text: "Main Subject", color: "#e040fb" }, { text: "Side Projects", color: "#00e5ff" },
+        { text: "Reading List", color: "#69f0ae" }, { text: "Skills to Learn", color: "#ffd740" },
+        { text: "Deadlines", color: "#ff4081" },
+      ] },
+    { name: "Creative Project", icon: "fa-palette", root: "Creative Vision", rootColor: "#ffab40",
+      branches: [
+        { text: "Inspiration", color: "#e040fb" }, { text: "Materials & Tools", color: "#00e5ff" },
+        { text: "Timeline", color: "#ff4081" }, { text: "Collaborators", color: "#69f0ae" },
+        { text: "Goals & Milestones", color: "#7c4dff" },
+      ] },
+  ];
+
+  const applyMindMapTheme = (themeIdx: number) => {
+    const t = MINDMAP_THEMES[themeIdx];
+    const cx = 400, cy = 300;
+    const nodes: MindMapNode[] = [
+      { id: "root", text: t.root, x: cx, y: cy, color: t.rootColor, parentId: null },
+    ];
+    t.branches.forEach((b, i) => {
+      const angle = (i / t.branches.length) * Math.PI * 2 - Math.PI / 2;
+      const dist = 200;
+      nodes.push({
+        id: `n${i + 1}`,
+        text: b.text,
+        x: cx + Math.cos(angle) * dist,
+        y: cy + Math.sin(angle) * dist,
+        color: b.color,
+        parentId: "root",
+      });
+    });
+    setMindMapNodes(nodes);
+    setSelectedNode(null);
+    setMindMapStickers([]);
+  };
+
+  const clearMindMap = () => {
+    setMindMapNodes([
+      { id: "root", text: "Start here...", x: 400, y: 300, color: "#e040fb", parentId: null },
+    ]);
+    setSelectedNode(null);
+    setMindMapStickers([]);
+  };
+
   const [mindMapNodes, setMindMapNodes] = useState<MindMapNode[]>([
     { id: "root", text: "My Dream Life", x: 400, y: 300, color: "#e040fb", parentId: null },
     { id: "n1", text: "Career Goals", x: 200, y: 150, color: "#7c4dff", parentId: "root" },
@@ -2685,9 +2750,6 @@ export default function CyberLog() {
                   <div className="cy-page-subtitle">Visualize Your Ideas ~ Connect the Dots</div>
                 </div>
                 <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                  <button className="cy-quick-add-btn" onClick={quickNewEntry} data-testid="quick-add-mindmap">
-                    <i className="fa-solid fa-plus" />New Entry
-                  </button>
                   <span className="cy-badge cy-badge-online" style={{ fontSize: 10 }}>
                     {mindMapNodes.length} NODES
                   </span>
@@ -2698,8 +2760,24 @@ export default function CyberLog() {
                   <button className="cy-quick-add-btn" onClick={() => setAssetOpen(v => !v)} data-testid="btn-mindmap-stickers">
                     <i className="fa-solid fa-palette" style={{ marginRight: 4 }} />Stickers
                   </button>
+                  <button className="cy-quick-add-btn" onClick={clearMindMap} data-testid="btn-mindmap-clear"
+                    style={{ borderColor: "rgba(255,64,129,0.3)", color: "#ff4081" }}
+                  >
+                    <i className="fa-solid fa-trash-can" style={{ marginRight: 4 }} />Clear
+                  </button>
                 </div>
               </div>
+            </div>
+            <div className="cy-mindmap-themes" data-testid="mindmap-themes">
+              <span className="cy-mindmap-themes-label">Templates:</span>
+              {MINDMAP_THEMES.map((t, i) => (
+                <button key={t.name} className="cy-mindmap-theme-btn" onClick={() => applyMindMapTheme(i)}
+                  data-testid={`mindmap-theme-${i}`}
+                >
+                  <i className={`fa-solid ${t.icon}`} style={{ marginRight: 5, color: t.rootColor }} />
+                  {t.name}
+                </button>
+              ))}
             </div>
             <div className="cy-mindmap-container" ref={mindMapRef} data-testid="mindmap-canvas"
               onClick={(e) => { if ((e.target as HTMLElement).classList.contains("cy-mindmap-container")) setSelectedNode(null); }}
