@@ -1236,38 +1236,71 @@ export default function CyberLog() {
     const randomTheme = otherThemes[Math.floor(Math.random() * otherThemes.length)];
     setTheme(randomTheme.id);
     const container = document.querySelector(".cyber-app");
-    if (container) {
-      const flash = document.createElement("div");
-      flash.className = "sparkle-flash";
-      container.appendChild(flash);
-      setTimeout(() => flash.remove(), 600);
+    if (!container) return;
+    const flash = document.createElement("div");
+    flash.className = "sparkle-flash";
+    container.appendChild(flash);
+    setTimeout(() => flash.remove(), 800);
 
+    const flash2 = document.createElement("div");
+    flash2.className = "sparkle-flash sparkle-flash-delayed";
+    container.appendChild(flash2);
+    setTimeout(() => flash2.remove(), 1200);
+
+    const colors = ["#ff4081","#e040fb","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#ea80fc","#fff","#ff69b4","#00ffcc","#ff1744","#d500f9","#651fff","#18ffff","#76ff03","#ffea00","#ff9100"];
+    const shapes = ["circle", "star", "diamond", "heart", "hexagon"];
+
+    const makeBurst = (ox: number, oy: number, count: number, delay: number) => {
       const burst = document.createElement("div");
       burst.className = "glitter-explosion";
-      const shapes = ["circle", "star", "diamond"];
-      for (let i = 0; i < 100; i++) {
+      burst.style.left = ox + "px";
+      burst.style.top = oy + "px";
+      for (let i = 0; i < count; i++) {
         const p = document.createElement("span");
         const shape = shapes[Math.floor(Math.random() * shapes.length)];
         p.className = `glitter-particle glitter-${shape}`;
         const angle = Math.random() * 360;
-        const dist = 60 + Math.random() * 400;
+        const dist = 40 + Math.random() * 500;
         const dx = Math.cos(angle * Math.PI / 180) * dist;
         const dy = Math.sin(angle * Math.PI / 180) * dist;
-        const colors = ["#ff4081","#e040fb","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#ea80fc","#fff","#ff69b4","#00ffcc"];
         p.style.setProperty("--dx", dx + "px");
         p.style.setProperty("--dy", dy + "px");
-        p.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.color = p.style.background;
-        p.style.animationDelay = (Math.random() * 0.3) + "s";
-        p.style.animationDuration = (1.0 + Math.random() * 1.2) + "s";
-        const size = 3 + Math.random() * 10;
+        p.style.setProperty("--rot", (Math.random() * 1080 - 540) + "deg");
+        const c = colors[Math.floor(Math.random() * colors.length)];
+        p.style.background = c;
+        p.style.color = c;
+        p.style.animationDelay = (delay + Math.random() * 0.4) + "s";
+        p.style.animationDuration = (1.2 + Math.random() * 1.5) + "s";
+        const size = 2 + Math.random() * 14;
         p.style.width = size + "px";
         p.style.height = size + "px";
         burst.appendChild(p);
       }
       container.appendChild(burst);
-      setTimeout(() => burst.remove(), 2000);
+      setTimeout(() => burst.remove(), 3500);
+    };
+
+    makeBurst(0, 0, 150, 0);
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    setTimeout(() => makeBurst((-w/2 + Math.random() * w) * 0.6, (-h/2 + Math.random() * h) * 0.6, 80, 0), 150);
+    setTimeout(() => makeBurst((-w/2 + Math.random() * w) * 0.6, (-h/2 + Math.random() * h) * 0.6, 80, 0), 350);
+    setTimeout(() => makeBurst((-w/2 + Math.random() * w) * 0.5, (-h/2 + Math.random() * h) * 0.5, 60, 0), 550);
+
+    for (let r = 0; r < 20; r++) {
+      const rain = document.createElement("div");
+      rain.className = "glitter-rain";
+      rain.style.left = (Math.random() * 100) + "vw";
+      rain.style.animationDelay = (Math.random() * 2) + "s";
+      rain.style.animationDuration = (1.5 + Math.random() * 2) + "s";
+      rain.style.background = colors[Math.floor(Math.random() * colors.length)];
+      rain.style.boxShadow = `0 0 6px ${rain.style.background}, 0 0 12px ${rain.style.background}`;
+      const s = 3 + Math.random() * 6;
+      rain.style.width = s + "px";
+      rain.style.height = s + "px";
+      container.appendChild(rain);
+      setTimeout(() => rain.remove(), 4000);
     }
   };
 
