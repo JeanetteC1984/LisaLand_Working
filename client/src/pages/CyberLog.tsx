@@ -59,6 +59,7 @@ type Theme = {
   id: string;
   label: string;
   primary: string;
+  light?: boolean;
 };
 
 const THEMES: Theme[] = [
@@ -81,6 +82,25 @@ const THEMES: Theme[] = [
   { id: "cloud-nine",      label: "☁️ Cloud Nine",    primary: "#7c4dff" },
   { id: "honey-glow",      label: "🍯 Honey Glow",   primary: "#f57f17" },
   { id: "sky-bloom",       label: "🌤️ Sky Bloom",    primary: "#0288d1" },
+  { id: "lt-rainbow-dream",  label: "Rainbow Dream",   primary: "#c51ade", light: true },
+  { id: "lt-sunset-glow",    label: "Sunset Glow",     primary: "#e65100", light: true },
+  { id: "lt-ocean-aura",     label: "Ocean Aura",      primary: "#00acc1", light: true },
+  { id: "lt-cosmic-berry",   label: "Cosmic Berry",    primary: "#e91e63", light: true },
+  { id: "lt-neon-jungle",    label: "Neon Jungle",     primary: "#2e7d32", light: true },
+  { id: "lt-stardust",       label: "Stardust",        primary: "#7e57c2", light: true },
+  { id: "lt-electric-candy", label: "Electric Candy",  primary: "#f9a825", light: true },
+  { id: "lt-midnight-rose",  label: "Midnight Rose",   primary: "#d81b60", light: true },
+  { id: "lt-aurora",         label: "Aurora",           primary: "#00897b", light: true },
+  { id: "lt-galaxy",         label: "Galaxy",           primary: "#5c35d2", light: true },
+  { id: "lt-cotton-candy",   label: "Cotton Candy",    primary: "#ec407a", light: true },
+  { id: "lt-lemonade",       label: "Lemonade",        primary: "#f9a825", light: true },
+  { id: "lt-lavender-mist",  label: "Lavender Mist",   primary: "#8e24aa", light: true },
+  { id: "lt-peach-sorbet",   label: "Peach Sorbet",    primary: "#e64a19", light: true },
+  { id: "lt-mint-chip",      label: "Mint Chip",       primary: "#00796b", light: true },
+  { id: "lt-rose-quartz",    label: "Rose Quartz",     primary: "#c2185b", light: true },
+  { id: "lt-cloud-nine",     label: "☁️ Cloud Nine",    primary: "#5c35d2", light: true },
+  { id: "lt-honey-glow",     label: "🍯 Honey Glow",   primary: "#e65100", light: true },
+  { id: "lt-sky-bloom",      label: "🌤️ Sky Bloom",    primary: "#0277bd", light: true },
 ];
 
 const INITIAL_FILES: JournalFile[] = [
@@ -1967,7 +1987,12 @@ export default function CyberLog() {
           <div className="cy-nav-group">
             <label>VIBE / THEME</label>
             <select className="cy-select" value={theme} onChange={e => setTheme(e.target.value)} data-testid="select-theme">
-              {THEMES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+              <optgroup label="Dark Themes">
+                {THEMES.filter(t => !t.light).map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+              </optgroup>
+              <optgroup label="Light Themes">
+                {THEMES.filter(t => t.light).map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
+              </optgroup>
             </select>
           </div>
 
@@ -3828,9 +3853,21 @@ export default function CyberLog() {
               <div className="cy-settings-grid">
                 <div className="cy-settings-card" style={{ gridColumn: "1 / -1" }}>
                   <div className="cy-settings-card-title">VIBE / THEME</div>
+                  <div className="cy-theme-section-label" data-testid="theme-label-dark"><i className="fa-solid fa-moon" style={{ marginRight: 6 }} />Dark Themes</div>
                   <div className="cy-theme-grid" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-                    {THEMES.map(t => (
+                    {THEMES.filter(t => !t.light).map(t => (
                       <div key={t.id} className={`cy-theme-option${theme === t.id ? " selected" : ""}`}
+                        onClick={() => setTheme(t.id)} data-testid={`theme-option-${t.id}`}
+                      >
+                        <div className="cy-theme-dot" style={{ background: t.primary, color: t.primary }} />
+                        <div><div style={{ fontWeight: 600, fontSize: 11 }}>{t.label}</div></div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="cy-theme-section-label" style={{ marginTop: 18 }} data-testid="theme-label-light"><i className="fa-solid fa-sun" style={{ marginRight: 6 }} />Light Themes</div>
+                  <div className="cy-theme-grid" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
+                    {THEMES.filter(t => t.light).map(t => (
+                      <div key={t.id} className={`cy-theme-option light${theme === t.id ? " selected" : ""}`}
                         onClick={() => setTheme(t.id)} data-testid={`theme-option-${t.id}`}
                       >
                         <div className="cy-theme-dot" style={{ background: t.primary, color: t.primary }} />
