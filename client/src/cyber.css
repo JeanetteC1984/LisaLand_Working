@@ -3806,11 +3806,276 @@
   mix-blend-mode: screen;
 }
 
+/* ============================================
+   BUDGET
+   ============================================ */
+.cy-budget-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.cy-budget-month-label {
+  font-family: var(--cy-font-header);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cy-primary);
+  letter-spacing: 1px;
+}
+.cy-budget-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.cy-budget-stat-card {
+  background: rgba(224,64,251,0.04);
+  border: 1px solid rgba(224,64,251,0.12);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: 0.2s;
+}
+.cy-budget-stat-card:hover {
+  border-color: rgba(224,64,251,0.3);
+  transform: translateY(-2px);
+}
+.cy-budget-stat-card.income { border-color: rgba(105,240,174,0.2); }
+.cy-budget-stat-card.income .cy-budget-stat-icon { color: #69f0ae; }
+.cy-budget-stat-card.income .cy-budget-stat-value { color: #69f0ae; }
+.cy-budget-stat-card.expense { border-color: rgba(255,64,129,0.2); }
+.cy-budget-stat-card.expense .cy-budget-stat-icon { color: #ff4081; }
+.cy-budget-stat-card.expense .cy-budget-stat-value { color: #ff4081; }
+.cy-budget-stat-card.balance.positive { border-color: rgba(100,255,218,0.2); }
+.cy-budget-stat-card.balance.positive .cy-budget-stat-icon { color: #64ffda; }
+.cy-budget-stat-card.balance.positive .cy-budget-stat-value { color: #64ffda; }
+.cy-budget-stat-card.balance.negative { border-color: rgba(255,82,82,0.3); }
+.cy-budget-stat-card.balance.negative .cy-budget-stat-icon { color: #ff5252; }
+.cy-budget-stat-card.balance.negative .cy-budget-stat-value { color: #ff5252; }
+.cy-budget-stat-icon {
+  font-size: 22px;
+  color: var(--cy-primary);
+}
+.cy-budget-stat-label {
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cy-text-muted);
+}
+.cy-budget-stat-value {
+  font-family: var(--cy-font-header);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--cy-primary);
+}
+.cy-budget-breakdown {
+  margin-bottom: 20px;
+}
+.cy-budget-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cy-budget-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cy-budget-bar-label {
+  width: 130px;
+  font-family: var(--cy-font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cy-text-main);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.cy-budget-bar-track {
+  flex: 1;
+  height: 12px;
+  background: rgba(224,64,251,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.cy-budget-bar-fill {
+  height: 100%;
+  background: var(--cy-gradient-rainbow);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+.cy-budget-bar-amount {
+  width: 90px;
+  text-align: right;
+  font-family: var(--cy-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cy-text-muted);
+  flex-shrink: 0;
+}
+.cy-budget-ratio {
+  margin-bottom: 20px;
+}
+.cy-budget-ratio-bar {
+  display: flex;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.cy-budget-ratio-income {
+  background: rgba(105,240,174,0.2);
+  color: #69f0ae;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.4s ease;
+}
+.cy-budget-ratio-expense {
+  background: rgba(255,64,129,0.2);
+  color: #ff4081;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.4s ease;
+}
+.cy-budget-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 800px) {
+  .cy-budget-lists { grid-template-columns: 1fr; }
+}
+.cy-budget-list-card {
+  min-height: 100px;
+}
+.cy-budget-empty {
+  font-family: var(--cy-font-ui);
+  font-size: 13px;
+  color: var(--cy-text-muted);
+  text-align: center;
+  padding: 30px 10px;
+  opacity: 0.6;
+}
+.cy-budget-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cy-budget-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(224,64,251,0.03);
+  border: 1px solid rgba(224,64,251,0.06);
+  transition: 0.2s;
+}
+.cy-budget-item:hover {
+  border-color: rgba(224,64,251,0.15);
+  background: rgba(224,64,251,0.06);
+}
+.cy-budget-item-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.cy-budget-item.income .cy-budget-item-icon {
+  background: rgba(105,240,174,0.12);
+  color: #69f0ae;
+}
+.cy-budget-item.expense .cy-budget-item-icon {
+  background: rgba(255,64,129,0.12);
+  color: #ff4081;
+}
+.cy-budget-item-info {
+  flex: 1;
+  min-width: 0;
+}
+.cy-budget-item-name {
+  font-family: var(--cy-font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cy-text-main);
+  display: flex;
+  align-items: center;
+}
+.cy-budget-item-cat {
+  font-family: var(--cy-font-ui);
+  font-size: 10px;
+  color: var(--cy-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.cy-budget-item-amount {
+  font-family: var(--cy-font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.cy-budget-item-amount.income { color: #69f0ae; }
+.cy-budget-item-amount.expense { color: #ff4081; }
+.cy-budget-item-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.cy-budget-item:hover .cy-budget-item-actions { opacity: 1; }
+.cy-budget-item-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid rgba(224,64,251,0.15);
+  background: rgba(224,64,251,0.06);
+  color: var(--cy-text-muted);
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.cy-budget-item-btn:hover { border-color: var(--cy-primary); color: var(--cy-primary); }
+.cy-budget-item-btn.delete:hover { border-color: #ff4081; color: #ff4081; }
+
+[data-cyber-theme^="lt-"] .cy-budget-stat-card {
+  background: color-mix(in srgb, var(--cy-surface, var(--cy-bg-panel)) 50%, white);
+  border-color: color-mix(in srgb, var(--cy-primary) 12%, transparent);
+}
+[data-cyber-theme^="lt-"] .cy-budget-item {
+  background: color-mix(in srgb, var(--cy-surface) 30%, white);
+  border-color: color-mix(in srgb, var(--cy-primary) 8%, transparent);
+}
+[data-cyber-theme^="lt-"] .cy-budget-bar-track {
+  background: color-mix(in srgb, var(--cy-primary) 8%, transparent);
+}
+
 /* Print */
 @media print {
   .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal,
   .cy-quick-add-btn, .cy-back-btn, .cy-goal-add-btn, .cy-affirmation-overlay,
-  .cy-sticker-layer, .cy-sticker-palette { display: none !important; }
+  .cy-sticker-palette { display: none !important; }
+
+  .cy-sticker-controls { display: none !important; }
+  .cy-sticker-layer { pointer-events: none; }
+  .cy-sticker { cursor: default; filter: none; }
 
   .cy-print-title {
     display: block !important;

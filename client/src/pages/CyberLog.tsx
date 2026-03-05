@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "dashboard" | "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar" | "music";
+type Section = "dashboard" | "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar" | "music" | "budget";
 
 type CalendarEvent = {
   id: string;
@@ -30,6 +30,16 @@ type Sticker = {
   y: number;
   rotation: number;
   scale?: number;
+};
+
+type BudgetItem = {
+  id: string;
+  name: string;
+  amount: number;
+  category: string;
+  type: "income" | "expense";
+  date: string;
+  recurring?: boolean;
 };
 
 type Goal = {
@@ -1058,6 +1068,14 @@ export default function CyberLog() {
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitIcon, setNewHabitIcon] = useState(HABIT_ICONS[0]);
   const [newHabitColor, setNewHabitColor] = useState(HABIT_COLORS[0]);
+  const [budgetItems, setBudgetItems] = useState<BudgetItem[]>([]);
+  const [showBudgetForm, setShowBudgetForm] = useState(false);
+  const [editingBudgetItem, setEditingBudgetItem] = useState<BudgetItem | null>(null);
+  const [budgetForm, setBudgetForm] = useState({ name: "", amount: "", category: "Housing", type: "expense" as "income" | "expense", recurring: false });
+  const [budgetMonth, setBudgetMonth] = useState(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; });
+  const BUDGET_CATEGORIES_EXPENSE = ["Housing","Utilities","Groceries","Transport","Insurance","Healthcare","Entertainment","Dining","Shopping","Subscriptions","Education","Savings","Debt","Pets","Personal","Other"];
+  const BUDGET_CATEGORIES_INCOME = ["Salary","Freelance","Side Hustle","Investments","Gifts","Refunds","Other"];
+  const BUDGET_CATEGORY_ICONS: Record<string, string> = { Housing:"fa-house", Utilities:"fa-bolt", Groceries:"fa-cart-shopping", Transport:"fa-car", Insurance:"fa-shield-halved", Healthcare:"fa-heart-pulse", Entertainment:"fa-film", Dining:"fa-utensils", Shopping:"fa-bag-shopping", Subscriptions:"fa-repeat", Education:"fa-graduation-cap", Savings:"fa-piggy-bank", Debt:"fa-credit-card", Pets:"fa-paw", Personal:"fa-user", Other:"fa-ellipsis", Salary:"fa-briefcase", Freelance:"fa-laptop", "Side Hustle":"fa-rocket", Investments:"fa-chart-line", Gifts:"fa-gift", Refunds:"fa-rotate-left" };
   const [entryTitlePrompt, setEntryTitlePrompt] = useState(false);
   const [entryTitleText, setEntryTitleText] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -1103,6 +1121,7 @@ export default function CyberLog() {
         if (d.accentColor) setAccentColor(d.accentColor);
         if (d.borderStyle) setBorderStyle(d.borderStyle);
         if (d.cursorGlow !== undefined) setCursorGlow(d.cursorGlow);
+        if (d.budgetItems) setBudgetItems(d.budgetItems);
       }
     } catch {}
     const lastShown = localStorage.getItem("dreamlog-affirmation-date");
@@ -1118,12 +1137,12 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow,
+          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -2073,6 +2092,7 @@ export default function CyberLog() {
     { icon: "fa-solid fa-face-smile",     title: "Mood",     section: "mood" },
     { icon: "fa-solid fa-fire",           title: "Habits",   section: "habits" },
     { icon: "fa-solid fa-calendar-days",  title: "Calendar", section: "calendar" },
+    { icon: "fa-solid fa-wallet",         title: "Budget",   section: "budget" },
     { icon: "fa-solid fa-headphones",     title: "Music",    section: "music" },
   ];
 
@@ -3941,6 +3961,227 @@ export default function CyberLog() {
             )}
           </div>
         )}
+
+        {section === "budget" && (() => {
+          const monthItems = budgetItems.filter(b => b.date.startsWith(budgetMonth));
+          const totalIncome = monthItems.filter(b => b.type === "income").reduce((s, b) => s + b.amount, 0);
+          const totalExpense = monthItems.filter(b => b.type === "expense").reduce((s, b) => s + b.amount, 0);
+          const balance = totalIncome - totalExpense;
+          const expenseByCategory: Record<string, number> = {};
+          monthItems.filter(b => b.type === "expense").forEach(b => { expenseByCategory[b.category] = (expenseByCategory[b.category] || 0) + b.amount; });
+          const topCategories = Object.entries(expenseByCategory).sort((a, b) => b[1] - a[1]);
+          const maxCat = topCategories.length > 0 ? topCategories[0][1] : 1;
+          const saveBudgetItem = () => {
+            if (!budgetForm.name.trim() || !budgetForm.amount) return;
+            const item: BudgetItem = {
+              id: editingBudgetItem ? editingBudgetItem.id : Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+              name: budgetForm.name.trim(),
+              amount: Math.abs(parseFloat(budgetForm.amount) || 0),
+              category: budgetForm.category,
+              type: budgetForm.type,
+              date: budgetMonth + "-01",
+              recurring: budgetForm.recurring,
+            };
+            if (editingBudgetItem) {
+              setBudgetItems(prev => prev.map(b => b.id === editingBudgetItem.id ? item : b));
+            } else {
+              setBudgetItems(prev => [...prev, item]);
+            }
+            setShowBudgetForm(false);
+            setEditingBudgetItem(null);
+            setBudgetForm({ name: "", amount: "", category: "Housing", type: "expense", recurring: false });
+          };
+          const openEditBudget = (item: BudgetItem) => {
+            setEditingBudgetItem(item);
+            setBudgetForm({ name: item.name, amount: String(item.amount), category: item.category, type: item.type, recurring: item.recurring || false });
+            setShowBudgetForm(true);
+          };
+          const monthLabel = new Date(budgetMonth + "-15").toLocaleDateString("en-US", { month: "long", year: "numeric" });
+          const navMonth = (dir: number) => {
+            const d = new Date(budgetMonth + "-15");
+            d.setMonth(d.getMonth() + dir);
+            setBudgetMonth(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+          };
+          return (
+            <div className="cy-section">
+              <div className="cy-page-header">
+                <div className="cy-page-header-row">
+                  <h2 className="cy-page-title" data-testid="budget-title"><i className="fa-solid fa-wallet" style={{ marginRight: 10 }} />Household Budget</h2>
+                </div>
+                <p className="cy-page-subtitle">Track income, expenses, and savings</p>
+              </div>
+
+              <div className="cy-budget-nav">
+                <button className="cy-cal-nav-btn" onClick={() => navMonth(-1)} data-testid="budget-prev" aria-label="Previous month"><i className="fa-solid fa-chevron-left" /></button>
+                <span className="cy-budget-month-label" data-testid="budget-month">{monthLabel}</span>
+                <button className="cy-cal-nav-btn" onClick={() => navMonth(1)} data-testid="budget-next" aria-label="Next month"><i className="fa-solid fa-chevron-right" /></button>
+                <button className="cy-goal-add-btn" style={{ marginLeft: "auto" }}
+                  onClick={() => { setEditingBudgetItem(null); setBudgetForm({ name: "", amount: "", category: "Housing", type: "expense", recurring: false }); setShowBudgetForm(true); }}
+                  data-testid="budget-add"
+                >
+                  <i className="fa-solid fa-plus" style={{ marginRight: 6 }} />Add Entry
+                </button>
+              </div>
+
+              <div className="cy-budget-summary">
+                <div className="cy-budget-stat-card income" data-testid="budget-income">
+                  <div className="cy-budget-stat-icon"><i className="fa-solid fa-arrow-trend-up" /></div>
+                  <div className="cy-budget-stat-label">Income</div>
+                  <div className="cy-budget-stat-value">${totalIncome.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+                </div>
+                <div className="cy-budget-stat-card expense" data-testid="budget-expense">
+                  <div className="cy-budget-stat-icon"><i className="fa-solid fa-arrow-trend-down" /></div>
+                  <div className="cy-budget-stat-label">Expenses</div>
+                  <div className="cy-budget-stat-value">${totalExpense.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+                </div>
+                <div className={`cy-budget-stat-card balance${balance >= 0 ? " positive" : " negative"}`} data-testid="budget-balance">
+                  <div className="cy-budget-stat-icon"><i className={`fa-solid ${balance >= 0 ? "fa-piggy-bank" : "fa-triangle-exclamation"}`} /></div>
+                  <div className="cy-budget-stat-label">Balance</div>
+                  <div className="cy-budget-stat-value">{balance >= 0 ? "" : "-"}${Math.abs(balance).toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+                </div>
+              </div>
+
+              {topCategories.length > 0 && (
+                <div className="cy-budget-breakdown cy-dash-card">
+                  <div className="cy-dash-card-title"><i className="fa-solid fa-chart-pie" style={{ marginRight: 8 }} />Spending Breakdown</div>
+                  <div className="cy-budget-bars">
+                    {topCategories.map(([cat, amt]) => (
+                      <div key={cat} className="cy-budget-bar-row" data-testid={`budget-cat-${cat}`}>
+                        <div className="cy-budget-bar-label">
+                          <i className={`fa-solid ${BUDGET_CATEGORY_ICONS[cat] || "fa-circle"}`} style={{ marginRight: 6, opacity: 0.7 }} />
+                          {cat}
+                        </div>
+                        <div className="cy-budget-bar-track">
+                          <div className="cy-budget-bar-fill" style={{ width: `${(amt / maxCat) * 100}%` }} />
+                        </div>
+                        <div className="cy-budget-bar-amount">${amt.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {totalIncome > 0 && totalExpense > 0 && (
+                <div className="cy-budget-ratio cy-dash-card">
+                  <div className="cy-dash-card-title"><i className="fa-solid fa-scale-balanced" style={{ marginRight: 8 }} />Budget Ratio</div>
+                  <div className="cy-budget-ratio-bar">
+                    <div className="cy-budget-ratio-income" style={{ width: `${(totalIncome / (totalIncome + totalExpense)) * 100}%` }}>
+                      Income {Math.round((totalIncome / (totalIncome + totalExpense)) * 100)}%
+                    </div>
+                    <div className="cy-budget-ratio-expense" style={{ width: `${(totalExpense / (totalIncome + totalExpense)) * 100}%` }}>
+                      Expenses {Math.round((totalExpense / (totalIncome + totalExpense)) * 100)}%
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="cy-budget-lists">
+                {(["income", "expense"] as const).map(btype => {
+                  const items = monthItems.filter(b => b.type === btype).sort((a, b) => b.amount - a.amount);
+                  return (
+                    <div key={btype} className="cy-budget-list-card cy-dash-card">
+                      <div className="cy-dash-card-title">
+                        <i className={`fa-solid ${btype === "income" ? "fa-arrow-trend-up" : "fa-arrow-trend-down"}`} style={{ marginRight: 8 }} />
+                        {btype === "income" ? "Income" : "Expenses"} ({items.length})
+                      </div>
+                      {items.length === 0 ? (
+                        <div className="cy-budget-empty">No {btype} entries this month</div>
+                      ) : (
+                        <div className="cy-budget-item-list">
+                          {items.map(item => (
+                            <div key={item.id} className={`cy-budget-item ${btype}`} data-testid={`budget-item-${item.id}`}>
+                              <div className="cy-budget-item-icon">
+                                <i className={`fa-solid ${BUDGET_CATEGORY_ICONS[item.category] || "fa-circle"}`} />
+                              </div>
+                              <div className="cy-budget-item-info">
+                                <div className="cy-budget-item-name">{item.name}{item.recurring ? <i className="fa-solid fa-repeat" style={{ fontSize: 10, marginLeft: 6, opacity: 0.5 }} /> : ""}</div>
+                                <div className="cy-budget-item-cat">{item.category}</div>
+                              </div>
+                              <div className={`cy-budget-item-amount ${btype}`}>
+                                {btype === "income" ? "+" : "-"}${item.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                              </div>
+                              <div className="cy-budget-item-actions">
+                                <button className="cy-budget-item-btn" onClick={() => openEditBudget(item)} data-testid={`budget-edit-${item.id}`} aria-label="Edit entry"><i className="fa-solid fa-pen" /></button>
+                                <button className="cy-budget-item-btn delete" onClick={() => setBudgetItems(prev => prev.filter(b => b.id !== item.id))} data-testid={`budget-delete-${item.id}`} aria-label="Delete entry"><i className="fa-solid fa-trash" /></button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {showBudgetForm && (
+                <div className="cy-affirmation-overlay" data-testid="budget-form-overlay">
+                  <div className="cy-affirmation-card cy-event-form-card">
+                    <div className="cy-affirmation-sparkle"><i className="fa-solid fa-wallet" /></div>
+                    <div className="cy-affirmation-title">{editingBudgetItem ? "Edit Entry" : "Add Budget Entry"}</div>
+                    <div className="cy-event-form-grid">
+                      <div className="cy-event-form-row">
+                        <label>Type</label>
+                        <div style={{ display: "flex", gap: 8 }}>
+                          {(["expense", "income"] as const).map(t => (
+                            <button key={t} className={`cy-cal-view-tab${budgetForm.type === t ? " active" : ""}`}
+                              onClick={() => setBudgetForm(f => ({ ...f, type: t, category: t === "income" ? "Salary" : "Housing" }))}
+                              data-testid={`budget-type-${t}`}
+                              style={{ flex: 1 }}
+                            >{t === "income" ? "Income" : "Expense"}</button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="cy-event-form-row">
+                        <label>Name</label>
+                        <input value={budgetForm.name} onChange={e => setBudgetForm(f => ({ ...f, name: e.target.value }))}
+                          placeholder={budgetForm.type === "income" ? "e.g. Monthly salary" : "e.g. Rent payment"}
+                          data-testid="budget-input-name"
+                        />
+                      </div>
+                      <div className="cy-event-form-row">
+                        <label>Amount ($)</label>
+                        <input type="number" min="0" step="0.01" value={budgetForm.amount}
+                          onChange={e => setBudgetForm(f => ({ ...f, amount: e.target.value }))}
+                          placeholder="0.00"
+                          data-testid="budget-input-amount"
+                        />
+                      </div>
+                      <div className="cy-event-form-row">
+                        <label>Category</label>
+                        <select className="cy-select" value={budgetForm.category}
+                          onChange={e => setBudgetForm(f => ({ ...f, category: e.target.value }))}
+                          data-testid="budget-input-category"
+                        >
+                          {(budgetForm.type === "income" ? BUDGET_CATEGORIES_INCOME : BUDGET_CATEGORIES_EXPENSE).map(c => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="cy-event-form-row">
+                        <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                          <input type="checkbox" checked={budgetForm.recurring}
+                            onChange={e => setBudgetForm(f => ({ ...f, recurring: e.target.checked }))}
+                            data-testid="budget-input-recurring"
+                          />
+                          Recurring monthly
+                        </label>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                      <button className="cy-goal-add-btn" onClick={saveBudgetItem} data-testid="budget-save">
+                        <i className="fa-solid fa-check" style={{ marginRight: 6 }} />{editingBudgetItem ? "Update" : "Add"}
+                      </button>
+                      <button className="cy-goal-add-btn" style={{ background: "rgba(255,255,255,0.1)" }}
+                        onClick={() => { setShowBudgetForm(false); setEditingBudgetItem(null); }}
+                        data-testid="budget-cancel"
+                      >Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         <audio ref={audioRef} style={{ display: "none" }} />
         <input ref={musicFileRef} type="file" accept="audio/*" multiple style={{ display: "none" }}

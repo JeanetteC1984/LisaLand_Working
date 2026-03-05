@@ -11,7 +11,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 ## Features
 
 - **20 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 10 light with unique names (Petal Pink, Marigold, Clear Sky, Blush Rose, Meadow, Wisteria, Sunshine, Cherry Blossom, Seafoam, Lavender Field). Light themes use `lt-` prefix IDs. Theme selector in sidebar uses optgroup Dark/Light. Settings page shows themes in two labeled grids.
-- **11 Sections**: Dashboard, Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Music Player, Settings/Customize
+- **12 Sections**: Dashboard, Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Budget, Music Player, Settings/Customize
 - **Dashboard**: Overview section showing journal entry count, goals complete, habit streak, today's mood, today's schedule, habits today, goal progress bars, weekly mood chart, recent entries, and quick action buttons
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 24 font choices, alignment, lists
 - **Paper Patterns (15)**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral, Crosshatch, Hexagons, Raindrops, Spirals, Moonlight — visual icon swatch selectors
@@ -23,6 +23,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Sparkle Button**: Triggers glitch animation + random theme change + 370+ particle glitter explosion (4 staggered bursts, 5 shapes, 22 neon colors, double flash, 20 glitter rain drops).
 - **Journal Icon**: Clicking the Journal icon in the sidebar opens the "Name Your Entry" popup instead of just switching sections.
 - **Music Player**: Audio player with IndexedDB-persisted playlist, file upload, play/pause/prev/next controls, animated reactor core visualization. Canvas-based visualizer with 3 switchable modes (Bars with mirror reflection, Circular radial, Wave oscilloscope) — real-time frequency analysis via Web Audio API AnalyserNode (fftSize=256) + requestAnimationFrame, 10 cycling neon colors with glow effects. Audio element persists across section navigation. Playlist management with purge.
+- **Household Budget**: Monthly income/expense tracking with 16 expense categories (Housing, Utilities, Groceries, Transport, Insurance, Healthcare, Entertainment, Dining, Shopping, Subscriptions, Education, Savings, Debt, Pets, Personal, Other) and 7 income categories (Salary, Freelance, Side Hustle, Investments, Gifts, Refunds, Other). Summary cards (income/expense/balance), spending breakdown bar chart, budget ratio visualization, add/edit/delete items via form modal, recurring flag, category icons, month navigation. Persisted in localStorage.
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load
