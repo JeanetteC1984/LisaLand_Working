@@ -2518,7 +2518,7 @@
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 
 /* === VISION BOARD SUBPAGES === */
-.cy-back-btn { background: var(--cy-surface); border: var(--cy-border); color: var(--cy-primary); width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s, box-shadow 0.2s; }
+.cy-back-btn { background: var(--cy-surface); border: var(--cy-border); color: var(--cy-primary); min-width: 36px; height: 36px; padding: 0 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-family: var(--cy-font-ui); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s, box-shadow 0.2s; white-space: nowrap; }
 .cy-back-btn:hover { background: var(--cy-bg); box-shadow: var(--cy-glow); }
 .cy-vision-subpage { display: flex; flex-direction: column; gap: 28px; }
 .cy-vision-subpage-grid { display: grid; grid-template-columns: 1fr 280px; gap: 24px; align-items: start; }

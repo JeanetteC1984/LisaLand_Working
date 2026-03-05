@@ -3873,7 +3873,7 @@ export default function CyberLog() {
             {showEventForm && (
               <div className="cy-affirmation-overlay" data-testid="event-form-overlay">
                 <div className="cy-affirmation-card cy-event-form-card">
-                  <div className="cy-affirmation-sparkle">📅</div>
+                  <div className="cy-affirmation-sparkle"><i className="fa-solid fa-calendar-days" /></div>
                   <div className="cy-affirmation-title">{editingEvent ? "Edit Event" : "New Event"}</div>
                   <div className="cy-event-form">
                     <input className="cy-input" placeholder="Event title..." value={eventForm.title}
@@ -4043,7 +4043,7 @@ export default function CyberLog() {
 
               {topCategories.length > 0 && (
                 <div className="cy-budget-breakdown cy-dash-card">
-                  <div className="cy-dash-card-title"><i className="fa-solid fa-chart-pie" style={{ marginRight: 8 }} />Spending Breakdown</div>
+                  <div className="cy-dash-card-header"><i className="fa-solid fa-chart-pie" style={{ marginRight: 8 }} />Spending Breakdown</div>
                   <div className="cy-budget-bars">
                     {topCategories.map(([cat, amt]) => (
                       <div key={cat} className="cy-budget-bar-row" data-testid={`budget-cat-${cat}`}>
@@ -4063,7 +4063,7 @@ export default function CyberLog() {
 
               {totalIncome > 0 && totalExpense > 0 && (
                 <div className="cy-budget-ratio cy-dash-card">
-                  <div className="cy-dash-card-title"><i className="fa-solid fa-scale-balanced" style={{ marginRight: 8 }} />Budget Ratio</div>
+                  <div className="cy-dash-card-header"><i className="fa-solid fa-scale-balanced" style={{ marginRight: 8 }} />Budget Ratio</div>
                   <div className="cy-budget-ratio-bar">
                     <div className="cy-budget-ratio-income" style={{ width: `${(totalIncome / (totalIncome + totalExpense)) * 100}%` }}>
                       Income {Math.round((totalIncome / (totalIncome + totalExpense)) * 100)}%
@@ -4080,7 +4080,7 @@ export default function CyberLog() {
                   const items = monthItems.filter(b => b.type === btype).sort((a, b) => b.amount - a.amount);
                   return (
                     <div key={btype} className="cy-budget-list-card cy-dash-card">
-                      <div className="cy-dash-card-title">
+                      <div className="cy-dash-card-header">
                         <i className={`fa-solid ${btype === "income" ? "fa-arrow-trend-up" : "fa-arrow-trend-down"}`} style={{ marginRight: 8 }} />
                         {btype === "income" ? "Income" : "Expenses"} ({items.length})
                       </div>
@@ -4118,36 +4118,34 @@ export default function CyberLog() {
                   <div className="cy-affirmation-card cy-event-form-card">
                     <div className="cy-affirmation-sparkle"><i className="fa-solid fa-wallet" /></div>
                     <div className="cy-affirmation-title">{editingBudgetItem ? "Edit Entry" : "Add Budget Entry"}</div>
-                    <div className="cy-event-form-grid">
-                      <div className="cy-event-form-row">
-                        <label>Type</label>
-                        <div style={{ display: "flex", gap: 8 }}>
-                          {(["expense", "income"] as const).map(t => (
-                            <button key={t} className={`cy-cal-view-tab${budgetForm.type === t ? " active" : ""}`}
-                              onClick={() => setBudgetForm(f => ({ ...f, type: t, category: t === "income" ? "Salary" : "Housing" }))}
-                              data-testid={`budget-type-${t}`}
-                              style={{ flex: 1 }}
-                            >{t === "income" ? "Income" : "Expense"}</button>
-                          ))}
-                        </div>
+                    <div className="cy-event-form">
+                      <div className="cy-field-label">TYPE</div>
+                      <div className="cy-cal-view-tabs" style={{ marginBottom: 4 }}>
+                        {(["expense", "income"] as const).map(t => (
+                          <button key={t} className={`cy-cal-view-tab${budgetForm.type === t ? " active" : ""}`}
+                            onClick={() => setBudgetForm(f => ({ ...f, type: t, category: t === "income" ? "Salary" : "Housing" }))}
+                            data-testid={`budget-type-${t}`}
+                            style={{ flex: 1 }}
+                          >{t === "income" ? "Income" : "Expense"}</button>
+                        ))}
                       </div>
-                      <div className="cy-event-form-row">
-                        <label>Name</label>
-                        <input value={budgetForm.name} onChange={e => setBudgetForm(f => ({ ...f, name: e.target.value }))}
+                      <div className="cy-event-form-field">
+                        <label className="cy-field-label">NAME</label>
+                        <input className="cy-input" value={budgetForm.name} onChange={e => setBudgetForm(f => ({ ...f, name: e.target.value }))}
                           placeholder={budgetForm.type === "income" ? "e.g. Monthly salary" : "e.g. Rent payment"}
                           data-testid="budget-input-name"
                         />
                       </div>
-                      <div className="cy-event-form-row">
-                        <label>Amount ($)</label>
-                        <input type="number" min="0" step="0.01" value={budgetForm.amount}
+                      <div className="cy-event-form-field">
+                        <label className="cy-field-label">AMOUNT ($)</label>
+                        <input className="cy-input" type="number" min="0" step="0.01" value={budgetForm.amount}
                           onChange={e => setBudgetForm(f => ({ ...f, amount: e.target.value }))}
                           placeholder="0.00"
                           data-testid="budget-input-amount"
                         />
                       </div>
-                      <div className="cy-event-form-row">
-                        <label>Category</label>
+                      <div className="cy-event-form-field">
+                        <label className="cy-field-label">CATEGORY</label>
                         <select className="cy-select" value={budgetForm.category}
                           onChange={e => setBudgetForm(f => ({ ...f, category: e.target.value }))}
                           data-testid="budget-input-category"
@@ -4157,24 +4155,22 @@ export default function CyberLog() {
                           ))}
                         </select>
                       </div>
-                      <div className="cy-event-form-row">
-                        <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
-                          <input type="checkbox" checked={budgetForm.recurring}
-                            onChange={e => setBudgetForm(f => ({ ...f, recurring: e.target.checked }))}
-                            data-testid="budget-input-recurring"
-                          />
-                          Recurring monthly
-                        </label>
+                      <div className="cy-toggle-row" style={{ padding: "8px 0" }}>
+                        <div>
+                          <div className="cy-toggle-label">Recurring monthly</div>
+                        </div>
+                        <button className={`cy-toggle-switch${budgetForm.recurring ? " on" : ""}`}
+                          onClick={() => setBudgetForm(f => ({ ...f, recurring: !f.recurring }))}
+                          data-testid="budget-input-recurring"
+                        />
                       </div>
-                    </div>
-                    <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-                      <button className="cy-goal-add-btn" onClick={saveBudgetItem} data-testid="budget-save">
-                        <i className="fa-solid fa-check" style={{ marginRight: 6 }} />{editingBudgetItem ? "Update" : "Add"}
-                      </button>
-                      <button className="cy-goal-add-btn" style={{ background: "rgba(255,255,255,0.1)" }}
-                        onClick={() => { setShowBudgetForm(false); setEditingBudgetItem(null); }}
-                        data-testid="budget-cancel"
-                      >Cancel</button>
+                      <div className="cy-event-form-actions">
+                        <button className="cy-affirmation-close" onClick={saveBudgetItem} data-testid="budget-save">
+                          <i className="fa-solid fa-check" style={{ marginRight: 6 }} />{editingBudgetItem ? "Update" : "Add"}
+                        </button>
+                        <button className="cy-back-btn" onClick={() => { setShowBudgetForm(false); setEditingBudgetItem(null); }}
+                          data-testid="budget-cancel">Cancel</button>
+                      </div>
                     </div>
                   </div>
                 </div>
