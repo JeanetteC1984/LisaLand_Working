@@ -1719,6 +1719,11 @@ export default function CyberLog() {
   const musicDbRef = useRef<IDBDatabase | null>(null);
   const musicFileRef = useRef<HTMLInputElement>(null);
   const musicUrlsRef = useRef<string[]>([]);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const vizFrameRef = useRef<number>(0);
+  const vizBarsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const req = indexedDB.open("DreamLogMusicDB", 1);
@@ -1736,8 +1741,61 @@ export default function CyberLog() {
       musicUrlsRef.current.forEach(u => URL.revokeObjectURL(u));
       musicUrlsRef.current = [];
       if (musicDbRef.current) musicDbRef.current.close();
+      if (vizFrameRef.current) cancelAnimationFrame(vizFrameRef.current);
+      if (audioCtxRef.current) audioCtxRef.current.close().catch(() => {});
     };
   }, []);
+
+  const connectAudioAnalyser = () => {
+    if (!audioRef.current) return;
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new AudioContext();
+    }
+    if (!sourceRef.current) {
+      sourceRef.current = audioCtxRef.current.createMediaElementSource(audioRef.current);
+      analyserRef.current = audioCtxRef.current.createAnalyser();
+      analyserRef.current.fftSize = 64;
+      sourceRef.current.connect(analyserRef.current);
+      analyserRef.current.connect(audioCtxRef.current.destination);
+    }
+  };
+
+  const startVisualizerLoop = () => {
+    if (vizFrameRef.current) return;
+    const analyser = analyserRef.current;
+    const container = vizBarsRef.current;
+    if (!analyser || !container) return;
+    const bufLen = analyser.frequencyBinCount;
+    const dataArr = new Uint8Array(bufLen);
+    const bars = container.querySelectorAll<HTMLElement>(".cy-music-bar");
+    const barCount = bars.length;
+    const draw = () => {
+      vizFrameRef.current = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArr);
+      for (let i = 0; i < barCount; i++) {
+        const idx = Math.floor((i / barCount) * bufLen);
+        const val = dataArr[idx] / 255;
+        const h = Math.max(3, val * 58);
+        bars[i].style.height = h + "px";
+        bars[i].style.opacity = String(0.4 + val * 0.6);
+      }
+    };
+    draw();
+  };
+
+  const stopVisualizerLoop = () => {
+    if (vizFrameRef.current) {
+      cancelAnimationFrame(vizFrameRef.current);
+      vizFrameRef.current = 0;
+    }
+    const container = vizBarsRef.current;
+    if (container) {
+      container.querySelectorAll<HTMLElement>(".cy-music-bar").forEach(b => {
+        b.style.height = "3px";
+        b.style.opacity = "0.4";
+      });
+    }
+  };
 
   const loadMusicFromDB = () => {
     const db = musicDbRef.current;
@@ -1782,6 +1840,7 @@ export default function CyberLog() {
       setMusicTrackIndex(0);
       setMusicPlaying(false);
       setMusicVisualizerActive(false);
+      stopVisualizerLoop();
       if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
     };
   };
@@ -1792,9 +1851,12 @@ export default function CyberLog() {
     if (audioRef.current) {
       audioRef.current.src = musicPlaylist[index].src;
       if (autoPlay) {
+        connectAudioAnalyser();
+        if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
         audioRef.current.play().catch(() => {
           setMusicPlaying(false);
           setMusicVisualizerActive(false);
+          stopVisualizerLoop();
         });
       }
     }
@@ -1808,9 +1870,12 @@ export default function CyberLog() {
         musicLoadTrack(0, true);
         return;
       }
+      connectAudioAnalyser();
+      if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
       audioRef.current.play().catch(() => {
         setMusicPlaying(false);
         setMusicVisualizerActive(false);
+        stopVisualizerLoop();
       });
     } else {
       audioRef.current.pause();
@@ -1835,9 +1900,14 @@ export default function CyberLog() {
       const next = (musicTrackIndex + 1) % musicPlaylist.length;
       musicLoadTrack(next);
     };
-    const onPlay = () => { setMusicPlaying(true); setMusicVisualizerActive(true); };
-    const onPause = () => { setMusicPlaying(false); setMusicVisualizerActive(false); };
-    const onError = () => { setMusicPlaying(false); setMusicVisualizerActive(false); };
+    const onPlay = () => {
+      setMusicPlaying(true);
+      setMusicVisualizerActive(true);
+      if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
+      startVisualizerLoop();
+    };
+    const onPause = () => { setMusicPlaying(false); setMusicVisualizerActive(false); stopVisualizerLoop(); };
+    const onError = () => { setMusicPlaying(false); setMusicVisualizerActive(false); stopVisualizerLoop(); };
     a.addEventListener("ended", onEnd);
     a.addEventListener("play", onPlay);
     a.addEventListener("pause", onPause);
@@ -3812,9 +3882,9 @@ export default function CyberLog() {
                   </button>
                 </div>
 
-                <div className={`cy-music-visualizer${musicVisualizerActive ? " active" : ""}`} data-testid="music-visualizer">
+                <div ref={vizBarsRef} className={`cy-music-visualizer${musicVisualizerActive ? " active" : ""}`} data-testid="music-visualizer">
                   {Array.from({ length: 20 }).map((_, i) => (
-                    <div key={i} className="cy-music-bar" style={{ animationDelay: `${i * 0.08}s` }} />
+                    <div key={i} className="cy-music-bar" />
                   ))}
                 </div>
               </div>

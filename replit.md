@@ -22,7 +22,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Calendar**: Daily/Weekly/Monthly views with navigation, time blocking (6AM–11PM hourly slots), drag-and-drop events, event form with full customization. Events persist in localStorage.
 - **Sparkle Button**: Triggers glitch animation + random theme change + 370+ particle glitter explosion (4 staggered bursts, 5 shapes, 22 neon colors, double flash, 20 glitter rain drops).
 - **Journal Icon**: Clicking the Journal icon in the sidebar opens the "Name Your Entry" popup instead of just switching sections.
-- **Music Player**: Audio player with IndexedDB-persisted playlist, file upload, play/pause/prev/next controls, animated reactor core visualization, color-cycling visualizer bars, playlist management with purge.
+- **Music Player**: Audio player with IndexedDB-persisted playlist, file upload, play/pause/prev/next controls, animated reactor core visualization, Web Audio API frequency-reactive visualizer bars (20 bars, 5 neon colors, real-time frequency analysis via AnalyserNode + requestAnimationFrame), playlist management with purge.
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load
