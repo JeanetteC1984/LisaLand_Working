@@ -25,7 +25,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load
 - **File/Entry Management**: Create (with title prompt modal), select, delete multiple journal entries
-- **SMART Goal Tracker**: Add/delete goals using SMART framework. Expandable cards with progress bars.
+- **SMART Goal Tracker**: Add/delete goals using SMART framework. Expandable cards with clickable progress bar, range slider, quick-set buttons (0/25/50/75/100%), auto-updating status labels (Just Started → Getting Started → Making Progress → Halfway There → Almost Done → Complete). Milestone checklist system: add/remove/toggle milestones that auto-calculate progress percentage. All persisted in localStorage.
 - **Mind Map**: Interactive node-based mind mapping with draggable nodes (ref-based cleanup for drag), SVG curved connectors, add/edit/delete nodes.
 - **Profile**: Editable personal info with profile picture upload (base64 in state)
 - **Vision Board Subpages**: Each of 6 cards opens to a 2-column grid layout — prompts on left, compact affirmation chips on right

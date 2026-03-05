@@ -43,6 +43,7 @@ type Goal = {
   category: string;
   progress: number;
   status: string;
+  milestones?: { text: string; done: boolean }[];
 };
 
 type MindMapNode = {
@@ -941,6 +942,7 @@ export default function CyberLog() {
   const [showGoalForm, setShowGoalForm] = useState(false);
   const [goalForm, setGoalForm] = useState({ ...EMPTY_GOAL_FORM });
   const [expandedGoal, setExpandedGoal] = useState<string | null>(null);
+  const [milestoneInput, setMilestoneInput] = useState("");
   const NODE_COLORS = ["#e040fb", "#7c4dff", "#00e5ff", "#69f0ae", "#ffd740", "#ff4081", "#ffab40", "#b388ff", "#64ffda", "#ff6d00"];
   const [mindMapNodes, setMindMapNodes] = useState<MindMapNode[]>([
     { id: "root", text: "My Dream Life", x: 400, y: 300, color: "#e040fb", parentId: null },
@@ -1247,6 +1249,44 @@ export default function CyberLog() {
     setGoals(g => [newGoal, ...g]);
     setGoalForm({ ...EMPTY_GOAL_FORM });
     setShowGoalForm(false);
+  };
+
+  const updateGoalProgress = (id: string, progress: number) => {
+    const clamped = Math.max(0, Math.min(100, progress));
+    const status = clamped === 0 ? "JUST STARTED" : clamped < 25 ? "GETTING STARTED" : clamped < 50 ? "MAKING PROGRESS" : clamped < 75 ? "HALFWAY THERE" : clamped < 100 ? "ALMOST DONE" : "COMPLETE ✨";
+    setGoals(g => g.map(goal => goal.id === id ? { ...goal, progress: clamped, status } : goal));
+  };
+
+  const toggleGoalMilestone = (goalId: string, milestoneIdx: number) => {
+    setGoals(g => g.map(goal => {
+      if (goal.id !== goalId) return goal;
+      const milestones = [...(goal.milestones || [])];
+      milestones[milestoneIdx] = { ...milestones[milestoneIdx], done: !milestones[milestoneIdx].done };
+      const doneCount = milestones.filter(m => m.done).length;
+      const progress = milestones.length > 0 ? Math.round((doneCount / milestones.length) * 100) : goal.progress;
+      const status = progress === 0 ? "JUST STARTED" : progress < 25 ? "GETTING STARTED" : progress < 50 ? "MAKING PROGRESS" : progress < 75 ? "HALFWAY THERE" : progress < 100 ? "ALMOST DONE" : "COMPLETE ✨";
+      return { ...goal, milestones, progress, status };
+    }));
+  };
+
+  const addGoalMilestone = (goalId: string, text: string) => {
+    if (!text.trim()) return;
+    setGoals(g => g.map(goal => {
+      if (goal.id !== goalId) return goal;
+      const milestones = [...(goal.milestones || []), { text: text.trim(), done: false }];
+      return { ...goal, milestones };
+    }));
+  };
+
+  const removeGoalMilestone = (goalId: string, idx: number) => {
+    setGoals(g => g.map(goal => {
+      if (goal.id !== goalId) return goal;
+      const milestones = (goal.milestones || []).filter((_, i) => i !== idx);
+      const doneCount = milestones.filter(m => m.done).length;
+      const progress = milestones.length > 0 ? Math.round((doneCount / milestones.length) * 100) : goal.progress;
+      const status = progress === 0 ? "JUST STARTED" : progress < 25 ? "GETTING STARTED" : progress < 50 ? "MAKING PROGRESS" : progress < 75 ? "HALFWAY THERE" : progress < 100 ? "ALMOST DONE" : "COMPLETE ✨";
+      return { ...goal, milestones, progress, status };
+    }));
   };
 
   const deleteGoal = (id: string) => {
@@ -2545,13 +2585,88 @@ export default function CyberLog() {
                         <span style={{ fontFamily: "var(--cy-font-ui)", fontSize: 10, fontWeight: 600, color: "var(--cy-text-muted)", letterSpacing: 1 }}>
                           PROGRESS
                         </span>
-                        <div className="cy-threat-bar">
-                          <div className="cy-threat-fill" style={{ width: `${g.progress}%`, background: `linear-gradient(90deg, ${barColor}, var(--cy-primary))`, boxShadow: `0 0 8px ${barColor}` }} />
+                        <div className="cy-threat-bar" style={{ cursor: "pointer", position: "relative" }}
+                          onClick={e => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const pct = Math.round(((e.clientX - rect.left) / rect.width) * 100);
+                            updateGoalProgress(g.id, pct);
+                          }}
+                          data-testid={`goal-progress-bar-${g.id}`}
+                        >
+                          <div className="cy-threat-fill" style={{ width: `${g.progress}%`, background: `linear-gradient(90deg, ${barColor}, var(--cy-primary))`, boxShadow: `0 0 8px ${barColor}`, transition: "width 0.3s" }} />
                         </div>
                         <span style={{ fontFamily: "var(--cy-font-ui)", fontSize: 12, fontWeight: 700, color: barColor, minWidth: 32, textAlign: "right" }}>
                           {g.progress}%
                         </span>
                       </div>
+
+                      {isExpanded && (
+                        <div className="cy-goal-progress-controls" data-testid={`goal-progress-controls-${g.id}`}>
+                          <div className="cy-goal-slider-row">
+                            <input type="range" min="0" max="100" value={g.progress}
+                              onChange={e => updateGoalProgress(g.id, parseInt(e.target.value))}
+                              className="cy-goal-slider"
+                              data-testid={`goal-slider-${g.id}`}
+                            />
+                            <div className="cy-goal-quick-btns">
+                              {[0, 25, 50, 75, 100].map(v => (
+                                <button key={v} className={`cy-goal-quick-btn${g.progress === v ? " active" : ""}`}
+                                  onClick={() => updateGoalProgress(g.id, v)}
+                                  data-testid={`goal-quick-${v}-${g.id}`}
+                                >{v}%</button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="cy-goal-milestones">
+                            <div className="cy-goal-milestones-header">
+                              <i className="fa-solid fa-list-check" style={{ marginRight: 6 }} />
+                              Milestones
+                              <span className="cy-goal-milestone-count">
+                                {(g.milestones || []).filter(m => m.done).length}/{(g.milestones || []).length}
+                              </span>
+                            </div>
+                            {(g.milestones || []).map((m, idx) => (
+                              <div key={idx} className={`cy-goal-milestone${m.done ? " done" : ""}`}
+                                data-testid={`goal-milestone-${g.id}-${idx}`}
+                              >
+                                <button className="cy-goal-milestone-check"
+                                  onClick={() => toggleGoalMilestone(g.id, idx)}
+                                  data-testid={`goal-milestone-toggle-${g.id}-${idx}`}
+                                >
+                                  <i className={`fa-${m.done ? "solid fa-circle-check" : "regular fa-circle"}`} />
+                                </button>
+                                <span className="cy-goal-milestone-text">{m.text}</span>
+                                <button className="cy-goal-milestone-remove"
+                                  onClick={() => removeGoalMilestone(g.id, idx)}
+                                  data-testid={`goal-milestone-remove-${g.id}-${idx}`}
+                                >
+                                  <i className="fa-solid fa-xmark" />
+                                </button>
+                              </div>
+                            ))}
+                            <div className="cy-goal-milestone-add">
+                              <input className="cy-field-input" placeholder="Add a milestone..."
+                                value={expandedGoal === g.id ? milestoneInput : ""}
+                                onChange={e => setMilestoneInput(e.target.value)}
+                                onKeyDown={e => {
+                                  if (e.key === "Enter") {
+                                    addGoalMilestone(g.id, milestoneInput);
+                                    setMilestoneInput("");
+                                  }
+                                }}
+                                data-testid={`goal-milestone-input-${g.id}`}
+                              />
+                              <button className="cy-goal-milestone-add-btn"
+                                onClick={() => { addGoalMilestone(g.id, milestoneInput); setMilestoneInput(""); }}
+                                data-testid={`goal-milestone-add-${g.id}`}
+                              >
+                                <i className="fa-solid fa-plus" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
