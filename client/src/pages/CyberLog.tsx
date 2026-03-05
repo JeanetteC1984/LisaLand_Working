@@ -73,34 +73,16 @@ const THEMES: Theme[] = [
   { id: "midnight-rose",   label: "Midnight Rose",   primary: "#f48fb1" },
   { id: "aurora",          label: "Aurora",           primary: "#64ffda" },
   { id: "galaxy",          label: "Galaxy",           primary: "#7c4dff" },
-  { id: "cotton-candy",    label: "Cotton Candy",    primary: "#f8bbd0" },
-  { id: "lemonade",        label: "Lemonade",        primary: "#fff176" },
-  { id: "lavender-mist",   label: "Lavender Mist",   primary: "#ce93d8" },
-  { id: "peach-sorbet",    label: "Peach Sorbet",    primary: "#ffab91" },
-  { id: "mint-chip",       label: "Mint Chip",       primary: "#80cbc4" },
-  { id: "rose-quartz",     label: "Rose Quartz",     primary: "#f8bbd0" },
-  { id: "cloud-nine",      label: "☁️ Cloud Nine",    primary: "#7c4dff" },
-  { id: "honey-glow",      label: "🍯 Honey Glow",   primary: "#f57f17" },
-  { id: "sky-bloom",       label: "🌤️ Sky Bloom",    primary: "#0288d1" },
-  { id: "lt-rainbow-dream",  label: "Rainbow Dream",   primary: "#c51ade", light: true },
-  { id: "lt-sunset-glow",    label: "Sunset Glow",     primary: "#e65100", light: true },
-  { id: "lt-ocean-aura",     label: "Ocean Aura",      primary: "#00acc1", light: true },
-  { id: "lt-cosmic-berry",   label: "Cosmic Berry",    primary: "#e91e63", light: true },
-  { id: "lt-neon-jungle",    label: "Neon Jungle",     primary: "#2e7d32", light: true },
-  { id: "lt-stardust",       label: "Stardust",        primary: "#7e57c2", light: true },
-  { id: "lt-electric-candy", label: "Electric Candy",  primary: "#f9a825", light: true },
-  { id: "lt-midnight-rose",  label: "Midnight Rose",   primary: "#d81b60", light: true },
-  { id: "lt-aurora",         label: "Aurora",           primary: "#00897b", light: true },
-  { id: "lt-galaxy",         label: "Galaxy",           primary: "#5c35d2", light: true },
-  { id: "lt-cotton-candy",   label: "Cotton Candy",    primary: "#ec407a", light: true },
-  { id: "lt-lemonade",       label: "Lemonade",        primary: "#f9a825", light: true },
-  { id: "lt-lavender-mist",  label: "Lavender Mist",   primary: "#8e24aa", light: true },
-  { id: "lt-peach-sorbet",   label: "Peach Sorbet",    primary: "#e64a19", light: true },
-  { id: "lt-mint-chip",      label: "Mint Chip",       primary: "#00796b", light: true },
-  { id: "lt-rose-quartz",    label: "Rose Quartz",     primary: "#c2185b", light: true },
-  { id: "lt-cloud-nine",     label: "☁️ Cloud Nine",    primary: "#5c35d2", light: true },
-  { id: "lt-honey-glow",     label: "🍯 Honey Glow",   primary: "#e65100", light: true },
-  { id: "lt-sky-bloom",      label: "🌤️ Sky Bloom",    primary: "#0277bd", light: true },
+  { id: "lt-rainbow-dream",  label: "Petal Pink",      primary: "#c51ade", light: true },
+  { id: "lt-sunset-glow",    label: "Marigold",        primary: "#e65100", light: true },
+  { id: "lt-ocean-aura",     label: "Clear Sky",       primary: "#00acc1", light: true },
+  { id: "lt-cosmic-berry",   label: "Blush Rose",      primary: "#e91e63", light: true },
+  { id: "lt-neon-jungle",    label: "Meadow",          primary: "#2e7d32", light: true },
+  { id: "lt-stardust",       label: "Wisteria",        primary: "#7e57c2", light: true },
+  { id: "lt-electric-candy", label: "Sunshine",        primary: "#f9a825", light: true },
+  { id: "lt-midnight-rose",  label: "Cherry Blossom",  primary: "#d81b60", light: true },
+  { id: "lt-aurora",         label: "Seafoam",         primary: "#00897b", light: true },
+  { id: "lt-galaxy",         label: "Lavender Field",  primary: "#5c35d2", light: true },
 ];
 
 const INITIAL_FILES: JournalFile[] = [
@@ -2062,6 +2044,11 @@ export default function CyberLog() {
                 { id: "canvas-aurora", label: "Aurora", bg: "linear-gradient(135deg, #001a0a, #0a0028)" },
                 { id: "canvas-soft", label: "Soft", bg: "linear-gradient(135deg, #1a1a24, #141420)" },
                 { id: "canvas-minimal", label: "Minimal", bg: "linear-gradient(135deg, #121218, #1a1a22)" },
+                { id: "canvas-prism", label: "Prism", bg: "linear-gradient(60deg, #1a0028, #001a2d, #1a0020)" },
+                { id: "canvas-nebula", label: "Nebula", bg: "radial-gradient(ellipse at 30% 40%, #1a0040, #0a0020)" },
+                { id: "canvas-ember", label: "Ember", bg: "linear-gradient(180deg, #0a0014, #1a0800)" },
+                { id: "canvas-frost", label: "Frost", bg: "linear-gradient(180deg, #0a1a24, #0a0018)" },
+                { id: "canvas-twilight", label: "Twilight", bg: "linear-gradient(180deg, #0a0028, #1a0830, #1a0a00)" },
               ].map(c => (
                 <button key={c.id} className={`cy-swatch-btn${canvasMode === c.id ? " active" : ""}`}
                   style={{ background: c.bg }}
@@ -2089,6 +2076,11 @@ export default function CyberLog() {
                 { id: "paper-waves", label: "Waves", icon: "fa-solid fa-water" },
                 { id: "paper-confetti", label: "Confetti", icon: "fa-solid fa-burst" },
                 { id: "paper-floral", label: "Floral", icon: "fa-solid fa-seedling" },
+                { id: "paper-crosshatch", label: "Crosshatch", icon: "fa-solid fa-hashtag" },
+                { id: "paper-hexagons", label: "Hexagons", icon: "fa-solid fa-hexagon-check" },
+                { id: "paper-raindrops", label: "Raindrops", icon: "fa-solid fa-droplet" },
+                { id: "paper-spirals", label: "Spirals", icon: "fa-solid fa-circle-notch" },
+                { id: "paper-moonlight", label: "Moonlight", icon: "fa-solid fa-moon" },
               ].map(p => (
                 <button key={p.id} className={`cy-swatch-btn cy-swatch-paper${paperPattern === p.id ? " active" : ""}`}
                   onClick={() => setPaperPattern(p.id)}
@@ -4010,6 +4002,11 @@ export default function CyberLog() {
                       <option value="canvas-aurora">Aurora</option>
                       <option value="canvas-soft">Soft Focus</option>
                       <option value="canvas-minimal">Minimal</option>
+                      <option value="canvas-prism">Prism</option>
+                      <option value="canvas-nebula">Nebula</option>
+                      <option value="canvas-ember">Ember</option>
+                      <option value="canvas-frost">Frost</option>
+                      <option value="canvas-twilight">Twilight</option>
                     </select>
                   </div>
                   <div className="cy-identity-field">
@@ -4027,6 +4024,11 @@ export default function CyberLog() {
                       <option value="paper-waves">Waves</option>
                       <option value="paper-confetti">Confetti</option>
                       <option value="paper-floral">Floral</option>
+                      <option value="paper-crosshatch">Crosshatch</option>
+                      <option value="paper-hexagons">Hexagons</option>
+                      <option value="paper-raindrops">Raindrops</option>
+                      <option value="paper-spirals">Spirals</option>
+                      <option value="paper-moonlight">Moonlight</option>
                     </select>
                   </div>
                 </div>

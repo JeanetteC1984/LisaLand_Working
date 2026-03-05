@@ -10,41 +10,43 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 
 ## Features
 
-- **38 Color Themes**: 19 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy, Cotton Candy, Lemonade, Lavender Mist, Peach Sorbet, Mint Chip, Rose Quartz, Cloud Nine, Honey Glow, Sky Bloom) + 19 matching light themes (same names, `lt-` prefix IDs, white/pastel backgrounds with dark text). Theme selector in sidebar uses optgroup Dark/Light. Settings page shows themes in two labeled grids (Dark Themes / Light Themes).
+- **20 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 10 light with unique names (Petal Pink, Marigold, Clear Sky, Blush Rose, Meadow, Wisteria, Sunshine, Cherry Blossom, Seafoam, Lavender Field). Light themes use `lt-` prefix IDs. Theme selector in sidebar uses optgroup Dark/Light. Settings page shows themes in two labeled grids.
 - **11 Sections**: Dashboard, Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Music Player, Settings/Customize
 - **Dashboard**: Overview section showing journal entry count, goals complete, habit streak, today's mood, today's schedule, habits today, goal progress bars, weekly mood chart, recent entries, and quick action buttons
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 24 font choices, alignment, lists
-- **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral — visual icon swatch selectors
-- **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal — visual gradient swatch selectors
-- **Sticker System (300+ stickers)**: 20 categories — Vibes (18), Symbols (20), Emoji (24), Notes (12), Art (12), Dividers (6), Weather (10), Nature (12), Food (12), Zodiac (12), Shapes (10), Badges (10), Animals (16), Travel (12), Celebration (12), Hearts (14), Music (10), Frames (8), Washi Tape (10). All draggable with position persistence, resizable (scale 0.3x–3x via +/- controls on hover). Available in both Journal and Mind Map sections. Tabs wrap for usability.
-- **Customization Options**: Editor font size slider (12–28px), 12 accent color presets + custom color picker, 6 border styles (Default, Rounded, Sharp, Dashed, Double, Glow), cursor glow effect (mouse-tracking neon orb).
-- **Calendar**: Daily/Weekly/Monthly views with navigation, time blocking (6AM–11PM hourly slots), drag-and-drop events between days and time slots, event form with title, date, start/end time, color (12 options), location, description, category (8 types), and all-day toggle. Events persist in localStorage.
-- **Sparkle Button**: Triggers glitch animation + random theme change + 370+ particle glitter explosion (4 staggered bursts, 5 shapes: circle/star/diamond/heart/hexagon, 22 neon colors, double flash, 20 glitter rain drops).
+- **Paper Patterns (15)**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral, Crosshatch, Hexagons, Raindrops, Spirals, Moonlight — visual icon swatch selectors
+- **Canvas Modes (15)**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal, Prism, Nebula, Ember, Frost, Twilight — visual gradient swatch selectors
+- **Sticker System (300+ stickers)**: 20 categories. All draggable with position persistence, resizable (scale 0.3x–3x). Stickers are saved per journal entry (not global). Available in both Journal and Mind Map sections.
+- **Per-File Stickers**: `stickersByFile` state (`Record<string, Sticker[]>`) stores stickers keyed by file ID. Each journal entry has its own stickers. Deleting a file cleans up its stickers.
+- **Customization Options**: Editor font size slider (12–28px), 12 accent color presets + custom color picker, 6 border styles, cursor glow effect.
+- **Calendar**: Daily/Weekly/Monthly views with navigation, time blocking (6AM–11PM hourly slots), drag-and-drop events, event form with full customization. Events persist in localStorage.
+- **Sparkle Button**: Triggers glitch animation + random theme change + 370+ particle glitter explosion (4 staggered bursts, 5 shapes, 22 neon colors, double flash, 20 glitter rain drops).
 - **Journal Icon**: Clicking the Journal icon in the sidebar opens the "Name Your Entry" popup instead of just switching sections.
-- **Music Player**: Audio player with IndexedDB-persisted playlist, file upload, play/pause/prev/next controls, animated reactor core visualization, color-cycling visualizer bars, playlist management with purge. Uses DreamLogMusicDB IndexedDB store.
+- **Music Player**: Audio player with IndexedDB-persisted playlist, file upload, play/pause/prev/next controls, animated reactor core visualization, color-cycling visualizer bars, playlist management with purge.
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load
 - **File/Entry Management**: Create (with title prompt modal), select, delete multiple journal entries
-- **SMART Goal Tracker**: Add/delete goals using SMART framework. Expandable cards with clickable progress bar, range slider, quick-set buttons (0/25/50/75/100%), auto-updating status labels (Just Started → Getting Started → Making Progress → Halfway There → Almost Done → Complete). Milestone checklist system: add/remove/toggle milestones that auto-calculate progress percentage. All persisted in localStorage.
-- **Mind Map**: Interactive node-based mind mapping with draggable nodes (ref-based cleanup for drag), SVG curved connectors, add/edit/delete nodes.
-- **Profile**: Editable personal info with profile picture upload (base64 in state)
-- **Vision Board Subpages**: Each of 6 cards opens to a 2-column grid layout — prompts on left, compact affirmation chips on right
-- **Mood Tracker**: Daily emoji check-in (5 moods) with optional notes, stats dashboard (total check-ins, day streak, average mood, most common), 7-day week trend visualization, mood distribution bar chart, deletable entries with hover X button, calendar history view
-- **Habit Tracker**: 6 default habits + custom habit creation (name, icon picker, color picker). Tap to complete, streak counting, weekly bar chart. Custom habits can be deleted.
-- **Vision Board Images (vboard)**: Masonry image gallery with captions per image. Data: `Record<string, {src, caption}[]>`
-- **localStorage Persistence**: Theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled
+- **SMART Goal Tracker**: Expandable cards with clickable progress bar, range slider, quick-set buttons, milestone checklist system.
+- **Mind Map**: Interactive node-based mind mapping with draggable nodes, SVG curved connectors, add/edit/delete nodes.
+- **Profile**: Editable personal info with profile picture upload
+- **Vision Board Subpages**: Each of 6 cards opens to a 2-column grid layout
+- **Mood Tracker**: Daily emoji check-in, stats dashboard, 7-day trend, mood distribution, deletable entries, calendar history view
+- **Habit Tracker**: 6 default + custom habits, streak counting, weekly bar chart
+- **Vision Board Images (vboard)**: Masonry image gallery with captions per image
+- **localStorage Persistence**: Theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, stickersByFile, mindMapStickers
 
 ## Sticker Drag System
 
-- `initDrag(el, stickerId)` handles mousedown/mousemove/mouseup with position persistence to React state
-- Notes use `.cy-note-drag-handle` for dragging (grip icon) while `.cy-note-body` stays `contenteditable`
-- Sticker layer uses `overflow: visible` so stickers can be dragged beyond editor bounds
+- `initDrag(el, stickerId, isMindMap, fileId)` handles mousedown/mousemove/mouseup with position persistence to React state
+- Journal stickers use `setStickersByFile` with the file ID for per-entry scoping
+- Mind map stickers use `setMindMapStickers` (global)
+- Notes use `.cy-note-drag-handle` for dragging while `.cy-note-body` stays `contenteditable`
 
 ## Mind Map Drag System
 
 - Uses `dragCleanups` ref (Map) to track and clean up event listeners per node
-- `initNodeDrag` removes old listener before adding new one (prevents stacking)
+- `initNodeDrag` removes old listener before adding new one
 - useEffect re-initializes drag on section change and node changes with 50ms delay
 
 ## Structure
