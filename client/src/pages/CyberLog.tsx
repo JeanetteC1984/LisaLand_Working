@@ -954,7 +954,7 @@ export default function CyberLog() {
   const [activeFileId, setActiveFileId] = useState("tutorial");
   const [paperPattern, setPaperPattern] = useState("paper-stars");
   const [canvasMode, setCanvasMode] = useState("canvas-default");
-  const [stickers, setStickers] = useState<Sticker[]>([]);
+  const [stickersByFile, setStickersByFile] = useState<Record<string, Sticker[]>>({});
   const [mindMapStickers, setMindMapStickers] = useState<Sticker[]>([]);
   const [assetOpen, setAssetOpen] = useState(false);
   const [assetTab, setAssetTab] = useState<keyof typeof STICKER_CATEGORIES>("Vibes");
@@ -1103,6 +1103,7 @@ export default function CyberLog() {
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
         if (d.mindMapStickers) setMindMapStickers(d.mindMapStickers);
+        if (d.stickersByFile) setStickersByFile(d.stickersByFile);
         if (d.customHabits) setCustomHabits(d.customHabits);
         if (d.visionImages) {
           const migrated: Record<string, {src: string, caption: string}[]> = {};
@@ -1135,19 +1136,19 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow,
+          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
 
   const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
-  const initDrag = useCallback((el: HTMLDivElement, stickerId: string, isMindMap = false) => {
+  const initDrag = useCallback((el: HTMLDivElement, stickerId: string, isMindMap = false, fileId?: string) => {
     let ox = 0, oy = 0, sx = 0, sy = 0;
     const onDown = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -1173,11 +1174,26 @@ export default function CyberLog() {
       document.removeEventListener("mouseup", onUp);
       const nx = parseInt(el.style.left) || 0;
       const ny = parseInt(el.style.top) || 0;
-      const setter = isMindMap ? setMindMapStickers : setStickers;
-      setter(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
+      if (isMindMap) {
+        setMindMapStickers(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
+      } else if (fileId) {
+        setStickersByFile(prev => ({
+          ...prev,
+          [fileId]: (prev[fileId] || []).map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s),
+        }));
+      }
     };
     el.addEventListener("mousedown", onDown);
   }, []);
+
+  const stickers = stickersByFile[activeFileId] || [];
+
+  const setStickers = (updater: (prev: Sticker[]) => Sticker[]) => {
+    setStickersByFile(prev => ({
+      ...prev,
+      [activeFileId]: updater(prev[activeFileId] || []),
+    }));
+  };
 
   const addSticker = (type: string, target: "journal" | "mindmap" = "journal") => {
     const id = Math.random().toString(36).slice(2);
@@ -1196,8 +1212,11 @@ export default function CyberLog() {
   const removeMindMapSticker = (id: string) => setMindMapStickers(s => s.filter(st => st.id !== id));
 
   const resizeSticker = (id: string, delta: number, target: "journal" | "mindmap" = "journal") => {
-    const setter = target === "mindmap" ? setMindMapStickers : setStickers;
-    setter(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
+    if (target === "mindmap") {
+      setMindMapStickers(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
+    } else {
+      setStickers(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
+    }
   };
 
   useEffect(() => {
@@ -1205,10 +1224,10 @@ export default function CyberLog() {
       const el = document.getElementById(`sticker-${st.id}`) as HTMLDivElement | null;
       if (el && !el.dataset.dragging) {
         el.dataset.dragging = "1";
-        initDrag(el, st.id);
+        initDrag(el, st.id, false, activeFileId);
       }
     });
-  }, [stickers, initDrag]);
+  }, [stickers, initDrag, activeFileId]);
 
   useEffect(() => {
     mindMapStickers.forEach(st => {
@@ -1533,6 +1552,11 @@ export default function CyberLog() {
     if (files.length <= 1) return;
     setFiles(fs => fs.filter(f => f.id !== id));
     if (activeFileId === id) setActiveFileId(files.find(f => f.id !== id)?.id || files[0].id);
+    setStickersByFile(prev => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   };
 
   const addVisionImage = (category: string, e: React.ChangeEvent<HTMLInputElement>) => {
