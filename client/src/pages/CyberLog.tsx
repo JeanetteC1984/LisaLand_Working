@@ -1,7 +1,20 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import "../cyber.css";
 
-type Section = "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings";
+type Section = "journal" | "profile" | "vision" | "vboard" | "goals" | "mindmap" | "mood" | "habits" | "settings" | "calendar";
+
+type CalendarEvent = {
+  id: string;
+  title: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  color: string;
+  description: string;
+  location: string;
+  category: string;
+  allDay: boolean;
+};
 
 type JournalFile = {
   id: string;
@@ -959,6 +972,14 @@ export default function CyberLog() {
   const [visionImages, setVisionImages] = useState<Record<string, {src: string, caption: string}[]>>({});
   const visionImageRef = useRef<HTMLInputElement>(null);
   const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
+  const [calendarView, setCalendarView] = useState<"daily" | "weekly" | "monthly">("monthly");
+  const [selectedDate, setSelectedDate] = useState(getToday());
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
+  const [eventForm, setEventForm] = useState({ title: "", date: getToday(), startTime: "09:00", endTime: "10:00", color: "#e040fb", description: "", location: "", category: "General", allDay: false });
+  const EVENT_COLORS = ["#e040fb","#ff4081","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#81d4fa"];
+  const EVENT_CATEGORIES = ["General","Work","Personal","Health","Social","Creative","Learning","Finance"];
   const [moodNote, setMoodNote] = useState("");
   const [habitDays, setHabitDays] = useState<HabitDay[]>([]);
   const [showAffirmation, setShowAffirmation] = useState(false);
@@ -991,6 +1012,7 @@ export default function CyberLog() {
         if (d.identity) setIdentity(d.identity);
         if (d.profilePic) setProfilePic(d.profilePic);
         if (d.moodEntries) setMoodEntries(d.moodEntries);
+        if (d.calendarEvents) setCalendarEvents(d.calendarEvents);
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
         if (d.mindMapStickers) setMindMapStickers(d.mindMapStickers);
@@ -1026,12 +1048,12 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow,
+          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, editorFontSize, accentColor, borderStyle, cursorGlow]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -1143,6 +1165,34 @@ export default function CyberLog() {
   const triggerGlitch = () => {
     setGlitching(true);
     setTimeout(() => setGlitching(false), 600);
+    const otherThemes = THEMES.filter(t => t.id !== theme);
+    const randomTheme = otherThemes[Math.floor(Math.random() * otherThemes.length)];
+    setTheme(randomTheme.id);
+    const container = document.querySelector(".cyber-app");
+    if (container) {
+      const burst = document.createElement("div");
+      burst.className = "glitter-explosion";
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement("span");
+        p.className = "glitter-particle";
+        const angle = Math.random() * 360;
+        const dist = 80 + Math.random() * 300;
+        const dx = Math.cos(angle * Math.PI / 180) * dist;
+        const dy = Math.sin(angle * Math.PI / 180) * dist;
+        const colors = ["#ff4081","#e040fb","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#ea80fc"];
+        p.style.setProperty("--dx", dx + "px");
+        p.style.setProperty("--dy", dy + "px");
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDelay = (Math.random() * 0.15) + "s";
+        p.style.animationDuration = (0.8 + Math.random() * 0.8) + "s";
+        const size = 4 + Math.random() * 8;
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        burst.appendChild(p);
+      }
+      container.appendChild(burst);
+      setTimeout(() => burst.remove(), 2000);
+    }
   };
 
   const handleTerminal = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -1374,6 +1424,9 @@ export default function CyberLog() {
   };
 
   const confirmNewEntry = () => {
+    if (editorRef.current && activeFileId) {
+      setFiles(fs => fs.map(f => f.id === activeFileId ? { ...f, content: editorRef.current!.innerHTML } : f));
+    }
     const id = Date.now().toString();
     const now = new Date();
     const name = entryTitleText.trim() || "Entry " + now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -1384,6 +1437,106 @@ export default function CyberLog() {
     setEntryTitlePrompt(false);
     setEntryTitleText("");
   };
+
+  const calGetMonthDays = (year: number, month: number) => {
+    const first = new Date(year, month, 1);
+    const last = new Date(year, month + 1, 0);
+    const startDay = first.getDay();
+    const totalDays = last.getDate();
+    const days: (string | null)[] = [];
+    for (let i = 0; i < startDay; i++) days.push(null);
+    for (let d = 1; d <= totalDays; d++) {
+      const mm = String(month + 1).padStart(2, "0");
+      const dd = String(d).padStart(2, "0");
+      days.push(`${year}-${mm}-${dd}`);
+    }
+    return days;
+  };
+
+  const calGetWeekDays = (dateStr: string) => {
+    const d = new Date(dateStr + "T12:00:00");
+    const day = d.getDay();
+    const start = new Date(d);
+    start.setDate(d.getDate() - day);
+    const days: string[] = [];
+    for (let i = 0; i < 7; i++) {
+      const cur = new Date(start);
+      cur.setDate(start.getDate() + i);
+      days.push(cur.toISOString().split("T")[0]);
+    }
+    return days;
+  };
+
+  const calNavigate = (dir: number) => {
+    const d = new Date(selectedDate + "T12:00:00");
+    if (calendarView === "monthly") d.setMonth(d.getMonth() + dir);
+    else if (calendarView === "weekly") d.setDate(d.getDate() + dir * 7);
+    else d.setDate(d.getDate() + dir);
+    setSelectedDate(d.toISOString().split("T")[0]);
+  };
+
+  const calEventsForDate = (date: string) => calendarEvents.filter(e => e.date === date);
+
+  const calTimeToY = (time: string) => {
+    const [h, m] = time.split(":").map(Number);
+    return ((h - 6) * 60 + m) * (60 / 60);
+  };
+
+  const openEventForm = (date?: string, startTime?: string) => {
+    setEditingEvent(null);
+    setEventForm({ title: "", date: date || selectedDate, startTime: startTime || "09:00", endTime: startTime ? `${String(Math.min(23, parseInt(startTime) + 1)).padStart(2, "0")}:00` : "10:00", color: "#e040fb", description: "", location: "", category: "General", allDay: false });
+    setShowEventForm(true);
+  };
+
+  const openEditEvent = (ev: CalendarEvent) => {
+    setEditingEvent(ev);
+    setEventForm({ title: ev.title, date: ev.date, startTime: ev.startTime, endTime: ev.endTime, color: ev.color, description: ev.description, location: ev.location, category: ev.category, allDay: ev.allDay });
+    setShowEventForm(true);
+  };
+
+  const saveEvent = () => {
+    if (!eventForm.title.trim()) return;
+    if (editingEvent) {
+      setCalendarEvents(prev => prev.map(e => e.id === editingEvent.id ? { ...editingEvent, ...eventForm } : e));
+    } else {
+      const newEv: CalendarEvent = { id: "ev" + Date.now(), ...eventForm };
+      setCalendarEvents(prev => [...prev, newEv]);
+    }
+    setShowEventForm(false);
+    setEditingEvent(null);
+  };
+
+  const deleteEvent = (id: string) => {
+    setCalendarEvents(prev => prev.filter(e => e.id !== id));
+    setShowEventForm(false);
+  };
+
+  const HOURS = Array.from({ length: 18 }, (_, i) => i + 6);
+
+  const parseTimeToMinutes = (t: string) => {
+    const [h, m] = t.split(":").map(Number);
+    return h * 60 + (m || 0);
+  };
+  const minutesToTime = (mins: number) => {
+    const clamped = Math.max(360, Math.min(1380, mins));
+    const h = Math.floor(clamped / 60);
+    const m = clamped % 60;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  };
+
+  const handleEventDrop = (eventId: string, newDate: string, newStartTime?: string) => {
+    setCalendarEvents(prev => prev.map(e => {
+      if (e.id !== eventId) return e;
+      if (!newStartTime) return { ...e, date: newDate };
+      const durationMins = parseTimeToMinutes(e.endTime) - parseTimeToMinutes(e.startTime);
+      const safeDuration = Math.max(60, durationMins);
+      const startMins = parseTimeToMinutes(newStartTime);
+      const clampedStart = Math.max(360, Math.min(1380 - safeDuration, startMins));
+      return { ...e, date: newDate, startTime: minutesToTime(clampedStart), endTime: minutesToTime(clampedStart + safeDuration) };
+    }));
+  };
+
+  const [dragEventId, setDragEventId] = useState<string | null>(null);
 
   const logMood = (mood: number) => {
     const today = getToday();
@@ -1436,6 +1589,7 @@ export default function CyberLog() {
     { icon: "fa-solid fa-diagram-project", title: "Mind Map", section: "mindmap" },
     { icon: "fa-solid fa-face-smile",     title: "Mood",     section: "mood" },
     { icon: "fa-solid fa-fire",           title: "Habits",   section: "habits" },
+    { icon: "fa-solid fa-calendar-days",  title: "Calendar", section: "calendar" },
   ];
 
   return (
@@ -1490,7 +1644,7 @@ export default function CyberLog() {
             className={`cy-icon-btn${section === n.section ? " active" : ""}`}
             title={n.title}
             data-testid={`nav-${n.section}`}
-            onClick={() => setSection(n.section)}
+            onClick={() => { if (n.section === "journal") { quickNewEntry(); } else { setSection(n.section); } }}
           >
             <i className={n.icon} />
           </button>
@@ -2660,6 +2814,330 @@ export default function CyberLog() {
         )}
 
         {/* SETTINGS */}
+        {section === "calendar" && (
+          <div className="cy-section">
+            <div className="cy-page-header">
+              <div className="cy-page-header-row">
+                <div>
+                  <div className="cy-page-title">Calendar</div>
+                  <div className="cy-page-subtitle">Plan Your Dreams ~ Own Your Time</div>
+                </div>
+                <button className="cy-quick-add-btn" onClick={() => openEventForm()} data-testid="quick-add-event">
+                  <i className="fa-solid fa-plus" style={{ marginRight: 4 }} />New Event
+                </button>
+              </div>
+            </div>
+            <div className="cy-page-body">
+              <div className="cy-cal-controls">
+                <div className="cy-cal-nav">
+                  <button className="cy-cal-nav-btn" onClick={() => calNavigate(-1)} data-testid="cal-prev"><i className="fa-solid fa-chevron-left" /></button>
+                  <div className="cy-cal-title" data-testid="cal-title">
+                    {calendarView === "daily" && new Date(selectedDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+                    {calendarView === "weekly" && (() => { const wk = calGetWeekDays(selectedDate); return `${new Date(wk[0] + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })} – ${new Date(wk[6] + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`; })()}
+                    {calendarView === "monthly" && new Date(selectedDate + "T12:00:00").toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                  </div>
+                  <button className="cy-cal-nav-btn" onClick={() => calNavigate(1)} data-testid="cal-next"><i className="fa-solid fa-chevron-right" /></button>
+                  <button className="cy-cal-nav-btn" onClick={() => setSelectedDate(getToday())} data-testid="cal-today" style={{ marginLeft: 8, fontSize: 11 }}>Today</button>
+                </div>
+                <div className="cy-cal-view-tabs">
+                  {(["daily", "weekly", "monthly"] as const).map(v => (
+                    <button key={v} className={`cy-cal-view-tab${calendarView === v ? " active" : ""}`}
+                      onClick={() => setCalendarView(v)} data-testid={`cal-view-${v}`}
+                    >{v.charAt(0).toUpperCase() + v.slice(1)}</button>
+                  ))}
+                </div>
+              </div>
+
+              {calendarView === "monthly" && (() => {
+                const d = new Date(selectedDate + "T12:00:00");
+                const days = calGetMonthDays(d.getFullYear(), d.getMonth());
+                const today = getToday();
+                return (
+                  <div className="cy-cal-month">
+                    <div className="cy-cal-dow-row">
+                      {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(dw => (
+                        <div key={dw} className="cy-cal-dow">{dw}</div>
+                      ))}
+                    </div>
+                    <div className="cy-cal-grid">
+                      {days.map((day, i) => (
+                        <div key={i}
+                          className={`cy-cal-cell${day === today ? " today" : ""}${day === selectedDate ? " selected" : ""}${!day ? " empty" : ""}`}
+                          onClick={() => day && setSelectedDate(day)}
+                          onDoubleClick={() => day && openEventForm(day)}
+                          onDragOver={e => { if (day) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); } }}
+                          onDragLeave={e => e.currentTarget.classList.remove("drag-over")}
+                          onDrop={e => { e.currentTarget.classList.remove("drag-over"); if (day && dragEventId) { handleEventDrop(dragEventId, day); setDragEventId(null); } }}
+                          data-testid={day ? `cal-day-${day}` : `cal-empty-${i}`}
+                        >
+                          {day && (
+                            <>
+                              <span className="cy-cal-day-num">{parseInt(day.split("-")[2])}</span>
+                              <div className="cy-cal-day-events">
+                                {calEventsForDate(day).slice(0, 3).map(ev => (
+                                  <div key={ev.id} className="cy-cal-event-dot"
+                                    style={{ background: ev.color }}
+                                    draggable
+                                    onDragStart={() => setDragEventId(ev.id)}
+                                    onDragEnd={() => setDragEventId(null)}
+                                    onClick={e => { e.stopPropagation(); openEditEvent(ev); }}
+                                    title={ev.title}
+                                    data-testid={`cal-event-${ev.id}`}
+                                  >{ev.title}</div>
+                                ))}
+                                {calEventsForDate(day).length > 3 && <div className="cy-cal-more">+{calEventsForDate(day).length - 3}</div>}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {calendarView === "weekly" && (() => {
+                const weekDays = calGetWeekDays(selectedDate);
+                const today = getToday();
+                return (
+                  <div className="cy-cal-week">
+                    <div className="cy-cal-week-header">
+                      <div className="cy-cal-time-gutter" />
+                      {weekDays.map(wd => (
+                        <div key={wd} className={`cy-cal-week-day-header${wd === today ? " today" : ""}${wd === selectedDate ? " selected" : ""}`}
+                          onClick={() => setSelectedDate(wd)}
+                        >
+                          <span className="cy-cal-wdh-name">{new Date(wd + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" })}</span>
+                          <span className="cy-cal-wdh-num">{parseInt(wd.split("-")[2])}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {weekDays.some(wd => calEventsForDate(wd).some(e => e.allDay)) && (
+                      <div className="cy-cal-allday-bar" style={{ marginLeft: 62 }}>
+                        {weekDays.map(wd => calEventsForDate(wd).filter(e => e.allDay).map(ev => (
+                          <div key={ev.id} className="cy-cal-allday-chip"
+                            style={{ background: ev.color + "25", borderColor: ev.color, color: ev.color }}
+                            draggable
+                            onDragStart={() => setDragEventId(ev.id)}
+                            onDragEnd={() => setDragEventId(null)}
+                            onClick={() => openEditEvent(ev)}
+                            data-testid={`cal-event-${ev.id}`}
+                          >{ev.title}</div>
+                        )))}
+                      </div>
+                    )}
+                    <div className="cy-cal-week-body">
+                      <div className="cy-cal-time-gutter">
+                        {HOURS.map(h => (
+                          <div key={h} className="cy-cal-hour-label">{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
+                        ))}
+                      </div>
+                      {weekDays.map(wd => (
+                        <div key={wd} className="cy-cal-day-col"
+                          onDragOver={e => e.preventDefault()}
+                          onDrop={e => {
+                            if (!dragEventId) return;
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const relY = e.clientY - rect.top;
+                            const hour = Math.floor(relY / 60) + 6;
+                            handleEventDrop(dragEventId, wd, `${String(Math.min(23, hour)).padStart(2, "0")}:00`);
+                            setDragEventId(null);
+                          }}
+                        >
+                          {HOURS.map(h => (
+                            <div key={h} className="cy-cal-hour-slot"
+                              onClick={() => openEventForm(wd, `${String(h).padStart(2, "0")}:00`)}
+                            />
+                          ))}
+                          {calEventsForDate(wd).filter(e => !e.allDay).map(ev => {
+                            const top = calTimeToY(ev.startTime);
+                            const bottom = calTimeToY(ev.endTime);
+                            const height = Math.max(20, bottom - top);
+                            return (
+                              <div key={ev.id} className="cy-cal-event-block"
+                                style={{ top, height, background: ev.color + "30", borderLeft: `3px solid ${ev.color}`, color: ev.color }}
+                                draggable
+                                onDragStart={() => setDragEventId(ev.id)}
+                                onDragEnd={() => setDragEventId(null)}
+                                onClick={e => { e.stopPropagation(); openEditEvent(ev); }}
+                                data-testid={`cal-event-${ev.id}`}
+                              >
+                                <div className="cy-cal-ev-title">{ev.title}</div>
+                                <div className="cy-cal-ev-time">{ev.startTime} – {ev.endTime}</div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {calendarView === "daily" && (() => {
+                const today = getToday();
+                const dayEvents = calEventsForDate(selectedDate);
+                return (
+                  <div className="cy-cal-daily">
+                    <div className="cy-cal-daily-header">
+                      <span className={`cy-cal-daily-date${selectedDate === today ? " today" : ""}`}>
+                        {new Date(selectedDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+                      </span>
+                      <span className="cy-badge cy-badge-online" style={{ fontSize: 10, marginLeft: 8 }}>{dayEvents.length} EVENTS</span>
+                    </div>
+                    {dayEvents.filter(e => e.allDay).length > 0 && (
+                      <div className="cy-cal-allday-bar">
+                        {dayEvents.filter(e => e.allDay).map(ev => (
+                          <div key={ev.id} className="cy-cal-allday-chip"
+                            style={{ background: ev.color + "25", borderColor: ev.color, color: ev.color }}
+                            onClick={() => openEditEvent(ev)}
+                            draggable onDragStart={() => setDragEventId(ev.id)}
+                            data-testid={`cal-event-${ev.id}`}
+                          >{ev.title}</div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="cy-cal-daily-body"
+                      onDragOver={e => e.preventDefault()}
+                      onDrop={e => {
+                        if (!dragEventId) return;
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const relY = e.clientY - rect.top;
+                        const hour = Math.floor(relY / 60) + 6;
+                        handleEventDrop(dragEventId, selectedDate, `${String(Math.min(23, hour)).padStart(2, "0")}:00`);
+                        setDragEventId(null);
+                      }}
+                    >
+                      <div className="cy-cal-time-gutter">
+                        {HOURS.map(h => (
+                          <div key={h} className="cy-cal-hour-label">{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
+                        ))}
+                      </div>
+                      <div className="cy-cal-day-col cy-cal-day-col-single">
+                        {HOURS.map(h => (
+                          <div key={h} className="cy-cal-hour-slot"
+                            onClick={() => openEventForm(selectedDate, `${String(h).padStart(2, "0")}:00`)}
+                          />
+                        ))}
+                        {dayEvents.filter(e => !e.allDay).map(ev => {
+                          const top = calTimeToY(ev.startTime);
+                          const bottom = calTimeToY(ev.endTime);
+                          const height = Math.max(30, bottom - top);
+                          return (
+                            <div key={ev.id} className="cy-cal-event-block cy-cal-event-block-daily"
+                              style={{ top, height, background: ev.color + "25", borderLeft: `4px solid ${ev.color}`, color: ev.color }}
+                              draggable
+                              onDragStart={() => setDragEventId(ev.id)}
+                              onDragEnd={() => setDragEventId(null)}
+                              onClick={e => { e.stopPropagation(); openEditEvent(ev); }}
+                              data-testid={`cal-event-${ev.id}`}
+                            >
+                              <div className="cy-cal-ev-title">{ev.title}</div>
+                              <div className="cy-cal-ev-time">{ev.startTime} – {ev.endTime}</div>
+                              {ev.location && <div className="cy-cal-ev-loc"><i className="fa-solid fa-location-dot" style={{ marginRight: 4 }} />{ev.location}</div>}
+                              {ev.description && <div className="cy-cal-ev-desc">{ev.description}</div>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {showEventForm && (
+              <div className="cy-affirmation-overlay" data-testid="event-form-overlay">
+                <div className="cy-affirmation-card cy-event-form-card">
+                  <div className="cy-affirmation-sparkle">📅</div>
+                  <div className="cy-affirmation-title">{editingEvent ? "Edit Event" : "New Event"}</div>
+                  <div className="cy-event-form">
+                    <input className="cy-input" placeholder="Event title..." value={eventForm.title}
+                      onChange={e => setEventForm(f => ({ ...f, title: e.target.value }))}
+                      autoFocus data-testid="event-title-input"
+                    />
+                    <div className="cy-event-form-row">
+                      <div className="cy-event-form-field">
+                        <label className="cy-field-label">DATE</label>
+                        <input type="date" className="cy-input" value={eventForm.date}
+                          onChange={e => setEventForm(f => ({ ...f, date: e.target.value }))}
+                          data-testid="event-date-input"
+                        />
+                      </div>
+                      <div className="cy-event-form-field">
+                        <label className="cy-field-label">CATEGORY</label>
+                        <select className="cy-select" value={eventForm.category}
+                          onChange={e => setEventForm(f => ({ ...f, category: e.target.value }))}
+                          data-testid="event-category-select"
+                        >
+                          {EVENT_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="cy-toggle-row" style={{ padding: "8px 0" }}>
+                      <div>
+                        <div className="cy-toggle-label">All Day</div>
+                      </div>
+                      <button className={`cy-toggle-switch${eventForm.allDay ? " on" : ""}`}
+                        onClick={() => setEventForm(f => ({ ...f, allDay: !f.allDay }))}
+                        data-testid="event-allday-toggle"
+                      />
+                    </div>
+                    {!eventForm.allDay && (
+                      <div className="cy-event-form-row">
+                        <div className="cy-event-form-field">
+                          <label className="cy-field-label">START TIME</label>
+                          <input type="time" className="cy-input" value={eventForm.startTime}
+                            onChange={e => setEventForm(f => ({ ...f, startTime: e.target.value }))}
+                            data-testid="event-start-input"
+                          />
+                        </div>
+                        <div className="cy-event-form-field">
+                          <label className="cy-field-label">END TIME</label>
+                          <input type="time" className="cy-input" value={eventForm.endTime}
+                            onChange={e => setEventForm(f => ({ ...f, endTime: e.target.value }))}
+                            data-testid="event-end-input"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    <input className="cy-input" placeholder="Location (optional)" value={eventForm.location}
+                      onChange={e => setEventForm(f => ({ ...f, location: e.target.value }))}
+                      data-testid="event-location-input"
+                    />
+                    <textarea className="cy-input" placeholder="Description (optional)" value={eventForm.description}
+                      onChange={e => setEventForm(f => ({ ...f, description: e.target.value }))}
+                      rows={3} style={{ resize: "vertical" }}
+                      data-testid="event-desc-input"
+                    />
+                    <div className="cy-field-label">COLOR</div>
+                    <div className="cy-event-color-row">
+                      {EVENT_COLORS.map(c => (
+                        <button key={c} className={`cy-accent-btn${eventForm.color === c ? " selected" : ""}`}
+                          style={{ background: c, borderColor: eventForm.color === c ? "#fff" : "transparent", width: 28, height: 28 }}
+                          onClick={() => setEventForm(f => ({ ...f, color: c }))}
+                          data-testid={`event-color-${c.replace("#", "")}`}
+                        />
+                      ))}
+                    </div>
+                    <div className="cy-event-form-actions">
+                      <button className="cy-affirmation-close" onClick={saveEvent} data-testid="event-save-btn">
+                        <i className="fa-solid fa-check" style={{ marginRight: 6 }} />{editingEvent ? "Save" : "Create"}
+                      </button>
+                      {editingEvent && (
+                        <button className="cy-back-btn" style={{ color: "#ff4081" }} onClick={() => deleteEvent(editingEvent.id)} data-testid="event-delete-btn">
+                          <i className="fa-solid fa-trash" style={{ marginRight: 4 }} />Delete
+                        </button>
+                      )}
+                      <button className="cy-back-btn" onClick={() => { setShowEventForm(false); setEditingEvent(null); }} data-testid="event-cancel-btn">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {section === "settings" && (
           <div className="cy-section">
             <div className="cy-page-header">

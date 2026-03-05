@@ -11,12 +11,15 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 ## Features
 
 - **19 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 3 dark-light (Cotton Candy, Lemonade, Lavender Mist) + 3 warm/cool (Peach Sorbet, Mint Chip, Rose Quartz) + 3 truly light-mode (☁️ Cloud Nine, 🍯 Honey Glow, 🌤️ Sky Bloom — white/pastel backgrounds with dark text, full CSS override block)
-- **8 Sections**: Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Settings/Customize
+- **9 Sections**: Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Settings/Customize
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 24 font choices, alignment, lists
 - **Paper Patterns**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral — visual icon swatch selectors
 - **Canvas Modes**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal — visual gradient swatch selectors
 - **Sticker System (300+ stickers)**: 20 categories — Vibes (18), Symbols (20), Emoji (24), Notes (12), Art (12), Dividers (6), Weather (10), Nature (12), Food (12), Zodiac (12), Shapes (10), Badges (10), Animals (16), Travel (12), Celebration (12), Hearts (14), Music (10), Frames (8), Washi Tape (10). All draggable with position persistence, resizable (scale 0.3x–3x via +/- controls on hover). Available in both Journal and Mind Map sections. Tabs wrap for usability.
 - **Customization Options**: Editor font size slider (12–28px), 12 accent color presets + custom color picker, 6 border styles (Default, Rounded, Sharp, Dashed, Double, Glow), cursor glow effect (mouse-tracking neon orb).
+- **Calendar**: Daily/Weekly/Monthly views with navigation, time blocking (6AM–11PM hourly slots), drag-and-drop events between days and time slots, event form with title, date, start/end time, color (12 options), location, description, category (8 types), and all-day toggle. Events persist in localStorage.
+- **Sparkle Button**: Triggers glitch animation + random theme change + 60-particle glitter explosion burst.
+- **Journal Icon**: Clicking the Journal icon in the sidebar opens the "Name Your Entry" popup instead of just switching sections.
 - **Sticky Notes**: Editable text with drag handle bar at top; click note body to type, grab handle to move.
 - **Affirmation Bar**: Commands: help, affirm, breathe, gratitude, goals, sparkle, love, clear
 - **Daily Affirmation Popup**: Random motivational message shown once per day on app load
