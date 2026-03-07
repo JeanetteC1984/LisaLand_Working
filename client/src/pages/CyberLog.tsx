@@ -1266,7 +1266,31 @@ export default function CyberLog() {
     };
   }, [cursorGlow]);
 
+  const savedSelectionRef = useRef<Range | null>(null);
+
+  const saveSelection = () => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0);
+      if (editorRef.current?.contains(range.commonAncestorContainer)) {
+        savedSelectionRef.current = range.cloneRange();
+      }
+    }
+  };
+
+  const restoreSelection = () => {
+    const range = savedSelectionRef.current;
+    if (range) {
+      const sel = window.getSelection();
+      if (sel) {
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+  };
+
   const formatDoc = (cmd: string, value?: string) => {
+    restoreSelection();
     document.execCommand(cmd, false, value ?? undefined);
     editorRef.current?.focus();
   };
@@ -2565,7 +2589,7 @@ export default function CyberLog() {
         {section === "journal" && (
           <div className="cy-section">
             <div className="cy-print-title" data-testid="print-title">{activeFile.name}</div>
-            <div className="cy-toolbar">
+            <div className="cy-toolbar" onMouseDown={saveSelection}>
               <div className="cy-tool-group">
                 {[
                   { cmd: "bold", icon: "fa-solid fa-bold", title: "Bold" },
@@ -2754,6 +2778,8 @@ export default function CyberLog() {
               <div ref={editorRef} contentEditable suppressContentEditableWarning
                 className={`cy-active-page ${paperPattern} ${glitching ? "glitch-anim" : ""} ${borderStyle !== "default" ? `border-${borderStyle}` : ""}`}
                 style={{ fontSize: editorFontSize }}
+                onMouseUp={saveSelection}
+                onKeyUp={saveSelection}
                 data-testid="editor-page"
               />
             </div>
