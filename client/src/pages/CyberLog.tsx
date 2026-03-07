@@ -1015,7 +1015,12 @@ type HabitDay = { date: string; completed: string[] };
 
 function getToday() { return new Date().toISOString().split("T")[0]; }
 
-export default function CyberLog() {
+interface CyberLogProps {
+  user: { id: string; username: string };
+  onLogout: () => void;
+}
+
+export default function CyberLog({ user, onLogout }: CyberLogProps) {
   const [section, setSection] = useState<Section>("journal");
   const [theme, setTheme] = useState("rainbow-dream");
   const [files, setFiles] = useState<JournalFile[]>(INITIAL_FILES);
@@ -1171,43 +1176,48 @@ export default function CyberLog() {
     bio: "Living boldly, dreaming wildly, and choosing joy every single day.",
   });
 
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("dreamlog-data");
-      if (saved) {
-        const d = JSON.parse(saved);
-        if (d.theme) setTheme(d.theme);
-        if (d.files) setFiles(d.files);
-        if (d.goals) setGoals(d.goals);
-        if (d.identity) setIdentity(d.identity);
-        if (d.profilePic) setProfilePic(d.profilePic);
-        if (d.moodEntries) setMoodEntries(d.moodEntries);
-        if (d.calendarEvents) setCalendarEvents(d.calendarEvents);
-        if (d.habitDays) setHabitDays(d.habitDays);
-        if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
-        if (d.mindMapStickers) setMindMapStickers(d.mindMapStickers);
-        if (d.calendarStickers) setCalendarStickers(d.calendarStickers);
-        if (d.stickersByFile) setStickersByFile(d.stickersByFile);
-        if (d.customHabits) setCustomHabits(d.customHabits);
-        if (d.visionImages) {
-          const migrated: Record<string, {src: string, caption: string}[]> = {};
-          for (const [k, v] of Object.entries(d.visionImages)) {
-            migrated[k] = (v as any[]).map((item: any) =>
-              typeof item === "string" ? { src: item, caption: "" } : item
-            );
+    fetch("/api/data")
+      .then(r => r.json())
+      .then(d => {
+        if (d && typeof d === "object" && !d.message) {
+          if (d.theme) setTheme(d.theme);
+          if (d.files) setFiles(d.files);
+          if (d.goals) setGoals(d.goals);
+          if (d.identity) setIdentity(d.identity);
+          if (d.profilePic) setProfilePic(d.profilePic);
+          if (d.moodEntries) setMoodEntries(d.moodEntries);
+          if (d.calendarEvents) setCalendarEvents(d.calendarEvents);
+          if (d.habitDays) setHabitDays(d.habitDays);
+          if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
+          if (d.mindMapStickers) setMindMapStickers(d.mindMapStickers);
+          if (d.calendarStickers) setCalendarStickers(d.calendarStickers);
+          if (d.stickersByFile) setStickersByFile(d.stickersByFile);
+          if (d.customHabits) setCustomHabits(d.customHabits);
+          if (d.visionImages) {
+            const migrated: Record<string, {src: string, caption: string}[]> = {};
+            for (const [k, v] of Object.entries(d.visionImages)) {
+              migrated[k] = (v as any[]).map((item: any) =>
+                typeof item === "string" ? { src: item, caption: "" } : item
+              );
+            }
+            setVisionImages(migrated);
           }
-          setVisionImages(migrated);
+          if (d.paperPattern) setPaperPattern(d.paperPattern);
+          if (d.canvasMode) setCanvasMode(d.canvasMode);
+          if (d.crtEnabled !== undefined) setCrtEnabled(d.crtEnabled);
+          if (d.editorFontSize) setEditorFontSize(d.editorFontSize);
+          if (d.accentColor) setAccentColor(d.accentColor);
+          if (d.borderStyle) setBorderStyle(d.borderStyle);
+          if (d.cursorGlow !== undefined) setCursorGlow(d.cursorGlow);
+          if (d.budgetItems) setBudgetItems(d.budgetItems);
         }
-        if (d.paperPattern) setPaperPattern(d.paperPattern);
-        if (d.canvasMode) setCanvasMode(d.canvasMode);
-        if (d.crtEnabled !== undefined) setCrtEnabled(d.crtEnabled);
-        if (d.editorFontSize) setEditorFontSize(d.editorFontSize);
-        if (d.accentColor) setAccentColor(d.accentColor);
-        if (d.borderStyle) setBorderStyle(d.borderStyle);
-        if (d.cursorGlow !== undefined) setCursorGlow(d.cursorGlow);
-        if (d.budgetItems) setBudgetItems(d.budgetItems);
-      }
-    } catch {}
+        setDataLoaded(true);
+      })
+      .catch(() => setDataLoaded(true));
+
     const lastShown = localStorage.getItem("dreamlog-affirmation-date");
     const today = getToday();
     if (lastShown !== today) {
@@ -1218,15 +1228,21 @@ export default function CyberLog() {
   }, []);
 
   useEffect(() => {
+    if (!dataLoaded) return;
     const timeout = setTimeout(() => {
       try {
-        localStorage.setItem("dreamlog-data", JSON.stringify({
+        const payload = {
           theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, calendarStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems,
-        }));
+        };
+        fetch("/api/data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }).catch(() => {});
       } catch {}
-    }, 500);
+    }, 1000);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, calendarStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems]);
+  }, [dataLoaded, theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, calendarStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
@@ -2346,6 +2362,18 @@ export default function CyberLog() {
         </div>
 
         <div className="cy-nav-scroll">
+          <div className="cy-nav-group cy-user-info">
+            <div className="cy-user-row">
+              <i className="fa-solid fa-circle-user" />
+              <span className="cy-user-name" data-testid="text-username">{user.username}</span>
+              <button className="cy-logout-btn" onClick={async () => {
+                await fetch("/api/auth/logout", { method: "POST" });
+                onLogout();
+              }} title="Sign Out" data-testid="btn-logout">
+                <i className="fa-solid fa-right-from-bracket" />
+              </button>
+            </div>
+          </div>
           <div className="cy-nav-group">
             <label>VIBE / THEME</label>
             <select className="cy-select" value={theme} onChange={e => setTheme(e.target.value)} data-testid="select-theme">

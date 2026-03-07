@@ -4490,3 +4490,183 @@
   .cy-page-title { background: none !important; -webkit-text-fill-color: #222 !important; background-clip: unset !important; -webkit-background-clip: unset !important; color: #222 !important; font-size: 24px !important; }
   .cy-page-subtitle { color: #555 !important; -webkit-text-fill-color: #555 !important; font-style: normal !important; }
 }
+
+/* ============================================
+   AUTH PAGE
+   ============================================ */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0418 0%, #1a0a2e 30%, #0d0d2b 60%, #0a0418 100%);
+  background-size: 400% 400%;
+  animation: authGradient 15s ease infinite;
+  font-family: 'Quicksand', sans-serif;
+  padding: 20px;
+}
+@keyframes authGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.auth-card {
+  background: rgba(26, 10, 46, 0.9);
+  border: 1px solid rgba(224, 64, 251, 0.2);
+  border-radius: 24px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 40px rgba(224, 64, 251, 0.1), 0 0 80px rgba(124, 77, 255, 0.05);
+  text-align: center;
+}
+.auth-logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 42px;
+  background: linear-gradient(135deg, #e040fb, #7c4dff, #00e5ff, #69f0ae, #ffd740, #ff4081);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+.auth-subtitle {
+  font-family: 'Comfortaa', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(224, 64, 251, 0.15);
+}
+.auth-tab {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.auth-tab.active {
+  background: rgba(224, 64, 251, 0.15);
+  color: #e040fb;
+}
+.auth-tab:hover:not(.active) {
+  background: rgba(224, 64, 251, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.auth-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(224, 64, 251, 0.12);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.auth-input:focus {
+  border-color: rgba(224, 64, 251, 0.4);
+  box-shadow: 0 0 12px rgba(224, 64, 251, 0.1);
+}
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+.auth-error {
+  color: #ff4081;
+  font-size: 13px;
+  text-align: left;
+  padding: 0 4px;
+}
+.auth-submit {
+  background: linear-gradient(135deg, #e040fb, #7c4dff);
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  margin-top: 4px;
+}
+.auth-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(224, 64, 251, 0.3);
+}
+.auth-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.auth-footer {
+  margin-top: 24px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.auth-link {
+  background: none;
+  border: none;
+  color: #e040fb;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.auth-link:hover {
+  color: #7c4dff;
+}
+
+/* User info in sidebar */
+.cy-user-info {
+  padding: 8px 12px !important;
+}
+.cy-user-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--cy-text);
+}
+.cy-user-row > i {
+  font-size: 18px;
+  color: var(--cy-primary);
+}
+.cy-user-name {
+  flex: 1;
+  font-weight: 600;
+  font-family: var(--cy-font-ui);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cy-logout-btn {
+  background: none;
+  border: none;
+  color: var(--cy-text-muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: color 0.2s, background 0.2s;
+}
+.cy-logout-btn:hover {
+  color: #ff4081;
+  background: rgba(255, 64, 129, 0.1);
+}

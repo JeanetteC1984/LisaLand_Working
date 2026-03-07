@@ -4,8 +4,11 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 
 ## Architecture
 
-- **Frontend**: React + TypeScript + Vite (client-side app, no DB needed)
-- **Backend**: Express (minimal, serves static files)
+- **Frontend**: React + TypeScript + Vite
+- **Backend**: Express with session-based authentication, PostgreSQL database
+- **Database**: PostgreSQL via Drizzle ORM. Tables: `users` (id, username, password), `user_data` (userId, data as JSONB), `session` (managed by connect-pg-simple)
+- **Auth**: express-session + connect-pg-simple + bcrypt. Routes: POST /api/auth/register, POST /api/auth/login, POST /api/auth/logout, GET /api/auth/me
+- **Data Persistence**: All user data (journal entries, settings, stickers, goals, etc.) stored as a single JSONB blob per user in `user_data` table. Auto-saves on state changes with 1s debounce via POST /api/data. Loaded on login via GET /api/data.
 - **Styling**: Custom CSS (`client/src/cyber.css`) with CSS custom properties for theming
 
 ## Features
