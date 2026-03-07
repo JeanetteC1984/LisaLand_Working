@@ -928,6 +928,14 @@
   font-size: 14px;
   line-height: 1.6;
 }
+.cy-editor [style*="background-color"]:not(.cy-highlight-bar),
+.cy-editor mark,
+.cy-editor [data-highlight],
+.cy-active-page [style*="background-color"]:not(.cy-highlight-bar),
+.cy-active-page mark,
+.cy-active-page [data-highlight] {
+  color: #111 !important;
+}
 .cy-highlight-bar {
   border-left: 3px solid var(--cy-accent);
   background: linear-gradient(90deg, color-mix(in srgb, var(--cy-accent) 12%, var(--cy-surface)) 0%, color-mix(in srgb, var(--cy-accent) 4%, var(--cy-surface)) 100%);
