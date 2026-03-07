@@ -1731,6 +1731,15 @@ export default function CyberLog() {
 
   const HOURS = Array.from({ length: 18 }, (_, i) => i + 6);
 
+  const getTimeBlockClass = (hour: number) => {
+    if (hour < 9) return "time-block-dawn";
+    if (hour < 12) return "time-block-morning";
+    if (hour < 14) return "time-block-midday";
+    if (hour < 17) return "time-block-afternoon";
+    if (hour < 20) return "time-block-evening";
+    return "time-block-night";
+  };
+
   const parseTimeToMinutes = (t: string) => {
     const [h, m] = t.split(":").map(Number);
     return h * 60 + (m || 0);
@@ -3881,7 +3890,7 @@ export default function CyberLog() {
                     <div className="cy-cal-week-body">
                       <div className="cy-cal-time-gutter">
                         {HOURS.map(h => (
-                          <div key={h} className="cy-cal-hour-label">{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
+                          <div key={h} className={`cy-cal-hour-label ${getTimeBlockClass(h)}-label`}>{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
                         ))}
                       </div>
                       {weekDays.map(wd => (
@@ -3897,7 +3906,7 @@ export default function CyberLog() {
                           }}
                         >
                           {HOURS.map(h => (
-                            <div key={h} className="cy-cal-hour-slot"
+                            <div key={h} className={`cy-cal-hour-slot ${getTimeBlockClass(h)}`}
                               onClick={() => openEventForm(wd, `${String(h).padStart(2, "0")}:00`)}
                             />
                           ))}
@@ -3962,12 +3971,12 @@ export default function CyberLog() {
                     >
                       <div className="cy-cal-time-gutter">
                         {HOURS.map(h => (
-                          <div key={h} className="cy-cal-hour-label">{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
+                          <div key={h} className={`cy-cal-hour-label ${getTimeBlockClass(h)}-label`}>{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
                         ))}
                       </div>
                       <div className="cy-cal-day-col cy-cal-day-col-single">
                         {HOURS.map(h => (
-                          <div key={h} className="cy-cal-hour-slot"
+                          <div key={h} className={`cy-cal-hour-slot ${getTimeBlockClass(h)}`}
                             onClick={() => openEventForm(selectedDate, `${String(h).padStart(2, "0")}:00`)}
                           />
                         ))}
