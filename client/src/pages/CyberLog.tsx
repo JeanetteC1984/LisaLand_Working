@@ -98,16 +98,16 @@ const THEMES: Theme[] = [
 const INITIAL_FILES: JournalFile[] = [
   {
     id: "tutorial",
-    name: "Welcome to Dream Log",
+    name: "Welcome to Glow Up",
     date: "2026-03-04",
-    content: `<h1 class="cy-doc-title" id="doc-title">Welcome to Dream Log</h1>
+    content: `<h1 class="cy-doc-title" id="doc-title">Welcome to Glow Up</h1>
 <div class="cy-case-meta" contenteditable="false">
   Your personal space to journal, dream, and grow.<br>
   Status: <span class="pulse-text" style="color:#69f0ae;">LET'S GO!</span>
 </div>
 <div class="cy-quote-block">"The magic you seek is already within you."</div>
 <p style="max-width:600px;margin-bottom:20px;line-height:1.8;">
-  Welcome to <strong>Dream Log</strong> — your cozy digital journal and life planner.
+  Welcome to <strong>Glow Up</strong> — your cozy digital journal and life planner.
   Here's a quick tour of everything you can do:
 </p>
 
@@ -2173,7 +2173,7 @@ export default function CyberLog() {
       <nav className="cy-file-nav">
         <div className="cy-brand">
           <i className="fa-solid fa-sparkles" style={{ WebkitTextFillColor: "unset" }} />
-          <span>Dream Log</span>
+          <span>Glow Up</span>
           <span className="cy-brand-version">v2</span>
           <button className="cy-sidebar-toggle" onClick={() => setSidebarOpen(v => !v)}
             title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"} data-testid="sidebar-toggle">
@@ -2319,6 +2319,20 @@ export default function CyberLog() {
             return streak;
           })();
           const journalCount = files.length;
+          const DASH_QUOTES = [
+            "She believed she could, so she did.",
+            "You are made of starlight and magic.",
+            "The glow up is an inside job.",
+            "Be the energy you want to attract.",
+            "Your only limit is your mind.",
+            "Main character energy, always.",
+            "Good things are coming. Keep going.",
+            "You didn't come this far to only come this far.",
+            "Sparkle more, worry less.",
+            "Today is a great day to glow up.",
+          ];
+          const quoteOfDay = DASH_QUOTES[Math.floor(new Date().getDate() % DASH_QUOTES.length)];
+          const dashVisionImg = (visionImages["board"] || [])[0]?.src || null;
           return (
             <div className="cy-section">
               <div className="cy-page-header">
@@ -2330,6 +2344,25 @@ export default function CyberLog() {
                 </div>
               </div>
               <div className="cy-page-body">
+
+                <div className="cy-dash-hero" data-testid="dash-hero">
+                  <div className="cy-dash-hero-glow" />
+                  <div className="cy-dash-hero-content">
+                    <div className="cy-dash-hero-greeting">
+                      {new Date().getHours() < 12 ? "Good Morning" : new Date().getHours() < 17 ? "Good Afternoon" : "Good Evening"}{identity.name ? `, ${identity.name}` : ""}
+                    </div>
+                    <div className="cy-dash-hero-quote" data-testid="dash-quote">
+                      <i className="fa-solid fa-quote-left" style={{ fontSize: 12, opacity: 0.4, marginRight: 8 }} />
+                      {quoteOfDay}
+                    </div>
+                  </div>
+                  {dashVisionImg && (
+                    <div className="cy-dash-hero-vision" onClick={() => setSection("vboard")} data-testid="dash-vision-img">
+                      <img src={dashVisionImg} alt="Vision Board" />
+                      <div className="cy-dash-hero-vision-label"><i className="fa-solid fa-eye" style={{ marginRight: 4 }} />My Vision</div>
+                    </div>
+                  )}
+                </div>
 
                 <div className="cy-dash-stats" data-testid="dash-stats">
                   <div className="cy-dash-stat-card" onClick={() => setSection("journal")} data-testid="dash-stat-journal">
@@ -2470,6 +2503,27 @@ export default function CyberLog() {
                           <span className="cy-dash-entry-date">{f.date}</span>
                         </div>
                       ))}
+                    </div>
+                  </div>
+
+                  <div className="cy-dash-card" data-testid="dash-vision-card">
+                    <div className="cy-dash-card-header">
+                      <i className="fa-solid fa-eye" style={{ marginRight: 8 }} />Vision Board
+                    </div>
+                    <div className="cy-dash-card-body">
+                      {dashVisionImg ? (
+                        <div className="cy-dash-vision-preview" onClick={() => setSection("vboard")} data-testid="dash-vision-link">
+                          <img src={dashVisionImg} alt="Vision" />
+                          <div className="cy-dash-vision-overlay">
+                            <span>View Board</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="cy-dash-empty-vision" onClick={() => setSection("vboard")} data-testid="dash-vision-empty">
+                          <i className="fa-solid fa-image" />
+                          <span>Add your first vision board image</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 

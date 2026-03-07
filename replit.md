@@ -1,4 +1,4 @@
-# DREAM LOG v2
+# GLOW UP v2
 
 A dark Lisa Frank-inspired digital journal for achieving goals and living your best life. Built with React + TypeScript.
 
@@ -12,7 +12,7 @@ A dark Lisa Frank-inspired digital journal for achieving goals and living your b
 
 - **20 Color Themes**: 10 dark (Rainbow Dream, Sunset Glow, Ocean Aura, Cosmic Berry, Neon Jungle, Stardust, Electric Candy, Midnight Rose, Aurora, Galaxy) + 10 light with unique names (Petal Pink, Marigold, Clear Sky, Blush Rose, Meadow, Wisteria, Sunshine, Cherry Blossom, Seafoam, Lavender Field). Light themes use `lt-` prefix IDs. Theme selector in sidebar uses optgroup Dark/Light. Settings page shows themes in two labeled grids.
 - **12 Sections**: Dashboard, Journal, Profile, Vision Board (with subpages), Goals, Mind Map, Mood Tracker, Habit Tracker, Calendar, Budget, Music Player, Settings/Customize
-- **Dashboard**: Overview section showing journal entry count, goals complete, habit streak, today's mood, today's schedule, habits today, goal progress bars, weekly mood chart, recent entries, and quick action buttons
+- **Dashboard**: Hero banner with time-of-day greeting (uses profile name if set), daily rotating quote, vision board thumbnail (if images exist). Stat cards for journal entries, goals, streak, mood. Grid of cards: today's schedule, habits, goals progress, mood chart, recent entries, vision board preview (with add-image prompt if empty), quick action buttons.
 - **Rich Text Editor**: Bold, italic, underline, strikethrough, 25 font choices, heading formatting (Title/Heading/Subheading/Normal), 7 font sizes (8–32pt), text color picker, highlight color picker, alignment, lists, quote blocks, highlight bars
 - **Paper Patterns (15)**: Stars, Hearts, Grid, Dots, Lined, Blank, Diamonds, Waves, Confetti, Floral, Crosshatch, Hexagons, Raindrops, Spirals, Moonlight — visual icon swatch selectors
 - **Canvas Modes (15)**: Default, Tinted, Gradient, Deep Dark, Glow, Dreamy, Starfield, Aurora, Soft Focus, Minimal, Prism, Nebula, Ember, Frost, Twilight — visual gradient swatch selectors

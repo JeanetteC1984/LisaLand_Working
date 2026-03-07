@@ -1,5 +1,5 @@
 /* ============================================
-   DREAM LOG - DARK LISA FRANK THEME SYSTEM
+   GLOW UP - DARK LISA FRANK THEME SYSTEM
    ============================================ */
 
 [data-cyber-theme] {
@@ -3548,6 +3548,101 @@
 }
 
 /* Dashboard */
+.cy-dash-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(224,64,251,0.08) 0%, rgba(124,77,255,0.06) 40%, rgba(0,229,255,0.04) 100%);
+  border: 1px solid rgba(224,64,251,0.12);
+  margin-bottom: 20px;
+  overflow: hidden;
+  min-height: 100px;
+}
+.cy-dash-hero-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,64,251,0.15) 0%, transparent 70%);
+  pointer-events: none;
+  animation: hero-glow-pulse 4s ease-in-out infinite alternate;
+}
+@keyframes hero-glow-pulse {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+.cy-dash-hero-content {
+  flex: 1;
+  min-width: 0;
+}
+.cy-dash-hero-greeting {
+  font-family: var(--cy-font-header);
+  font-size: 22px;
+  font-weight: 700;
+  background: var(--cy-gradient-rainbow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.cy-dash-hero-quote {
+  font-family: var(--cy-font-body);
+  font-size: 14px;
+  color: var(--cy-text-muted);
+  font-style: italic;
+  line-height: 1.5;
+}
+.cy-dash-hero-vision {
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(224,64,251,0.2);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(224,64,251,0.1);
+}
+.cy-dash-hero-vision:hover {
+  border-color: var(--cy-primary);
+  transform: scale(1.05);
+  box-shadow: 0 4px 24px rgba(224,64,251,0.25);
+}
+.cy-dash-hero-vision img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cy-dash-hero-vision-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3px 0;
+  text-align: center;
+  font-family: var(--cy-font-ui);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+}
+
+[data-cyber-theme^="lt-"] .cy-dash-hero {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cy-primary) 6%, white) 0%, color-mix(in srgb, var(--cy-secondary) 4%, white) 100%);
+  border-color: color-mix(in srgb, var(--cy-primary) 15%, transparent);
+}
+[data-cyber-theme^="lt-"] .cy-dash-hero-quote {
+  color: var(--cy-text-muted);
+}
+
 .cy-dash-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -3742,6 +3837,61 @@
   flex-shrink: 0;
   margin-left: 8px;
 }
+
+.cy-dash-vision-preview {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16/9;
+  max-height: 160px;
+}
+.cy-dash-vision-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.cy-dash-vision-preview:hover img { transform: scale(1.05); }
+.cy-dash-vision-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.25s;
+  font-family: var(--cy-font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.cy-dash-vision-preview:hover .cy-dash-vision-overlay { opacity: 1; }
+.cy-dash-empty-vision {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 16px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 2px dashed rgba(224,64,251,0.15);
+  color: var(--cy-text-muted);
+  font-family: var(--cy-font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.25s;
+}
+.cy-dash-empty-vision i { font-size: 28px; opacity: 0.3; }
+.cy-dash-empty-vision:hover {
+  border-color: var(--cy-primary);
+  color: var(--cy-primary);
+  background: rgba(224,64,251,0.04);
+}
+.cy-dash-empty-vision:hover i { opacity: 0.7; }
 
 .cy-dash-actions {
   display: grid;
