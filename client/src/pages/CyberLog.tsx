@@ -1731,13 +1731,14 @@ export default function CyberLog() {
 
   const HOURS = Array.from({ length: 18 }, (_, i) => i + 6);
 
-  const getTimeBlockClass = (hour: number) => {
-    if (hour < 9) return "time-block-dawn";
-    if (hour < 12) return "time-block-morning";
-    if (hour < 14) return "time-block-midday";
-    if (hour < 17) return "time-block-afternoon";
-    if (hour < 20) return "time-block-evening";
-    return "time-block-night";
+  const getTimeBlockColor = (time: string) => {
+    const h = parseInt(time.split(":")[0]);
+    if (h < 9) return "#b388ff";
+    if (h < 12) return "#ffab40";
+    if (h < 14) return "#ff4081";
+    if (h < 17) return "#00e5ff";
+    if (h < 20) return "#e040fb";
+    return "#7c4dff";
   };
 
   const parseTimeToMinutes = (t: string) => {
@@ -3890,7 +3891,7 @@ export default function CyberLog() {
                     <div className="cy-cal-week-body">
                       <div className="cy-cal-time-gutter">
                         {HOURS.map(h => (
-                          <div key={h} className={`cy-cal-hour-label ${getTimeBlockClass(h)}-label`}>{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
+                          <div key={h} className="cy-cal-hour-label">{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
                         ))}
                       </div>
                       {weekDays.map(wd => (
@@ -3906,7 +3907,7 @@ export default function CyberLog() {
                           }}
                         >
                           {HOURS.map(h => (
-                            <div key={h} className={`cy-cal-hour-slot ${getTimeBlockClass(h)}`}
+                            <div key={h} className="cy-cal-hour-slot"
                               onClick={() => openEventForm(wd, `${String(h).padStart(2, "0")}:00`)}
                             />
                           ))}
@@ -3914,9 +3915,10 @@ export default function CyberLog() {
                             const top = calTimeToY(ev.startTime);
                             const bottom = calTimeToY(ev.endTime);
                             const height = Math.max(20, bottom - top);
+                            const tbc = getTimeBlockColor(ev.startTime);
                             return (
                               <div key={ev.id} className="cy-cal-event-block"
-                                style={{ top, height, background: ev.color + "30", borderLeft: `3px solid ${ev.color}`, color: ev.color }}
+                                style={{ top, height, background: tbc + "30", borderLeft: `3px solid ${tbc}`, color: tbc }}
                                 draggable
                                 onDragStart={() => setDragEventId(ev.id)}
                                 onDragEnd={() => setDragEventId(null)}
@@ -3971,12 +3973,12 @@ export default function CyberLog() {
                     >
                       <div className="cy-cal-time-gutter">
                         {HOURS.map(h => (
-                          <div key={h} className={`cy-cal-hour-label ${getTimeBlockClass(h)}-label`}>{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
+                          <div key={h} className="cy-cal-hour-label">{h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}</div>
                         ))}
                       </div>
                       <div className="cy-cal-day-col cy-cal-day-col-single">
                         {HOURS.map(h => (
-                          <div key={h} className={`cy-cal-hour-slot ${getTimeBlockClass(h)}`}
+                          <div key={h} className="cy-cal-hour-slot"
                             onClick={() => openEventForm(selectedDate, `${String(h).padStart(2, "0")}:00`)}
                           />
                         ))}
@@ -3984,9 +3986,10 @@ export default function CyberLog() {
                           const top = calTimeToY(ev.startTime);
                           const bottom = calTimeToY(ev.endTime);
                           const height = Math.max(30, bottom - top);
+                          const tbc = getTimeBlockColor(ev.startTime);
                           return (
                             <div key={ev.id} className="cy-cal-event-block cy-cal-event-block-daily"
-                              style={{ top, height, background: ev.color + "25", borderLeft: `4px solid ${ev.color}`, color: ev.color }}
+                              style={{ top, height, background: tbc + "25", borderLeft: `4px solid ${tbc}`, color: tbc }}
                               draggable
                               onDragStart={() => setDragEventId(ev.id)}
                               onDragEnd={() => setDragEventId(null)}

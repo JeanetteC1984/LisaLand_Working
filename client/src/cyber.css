@@ -3195,39 +3195,11 @@
 .cy-cal-day-col-single { min-width: 200px; }
 .cy-cal-hour-slot {
   height: 60px;
-  border-top: 1px solid rgba(224,64,251,0.08);
+  border-top: 1px solid rgba(224,64,251,0.06);
   cursor: pointer;
-  transition: background 0.15s, filter 0.15s;
+  transition: background 0.15s;
 }
-.cy-cal-hour-slot:hover { filter: brightness(1.3); }
-
-.cy-cal-hour-slot.time-block-dawn { background: rgba(124,77,255,0.10); border-left: 3px solid rgba(124,77,255,0.35); }
-.cy-cal-hour-slot.time-block-morning { background: rgba(255,171,64,0.10); border-left: 3px solid rgba(255,171,64,0.35); }
-.cy-cal-hour-slot.time-block-midday { background: rgba(255,64,129,0.10); border-left: 3px solid rgba(255,64,129,0.35); }
-.cy-cal-hour-slot.time-block-afternoon { background: rgba(0,229,255,0.10); border-left: 3px solid rgba(0,229,255,0.35); }
-.cy-cal-hour-slot.time-block-evening { background: rgba(224,64,251,0.10); border-left: 3px solid rgba(224,64,251,0.35); }
-.cy-cal-hour-slot.time-block-night { background: rgba(101,31,255,0.10); border-left: 3px solid rgba(101,31,255,0.35); }
-
-.cy-cal-hour-label.time-block-dawn-label { color: #b388ff; }
-.cy-cal-hour-label.time-block-morning-label { color: #ffab40; }
-.cy-cal-hour-label.time-block-midday-label { color: #ff4081; }
-.cy-cal-hour-label.time-block-afternoon-label { color: #00e5ff; }
-.cy-cal-hour-label.time-block-evening-label { color: #e040fb; }
-.cy-cal-hour-label.time-block-night-label { color: #7c4dff; }
-
-[data-cyber-theme^="lt-"] .cy-cal-hour-slot.time-block-dawn { background: rgba(124,77,255,0.08); border-left-color: rgba(124,77,255,0.25); }
-[data-cyber-theme^="lt-"] .cy-cal-hour-slot.time-block-morning { background: rgba(255,152,0,0.08); border-left-color: rgba(255,152,0,0.25); }
-[data-cyber-theme^="lt-"] .cy-cal-hour-slot.time-block-midday { background: rgba(233,30,99,0.08); border-left-color: rgba(233,30,99,0.25); }
-[data-cyber-theme^="lt-"] .cy-cal-hour-slot.time-block-afternoon { background: rgba(0,188,212,0.08); border-left-color: rgba(0,188,212,0.25); }
-[data-cyber-theme^="lt-"] .cy-cal-hour-slot.time-block-evening { background: rgba(156,39,176,0.08); border-left-color: rgba(156,39,176,0.25); }
-[data-cyber-theme^="lt-"] .cy-cal-hour-slot.time-block-night { background: rgba(63,81,181,0.08); border-left-color: rgba(63,81,181,0.25); }
-
-[data-cyber-theme^="lt-"] .cy-cal-hour-label.time-block-dawn-label { color: #7c4dff; }
-[data-cyber-theme^="lt-"] .cy-cal-hour-label.time-block-morning-label { color: #e65100; }
-[data-cyber-theme^="lt-"] .cy-cal-hour-label.time-block-midday-label { color: #c2185b; }
-[data-cyber-theme^="lt-"] .cy-cal-hour-label.time-block-afternoon-label { color: #00838f; }
-[data-cyber-theme^="lt-"] .cy-cal-hour-label.time-block-evening-label { color: #7b1fa2; }
-[data-cyber-theme^="lt-"] .cy-cal-hour-label.time-block-night-label { color: #283593; }
+.cy-cal-hour-slot:hover { background: rgba(224,64,251,0.06); }
 .cy-cal-event-block {
   position: absolute;
   left: 4px; right: 4px;
