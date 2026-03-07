@@ -1402,8 +1402,9 @@ export default function CyberLog() {
           const mark = document.createElement("span");
           mark.setAttribute("data-highlight", "true");
           mark.style.backgroundColor = value || "#7c4dff";
+          mark.style.color = "#111";
           mark.style.borderRadius = "2px";
-          mark.style.padding = "0 1px";
+          mark.style.padding = "0 2px";
           try {
             range.surroundContents(mark);
           } catch {
