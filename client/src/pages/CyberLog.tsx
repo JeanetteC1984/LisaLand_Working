@@ -1390,6 +1390,35 @@ export default function CyberLog() {
 
   const formatDoc = (cmd: string, value?: string) => {
     restoreSelection();
+    if (cmd === "hiliteColor") {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+        const range = sel.getRangeAt(0);
+        const existingMark = range.commonAncestorContainer.parentElement?.closest("mark");
+        if (existingMark && sel.toString() === existingMark.textContent) {
+          existingMark.style.backgroundColor = value || "#7c4dff";
+        } else {
+          const mark = document.createElement("mark");
+          mark.style.backgroundColor = value || "#7c4dff";
+          mark.style.color = "inherit";
+          mark.style.borderRadius = "2px";
+          mark.style.padding = "0 1px";
+          try {
+            range.surroundContents(mark);
+          } catch {
+            const frag = range.extractContents();
+            mark.appendChild(frag);
+            range.insertNode(mark);
+          }
+          sel.removeAllRanges();
+          const newRange = document.createRange();
+          newRange.selectNodeContents(mark);
+          sel.addRange(newRange);
+        }
+      }
+      editorRef.current?.focus();
+      return;
+    }
     document.execCommand(cmd, false, value ?? undefined);
     editorRef.current?.focus();
   };
