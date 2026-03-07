@@ -4270,6 +4270,20 @@
   background: color-mix(in srgb, var(--cy-primary) 8%, transparent);
 }
 
+/* Theme-adaptive Sticky Notes & Note Buttons */
+.sn-primary   { background: var(--cy-primary) !important; color: var(--cy-text-main) !important; }
+.sn-secondary { background: var(--cy-secondary) !important; color: var(--cy-text-main) !important; }
+.sn-accent    { background: var(--cy-accent) !important; color: var(--cy-bg-app) !important; }
+.sn-warm      { background: var(--cy-warm) !important; color: var(--cy-text-main) !important; }
+.sn-soft      { background: color-mix(in srgb, var(--cy-primary) 70%, #fff) !important; color: var(--cy-bg-app) !important; }
+.sn-bright    { background: color-mix(in srgb, var(--cy-accent) 80%, #fff) !important; color: var(--cy-bg-app) !important; }
+.sn-deep      { background: color-mix(in srgb, var(--cy-secondary) 80%, #000) !important; color: var(--cy-text-main) !important; }
+.sn-pop       { background: color-mix(in srgb, var(--cy-warm) 80%, #000) !important; color: var(--cy-text-main) !important; }
+.sn-vivid     { background: color-mix(in srgb, var(--cy-primary) 60%, var(--cy-warm)) !important; color: var(--cy-text-main) !important; }
+.sn-muted     { background: color-mix(in srgb, var(--cy-accent) 60%, var(--cy-bg-panel)) !important; color: var(--cy-text-main) !important; }
+.sn-dreamy    { background: color-mix(in srgb, var(--cy-secondary) 50%, var(--cy-primary)) !important; color: var(--cy-text-main) !important; }
+.sn-glow      { background: color-mix(in srgb, var(--cy-warm) 60%, var(--cy-primary)) !important; color: var(--cy-text-main) !important; }
+
 /* Notes Panel */
 .cy-notes-panel {
   background: var(--cy-bg-card);

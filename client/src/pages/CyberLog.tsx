@@ -556,19 +556,19 @@ const STICKER_CATEGORIES = {
   ],
 };
 
-const NOTE_COLORS = [
-  { type: "note-pink",    label: "Pink",     bg: "#d81b60", fg: "#ffe0f0" },
-  { type: "note-lilac",   label: "Lilac",    bg: "#7c4dff", fg: "#ece0ff" },
-  { type: "note-mint",    label: "Mint",     bg: "#00897b", fg: "#d0fff0" },
-  { type: "note-peach",   label: "Peach",    bg: "#e65100", fg: "#fff3e0" },
-  { type: "note-gold",    label: "Gold",     bg: "#f9a825", fg: "#3e2723" },
-  { type: "note-sky",     label: "Sky",      bg: "#0288d1", fg: "#e1f5fe" },
-  { type: "note-rose",    label: "Rose",     bg: "#ad1457", fg: "#fce4ec" },
-  { type: "note-neon",    label: "Neon",     bg: "#1b5e20", fg: "#b9f6ca" },
-  { type: "note-coral",   label: "Coral",    bg: "#e65100", fg: "#fbe9e7" },
-  { type: "note-sage",    label: "Sage",     bg: "#2e7d32", fg: "#e8f5e9" },
-  { type: "note-lavender",label: "Lavender", bg: "#5e35b1", fg: "#ede7f6" },
-  { type: "note-sunset",  label: "Sunset",   bg: "#bf360c", fg: "#fff3e0" },
+const NOTE_STYLES: { type: string; label: string; cls: string }[] = [
+  { type: "note-pink",    label: "Primary",   cls: "sn-primary" },
+  { type: "note-lilac",   label: "Secondary", cls: "sn-secondary" },
+  { type: "note-mint",    label: "Accent",    cls: "sn-accent" },
+  { type: "note-peach",   label: "Warm",      cls: "sn-warm" },
+  { type: "note-gold",    label: "Soft",      cls: "sn-soft" },
+  { type: "note-sky",     label: "Bright",    cls: "sn-bright" },
+  { type: "note-rose",    label: "Deep",      cls: "sn-deep" },
+  { type: "note-neon",    label: "Pop",       cls: "sn-pop" },
+  { type: "note-coral",   label: "Vivid",     cls: "sn-vivid" },
+  { type: "note-sage",    label: "Muted",     cls: "sn-muted" },
+  { type: "note-lavender",label: "Dreamy",    cls: "sn-dreamy" },
+  { type: "note-sunset",  label: "Glow",      cls: "sn-glow" },
 ];
 
 const AFFIRMATION_CMDS: Record<string, { response: string; cls?: string }> = {
@@ -605,13 +605,13 @@ function getStickerContent(type: string): string {
     case "icon-moon":
       return `<i class="fa-solid fa-moon" style="font-size:3rem; color:#b388ff; text-shadow: 0 0 14px rgba(179,136,255,0.5);"></i>`;
     case "note-pink":
-      return `<div class="sticky-note" style="background:#d81b60;color:#ffe0f0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-primary"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-lilac":
-      return `<div class="sticky-note" style="background:#7c4dff;color:#ece0ff;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-secondary"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-mint":
-      return `<div class="sticky-note" style="background:#00897b;color:#d0fff0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-accent"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-peach":
-      return `<div class="sticky-note" style="background:#e65100;color:#fff3e0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-warm"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "svg-butterfly":
       return `<svg width="80" height="60" viewBox="0 0 80 60"><ellipse cx="28" cy="22" rx="20" ry="16" fill="rgba(224,64,251,0.3)" stroke="#e040fb" stroke-width="2"/><ellipse cx="52" cy="22" rx="20" ry="16" fill="rgba(124,77,255,0.3)" stroke="#7c4dff" stroke-width="2"/><ellipse cx="30" cy="42" rx="16" ry="12" fill="rgba(255,64,129,0.25)" stroke="#ff4081" stroke-width="1.5"/><ellipse cx="50" cy="42" rx="16" ry="12" fill="rgba(0,229,255,0.25)" stroke="#00e5ff" stroke-width="1.5"/><line x1="40" y1="8" x2="40" y2="56" stroke="#e040fb" stroke-width="2.5"/><circle cx="36" cy="6" r="2" fill="#ffd740"/><circle cx="44" cy="6" r="2" fill="#ffd740"/></svg>`;
     case "svg-rainbow":
@@ -645,13 +645,13 @@ function getStickerContent(type: string): string {
     case "icon-bolt":
       return `<i class="fa-solid fa-bolt" style="font-size:3rem; color:#ffd740; text-shadow: 0 0 14px rgba(255,215,64,0.5);"></i>`;
     case "note-gold":
-      return `<div class="sticky-note" style="background:#f9a825;color:#3e2723;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-soft"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-sky":
-      return `<div class="sticky-note" style="background:#0288d1;color:#e1f5fe;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-bright"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-rose":
-      return `<div class="sticky-note" style="background:#ad1457;color:#fce4ec;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-deep"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-neon":
-      return `<div class="sticky-note" style="background:#1b5e20;color:#b9f6ca;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-pop"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "stamp-dreamer":
       return `<div class="stamp-secret" style="border-color:#00e5ff;color:#00e5ff;">DREAMER</div>`;
     case "stamp-iconic":
@@ -741,13 +741,13 @@ function getStickerContent(type: string): string {
     case "icon-compass":
       return `<i class="fa-solid fa-compass" style="font-size:3rem; color:#81d4fa; text-shadow: 0 0 14px rgba(129,212,250,0.5);"></i>`;
     case "note-coral":
-      return `<div class="sticky-note" style="background:#e65100;color:#fbe9e7;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-vivid"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-sage":
-      return `<div class="sticky-note" style="background:#2e7d32;color:#e8f5e9;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-muted"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-lavender":
-      return `<div class="sticky-note" style="background:#5e35b1;color:#ede7f6;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-dreamy"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "note-sunset":
-      return `<div class="sticky-note" style="background:#bf360c;color:#fff3e0;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
+      return `<div class="sticky-note sn-glow"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><div contenteditable="true" class="cy-note-body">My thoughts...</div></div>`;
     case "div-sparkle":
       return `<div style="text-align:center;padding:8px 0;letter-spacing:8px;font-size:14px;opacity:0.7;">✨ ✨ ✨ ✨ ✨ ✨ ✨ ✨</div>`;
     case "div-hearts":
@@ -1000,6 +1000,7 @@ export default function CyberLog() {
   const [canvasMode, setCanvasMode] = useState("canvas-default");
   const [stickersByFile, setStickersByFile] = useState<Record<string, Sticker[]>>({});
   const [mindMapStickers, setMindMapStickers] = useState<Sticker[]>([]);
+  const [calendarStickers, setCalendarStickers] = useState<Sticker[]>([]);
   const [assetOpen, setAssetOpen] = useState(false);
   const [assetTab, setAssetTab] = useState<keyof typeof STICKER_CATEGORIES>("Vibes");
   const [notesPanelOpen, setNotesPanelOpen] = useState(false);
@@ -1161,6 +1162,7 @@ export default function CyberLog() {
         if (d.habitDays) setHabitDays(d.habitDays);
         if (d.mindMapNodes) setMindMapNodes(d.mindMapNodes);
         if (d.mindMapStickers) setMindMapStickers(d.mindMapStickers);
+        if (d.calendarStickers) setCalendarStickers(d.calendarStickers);
         if (d.stickersByFile) setStickersByFile(d.stickersByFile);
         if (d.customHabits) setCustomHabits(d.customHabits);
         if (d.visionImages) {
@@ -1195,25 +1197,25 @@ export default function CyberLog() {
     const timeout = setTimeout(() => {
       try {
         localStorage.setItem("dreamlog-data", JSON.stringify({
-          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems,
+          theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, calendarStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems,
         }));
       } catch {}
     }, 500);
     return () => clearTimeout(timeout);
-  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems]);
+  }, [theme, files, goals, identity, profilePic, moodEntries, calendarEvents, habitDays, mindMapNodes, visionImages, customHabits, paperPattern, canvasMode, crtEnabled, mindMapStickers, calendarStickers, stickersByFile, editorFontSize, accentColor, borderStyle, cursorGlow, budgetItems]);
 
   const editorRef = useRef<HTMLDivElement>(null);
   const termOutputRef = useRef<HTMLDivElement>(null);
 
   const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
-  const initDrag = useCallback((el: HTMLDivElement, stickerId: string, isMindMap = false, fileId?: string) => {
+  const initDrag = useCallback((el: HTMLDivElement, stickerId: string, target: "journal" | "mindmap" | "calendar" = "journal", fileId?: string) => {
     let ox = 0, oy = 0, sx = 0, sy = 0;
     const onDown = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.classList.contains("cy-sticker-delete") || target.classList.contains("cy-sticker-resize")) return;
-      if (target.getAttribute("contenteditable") === "true" || target.closest("[contenteditable='true']")) {
-        if (!target.classList.contains("cy-note-drag-handle") && !target.closest(".cy-note-drag-handle")) return;
+      const t = e.target as HTMLElement;
+      if (t.classList.contains("cy-sticker-delete") || t.classList.contains("cy-sticker-resize")) return;
+      if (t.getAttribute("contenteditable") === "true" || t.closest("[contenteditable='true']")) {
+        if (!t.classList.contains("cy-note-drag-handle") && !t.closest(".cy-note-drag-handle")) return;
       }
       e.preventDefault();
       sx = e.clientX; sy = e.clientY;
@@ -1233,8 +1235,10 @@ export default function CyberLog() {
       document.removeEventListener("mouseup", onUp);
       const nx = parseInt(el.style.left) || 0;
       const ny = parseInt(el.style.top) || 0;
-      if (isMindMap) {
+      if (target === "mindmap") {
         setMindMapStickers(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
+      } else if (target === "calendar") {
+        setCalendarStickers(prev => prev.map(s => s.id === stickerId ? { ...s, x: nx, y: ny } : s));
       } else if (fileId) {
         setStickersByFile(prev => ({
           ...prev,
@@ -1254,7 +1258,7 @@ export default function CyberLog() {
     }));
   };
 
-  const addSticker = (type: string, target: "journal" | "mindmap" = "journal") => {
+  const addSticker = (type: string, target: "journal" | "mindmap" | "calendar" = "journal") => {
     const id = Math.random().toString(36).slice(2);
     const rx = Math.floor(Math.random() * 200) + 60;
     const ry = Math.floor(Math.random() * 200) + 100;
@@ -1262,6 +1266,8 @@ export default function CyberLog() {
     const newSticker = { id, type, x: rx, y: ry, rotation: rot, scale: 1 };
     if (target === "mindmap") {
       setMindMapStickers(s => [...s, newSticker]);
+    } else if (target === "calendar") {
+      setCalendarStickers(s => [...s, newSticker]);
     } else {
       setStickers(s => [...s, newSticker]);
     }
@@ -1269,10 +1275,13 @@ export default function CyberLog() {
 
   const removeSticker = (id: string) => setStickers(s => s.filter(st => st.id !== id));
   const removeMindMapSticker = (id: string) => setMindMapStickers(s => s.filter(st => st.id !== id));
+  const removeCalendarSticker = (id: string) => setCalendarStickers(s => s.filter(st => st.id !== id));
 
-  const resizeSticker = (id: string, delta: number, target: "journal" | "mindmap" = "journal") => {
+  const resizeSticker = (id: string, delta: number, target: "journal" | "mindmap" | "calendar" = "journal") => {
     if (target === "mindmap") {
       setMindMapStickers(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
+    } else if (target === "calendar") {
+      setCalendarStickers(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
     } else {
       setStickers(prev => prev.map(s => s.id === id ? { ...s, scale: Math.max(0.3, Math.min(3, (s.scale || 1) + delta)) } : s));
     }
@@ -1283,7 +1292,7 @@ export default function CyberLog() {
       const el = document.getElementById(`sticker-${st.id}`) as HTMLDivElement | null;
       if (el && !el.dataset.dragging) {
         el.dataset.dragging = "1";
-        initDrag(el, st.id, false, activeFileId);
+        initDrag(el, st.id, "journal", activeFileId);
       }
     });
   }, [stickers, initDrag, activeFileId]);
@@ -1293,10 +1302,20 @@ export default function CyberLog() {
       const el = document.getElementById(`mmsticker-${st.id}`) as HTMLDivElement | null;
       if (el && !el.dataset.dragging) {
         el.dataset.dragging = "1";
-        initDrag(el, st.id, true);
+        initDrag(el, st.id, "mindmap");
       }
     });
   }, [mindMapStickers, initDrag]);
+
+  useEffect(() => {
+    calendarStickers.forEach(st => {
+      const el = document.getElementById(`calsticker-${st.id}`) as HTMLDivElement | null;
+      if (el && !el.dataset.dragging) {
+        el.dataset.dragging = "1";
+        initDrag(el, st.id, "calendar");
+      }
+    });
+  }, [calendarStickers, initDrag]);
 
   useEffect(() => {
     if (!cursorGlow) {
@@ -2826,8 +2845,8 @@ export default function CyberLog() {
               <div className="cy-notes-panel" data-testid="notes-panel">
                 <div className="cy-notes-panel-title">Add a Note</div>
                 <div className="cy-notes-color-grid">
-                  {NOTE_COLORS.map(n => (
-                    <button key={n.type} className="cy-note-color-btn" style={{ background: n.bg, color: n.fg }}
+                  {NOTE_STYLES.map(n => (
+                    <button key={n.type} className={`cy-note-color-btn ${n.cls}`}
                       onClick={() => { addSticker(n.type); setNotesPanelOpen(false); }}
                       data-testid={`note-btn-${n.type}`}
                     >{n.label}</button>
@@ -2845,7 +2864,8 @@ export default function CyberLog() {
                       const f = e.target.files?.[0];
                       if (!f) return;
                       const reader = new FileReader();
-                      reader.onload = () => { addSticker("note-image-" + reader.result); setNotesPanelOpen(false); };
+                      const tgt: "journal" | "mindmap" | "calendar" = section === "mindmap" ? "mindmap" : section === "calendar" ? "calendar" : "journal";
+                      reader.onload = () => { addSticker("note-image-" + reader.result, tgt); setNotesPanelOpen(false); };
                       reader.readAsDataURL(f);
                       e.target.value = "";
                     }}
@@ -2855,7 +2875,8 @@ export default function CyberLog() {
                       const f = e.target.files?.[0];
                       if (!f) return;
                       const reader = new FileReader();
-                      reader.onload = () => { addSticker("note-video-" + reader.result); setNotesPanelOpen(false); };
+                      const tgt: "journal" | "mindmap" | "calendar" = section === "mindmap" ? "mindmap" : section === "calendar" ? "calendar" : "journal";
+                      reader.onload = () => { addSticker("note-video-" + reader.result, tgt); setNotesPanelOpen(false); };
                       reader.readAsDataURL(f);
                       e.target.value = "";
                     }}
@@ -3516,8 +3537,8 @@ export default function CyberLog() {
               <div className="cy-notes-panel" data-testid="mindmap-notes-panel">
                 <div className="cy-notes-panel-title">Add a Note</div>
                 <div className="cy-notes-color-grid">
-                  {NOTE_COLORS.map(n => (
-                    <button key={n.type} className="cy-note-color-btn" style={{ background: n.bg, color: n.fg }}
+                  {NOTE_STYLES.map(n => (
+                    <button key={n.type} className={`cy-note-color-btn ${n.cls}`}
                       onClick={() => { addSticker(n.type, "mindmap"); setNotesPanelOpen(false); }}
                       data-testid={`mm-note-btn-${n.type}`}
                     >{n.label}</button>
@@ -3931,12 +3952,62 @@ export default function CyberLog() {
                   <div className="cy-page-title">Calendar</div>
                   <div className="cy-page-subtitle">Plan Your Dreams ~ Own Your Time</div>
                 </div>
-                <button className="cy-quick-add-btn" onClick={() => openEventForm()} data-testid="quick-add-event">
-                  <i className="fa-solid fa-plus" style={{ marginRight: 4 }} />New Event
-                </button>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  <button className="cy-quick-add-btn" onClick={() => openEventForm()} data-testid="quick-add-event">
+                    <i className="fa-solid fa-plus" style={{ marginRight: 4 }} />New Event
+                  </button>
+                  <button className="cy-asset-toggle" onClick={() => setAssetOpen(v => !v)} data-testid="btn-cal-stickers">
+                    <i className="fa-solid fa-palette" style={{ marginRight: 4 }} />Stickers
+                  </button>
+                  <button className="cy-asset-toggle" onClick={() => setNotesPanelOpen(v => !v)} data-testid="btn-cal-notes">
+                    <i className="fa-solid fa-note-sticky" style={{ marginRight: 4 }} />Notes
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="cy-page-body">
+            {notesPanelOpen && section === "calendar" && (
+              <div className="cy-notes-panel" data-testid="cal-notes-panel" style={{ margin: "0 16px 10px" }}>
+                <div className="cy-notes-panel-title">Add a Note</div>
+                <div className="cy-notes-color-grid">
+                  {NOTE_STYLES.map(n => (
+                    <button key={n.type} className={`cy-note-color-btn ${n.cls}`}
+                      onClick={() => { addSticker(n.type, "calendar"); setNotesPanelOpen(false); }}
+                      data-testid={`cal-note-btn-${n.type}`}
+                    >{n.label}</button>
+                  ))}
+                </div>
+                <div className="cy-notes-media-row">
+                  <button className="cy-quick-add-btn" onClick={() => noteImageRef.current?.click()} data-testid="cal-note-upload-image">
+                    <i className="fa-solid fa-image" style={{ marginRight: 4 }} />Image Note
+                  </button>
+                  <button className="cy-quick-add-btn" onClick={() => noteVideoRef.current?.click()} data-testid="cal-note-upload-video">
+                    <i className="fa-solid fa-video" style={{ marginRight: 4 }} />Video Note
+                  </button>
+                </div>
+              </div>
+            )}
+            <div className="cy-page-body" style={{ position: "relative" }}>
+              <div className="cy-sticker-layer">
+                {calendarStickers.map(st => (
+                  <div key={st.id} id={`calsticker-${st.id}`} className="cy-sticker"
+                    style={{ left: st.x, top: st.y, transform: `rotate(${st.rotation}deg) scale(${st.scale || 1})` }}
+                    data-testid={`calsticker-${st.id}`}
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: getStickerContent(st.type) }} />
+                    <div className="cy-sticker-controls">
+                      <button className="cy-sticker-resize" onClick={() => resizeSticker(st.id, 0.15, "calendar")} title="Bigger">
+                        <i className="fa-solid fa-plus" />
+                      </button>
+                      <button className="cy-sticker-resize" onClick={() => resizeSticker(st.id, -0.15, "calendar")} title="Smaller">
+                        <i className="fa-solid fa-minus" />
+                      </button>
+                      <button className="cy-sticker-delete" onClick={() => removeCalendarSticker(st.id)} title="Remove">
+                        <i className="fa-solid fa-xmark" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="cy-cal-controls">
                 <div className="cy-cal-nav">
                   <button className="cy-cal-nav-btn" onClick={() => calNavigate(-1)} data-testid="cal-prev"><i className="fa-solid fa-chevron-left" /></button>
@@ -4807,6 +4878,7 @@ export default function CyberLog() {
             <div key={s.type} className="cy-tag"
               onClick={() => {
                 if (section === "mindmap") { addSticker(s.type, "mindmap"); }
+                else if (section === "calendar") { addSticker(s.type, "calendar"); }
                 else { addSticker(s.type); if (section !== "journal") setSection("journal"); }
               }}
               data-testid={`sticker-btn-${s.type}`}
