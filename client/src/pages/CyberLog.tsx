@@ -1394,13 +1394,14 @@ export default function CyberLog() {
       const sel = window.getSelection();
       if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
         const range = sel.getRangeAt(0);
-        const existingMark = range.commonAncestorContainer.parentElement?.closest("mark");
+        const parent = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer as HTMLElement;
+        const existingMark = parent?.closest?.("[data-highlight]") || (parent?.hasAttribute?.("data-highlight") ? parent : null);
         if (existingMark && sel.toString() === existingMark.textContent) {
           existingMark.style.backgroundColor = value || "#7c4dff";
         } else {
-          const mark = document.createElement("mark");
+          const mark = document.createElement("span");
+          mark.setAttribute("data-highlight", "true");
           mark.style.backgroundColor = value || "#7c4dff";
-          mark.style.color = "inherit";
           mark.style.borderRadius = "2px";
           mark.style.padding = "0 1px";
           try {
