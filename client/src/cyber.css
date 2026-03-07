@@ -3654,17 +3654,6 @@
   padding: 18px;
   margin-bottom: 20px;
 }
-.cy-dash-stats-card-header {
-  font-family: var(--cy-font-header);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--cy-primary);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-}
 .cy-dash-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

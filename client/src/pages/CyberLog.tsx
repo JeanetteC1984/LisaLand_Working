@@ -2474,9 +2474,6 @@ export default function CyberLog() {
                 </div>
 
                 <div className="cy-dash-stats-card" data-testid="dash-stats">
-                  <div className="cy-dash-stats-card-header">
-                    <i className="fa-solid fa-chart-simple" style={{ marginRight: 8 }} />Quick Stats
-                  </div>
                   <div className="cy-dash-stats-grid">
                     <div className="cy-dash-stat-card" onClick={() => setSection("journal")} data-testid="dash-stat-journal">
                       <div className="cy-dash-stat-icon" style={{ background: "rgba(224,64,251,0.15)", color: "#e040fb" }}>
