@@ -1042,6 +1042,8 @@ export default function CyberLog() {
   const [glitching, setGlitching] = useState(false);
   const [crtEnabled, setCrtEnabled] = useState(true);
   const [fontChoice, setFontChoice] = useState("Nunito");
+  const [textColorChoice, setTextColorChoice] = useState("#f0e0ff");
+  const [highlightColorChoice, setHighlightColorChoice] = useState("#7c4dff");
   const [editorFontSize, setEditorFontSize] = useState(16);
   const [accentColor, setAccentColor] = useState("");
   const [borderStyle, setBorderStyle] = useState("default");
@@ -2554,6 +2556,52 @@ export default function CyberLog() {
                 <option value="Montserrat">Montserrat</option>
                 <option value="Lora">Lora</option>
               </select>
+
+              <select className="cy-tool-select" style={{ width: 90 }}
+                onChange={e => {
+                  const v = e.target.value;
+                  if (v === "p") { formatDoc("formatBlock", "p"); }
+                  else { formatDoc("formatBlock", v); }
+                }}
+                defaultValue="p" data-testid="select-heading"
+              >
+                <option value="p">Normal</option>
+                <option value="h1">Title</option>
+                <option value="h2">Heading</option>
+                <option value="h3">Subheading</option>
+              </select>
+
+              <select className="cy-tool-select" style={{ width: 60 }}
+                onChange={e => { formatDoc("fontSize", e.target.value); }}
+                defaultValue="3" data-testid="select-fontsize"
+              >
+                <option value="1">8</option>
+                <option value="2">10</option>
+                <option value="3">12</option>
+                <option value="4">14</option>
+                <option value="5">18</option>
+                <option value="6">24</option>
+                <option value="7">32</option>
+              </select>
+
+              <div className="cy-tool-group cy-tool-color-group">
+                <label className="cy-tool-btn cy-tool-color-wrap" title="Text Color" data-testid="btn-text-color">
+                  <i className="fa-solid fa-font" />
+                  <span className="cy-tool-color-bar" style={{ background: textColorChoice }} />
+                  <input type="color" value={textColorChoice}
+                    onChange={e => { setTextColorChoice(e.target.value); formatDoc("foreColor", e.target.value); }}
+                    data-testid="input-text-color"
+                  />
+                </label>
+                <label className="cy-tool-btn cy-tool-color-wrap" title="Highlight Color" data-testid="btn-highlight-color">
+                  <i className="fa-solid fa-highlighter" />
+                  <span className="cy-tool-color-bar" style={{ background: highlightColorChoice }} />
+                  <input type="color" value={highlightColorChoice}
+                    onChange={e => { setHighlightColorChoice(e.target.value); formatDoc("hiliteColor", e.target.value); }}
+                    data-testid="input-highlight-color"
+                  />
+                </label>
+              </div>
 
               <div className="cy-tool-group">
                 {[
