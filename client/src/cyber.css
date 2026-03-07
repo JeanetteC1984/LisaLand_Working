@@ -2770,6 +2770,10 @@
 [data-cyber-theme^="lt-"] .cy-mood-card,
 [data-cyber-theme^="lt-"] .cy-habit-card,
 [data-cyber-theme^="lt-"] .cy-dash-card,
+[data-cyber-theme^="lt-"] .cy-dash-stats-card {
+  background: color-mix(in srgb, var(--cy-bg-panel) 80%, white);
+  border-color: color-mix(in srgb, var(--cy-primary) 15%, transparent);
+}
 [data-cyber-theme^="lt-"] .cy-dash-stat-card {
   background: color-mix(in srgb, var(--cy-surface, var(--cy-bg-panel)) 50%, white);
   border-color: color-mix(in srgb, var(--cy-primary) 12%, transparent);
@@ -3643,26 +3647,43 @@
   color: var(--cy-text-muted);
 }
 
-.cy-dash-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+.cy-dash-stats-card {
+  background: var(--cy-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cy-primary) 12%, transparent);
+  border-radius: 16px;
+  padding: 18px;
   margin-bottom: 20px;
 }
+.cy-dash-stats-card-header {
+  font-family: var(--cy-font-header);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cy-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+}
+.cy-dash-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 .cy-dash-stat-card {
-  background: rgba(224,64,251,0.03);
-  border: 1px solid rgba(224,64,251,0.08);
+  background: color-mix(in srgb, var(--cy-primary) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cy-primary) 8%, transparent);
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px 10px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
 }
 .cy-dash-stat-card:hover {
-  background: rgba(224,64,251,0.08);
-  border-color: rgba(224,64,251,0.2);
+  background: color-mix(in srgb, var(--cy-primary) 10%, transparent);
+  border-color: color-mix(in srgb, var(--cy-primary) 20%, transparent);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(224,64,251,0.1);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--cy-primary) 12%, transparent);
 }
 .cy-dash-stat-icon {
   width: 40px; height: 40px;

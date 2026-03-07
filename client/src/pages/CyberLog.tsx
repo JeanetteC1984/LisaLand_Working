@@ -2473,34 +2473,39 @@ export default function CyberLog() {
                   )}
                 </div>
 
-                <div className="cy-dash-stats" data-testid="dash-stats">
-                  <div className="cy-dash-stat-card" onClick={() => setSection("journal")} data-testid="dash-stat-journal">
-                    <div className="cy-dash-stat-icon" style={{ background: "rgba(224,64,251,0.15)", color: "#e040fb" }}>
-                      <i className="fa-solid fa-book-open" />
-                    </div>
-                    <div className="cy-dash-stat-value">{journalCount}</div>
-                    <div className="cy-dash-stat-label">Journal Entries</div>
+                <div className="cy-dash-stats-card" data-testid="dash-stats">
+                  <div className="cy-dash-stats-card-header">
+                    <i className="fa-solid fa-chart-simple" style={{ marginRight: 8 }} />Quick Stats
                   </div>
-                  <div className="cy-dash-stat-card" onClick={() => setSection("goals")} data-testid="dash-stat-goals">
-                    <div className="cy-dash-stat-icon" style={{ background: "rgba(105,240,174,0.15)", color: "#69f0ae" }}>
-                      <i className="fa-solid fa-bullseye" />
+                  <div className="cy-dash-stats-grid">
+                    <div className="cy-dash-stat-card" onClick={() => setSection("journal")} data-testid="dash-stat-journal">
+                      <div className="cy-dash-stat-icon" style={{ background: "rgba(224,64,251,0.15)", color: "#e040fb" }}>
+                        <i className="fa-solid fa-book-open" />
+                      </div>
+                      <div className="cy-dash-stat-value">{journalCount}</div>
+                      <div className="cy-dash-stat-label">Journal Entries</div>
                     </div>
-                    <div className="cy-dash-stat-value">{goalsDone}<span className="cy-dash-stat-sub">/{goals.length}</span></div>
-                    <div className="cy-dash-stat-label">Goals Complete</div>
-                  </div>
-                  <div className="cy-dash-stat-card" onClick={() => setSection("habits")} data-testid="dash-stat-habits">
-                    <div className="cy-dash-stat-icon" style={{ background: "rgba(0,229,255,0.15)", color: "#00e5ff" }}>
-                      <i className="fa-solid fa-fire" />
+                    <div className="cy-dash-stat-card" onClick={() => setSection("goals")} data-testid="dash-stat-goals">
+                      <div className="cy-dash-stat-icon" style={{ background: "rgba(105,240,174,0.15)", color: "#69f0ae" }}>
+                        <i className="fa-solid fa-bullseye" />
+                      </div>
+                      <div className="cy-dash-stat-value">{goalsDone}<span className="cy-dash-stat-sub">/{goals.length}</span></div>
+                      <div className="cy-dash-stat-label">Goals Complete</div>
                     </div>
-                    <div className="cy-dash-stat-value">{streakDays}</div>
-                    <div className="cy-dash-stat-label">Day Streak</div>
-                  </div>
-                  <div className="cy-dash-stat-card" onClick={() => setSection("mood")} data-testid="dash-stat-mood">
-                    <div className="cy-dash-stat-icon" style={{ background: "rgba(255,64,129,0.15)", color: "#ff4081" }}>
-                      <i className="fa-solid fa-face-smile" />
+                    <div className="cy-dash-stat-card" onClick={() => setSection("habits")} data-testid="dash-stat-habits">
+                      <div className="cy-dash-stat-icon" style={{ background: "rgba(0,229,255,0.15)", color: "#00e5ff" }}>
+                        <i className="fa-solid fa-fire" />
+                      </div>
+                      <div className="cy-dash-stat-value">{streakDays}</div>
+                      <div className="cy-dash-stat-label">Day Streak</div>
                     </div>
-                    <div className="cy-dash-stat-value">{moodToday ? moodEmojis[moodToday.mood - 1] : "—"}</div>
-                    <div className="cy-dash-stat-label">Today's Mood</div>
+                    <div className="cy-dash-stat-card" onClick={() => setSection("mood")} data-testid="dash-stat-mood">
+                      <div className="cy-dash-stat-icon" style={{ background: "rgba(255,64,129,0.15)", color: "#ff4081" }}>
+                        <i className="fa-solid fa-face-smile" />
+                      </div>
+                      <div className="cy-dash-stat-value">{moodToday ? moodEmojis[moodToday.mood - 1] : "—"}</div>
+                      <div className="cy-dash-stat-label">Today's Mood</div>
+                    </div>
                   </div>
                 </div>
 
