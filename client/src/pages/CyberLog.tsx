@@ -14,6 +14,7 @@ type CalendarEvent = {
   location: string;
   category: string;
   allDay: boolean;
+  image?: string;
 };
 
 type JournalFile = {
@@ -331,20 +332,11 @@ const STICKER_CATEGORIES = {
     { type: "emoji-cat",        label: "CAT" },
     { type: "emoji-galaxy",     label: "GALAXY" },
     { type: "emoji-lotus",      label: "LOTUS" },
-  ],
-  Notes: [
-    { type: "note-pink",    label: "NOTE (Pink)" },
-    { type: "note-lilac",   label: "NOTE (Lilac)" },
-    { type: "note-mint",    label: "NOTE (Mint)" },
-    { type: "note-peach",   label: "NOTE (Peach)" },
-    { type: "note-gold",    label: "NOTE (Gold)" },
-    { type: "note-sky",     label: "NOTE (Sky)" },
-    { type: "note-rose",    label: "NOTE (Rose)" },
-    { type: "note-neon",    label: "NOTE (Neon)" },
-    { type: "note-coral",   label: "NOTE (Coral)" },
-    { type: "note-sage",    label: "NOTE (Sage)" },
-    { type: "note-lavender",label: "NOTE (Lavender)" },
-    { type: "note-sunset",  label: "NOTE (Sunset)" },
+    { type: "emoji-alien",      label: "ALIEN" },
+    { type: "emoji-angel",      label: "ANGEL" },
+    { type: "emoji-witch",      label: "WITCH" },
+    { type: "emoji-dragon",     label: "DRAGON" },
+    { type: "emoji-magic-wand", label: "MAGIC WAND" },
   ],
   Art: [
     { type: "svg-butterfly", label: "BUTTERFLY" },
@@ -463,6 +455,11 @@ const STICKER_CATEGORIES = {
     { type: "emoji-bee",        label: "BEE" },
     { type: "emoji-snail",      label: "SNAIL" },
     { type: "emoji-hedgehog",   label: "HEDGEHOG" },
+    { type: "emoji-deer",       label: "DEER" },
+    { type: "emoji-duck",       label: "DUCK" },
+    { type: "emoji-parrot",     label: "PARROT" },
+    { type: "emoji-jellyfish",  label: "JELLYFISH" },
+    { type: "emoji-turtle",     label: "TURTLE" },
   ],
   Travel: [
     { type: "emoji-airplane",   label: "AIRPLANE" },
@@ -491,6 +488,21 @@ const STICKER_CATEGORIES = {
     { type: "emoji-fireworks",  label: "FIREWORKS" },
     { type: "emoji-disco",      label: "DISCO" },
     { type: "emoji-champagne",  label: "CHAMPAGNE" },
+    { type: "emoji-sparkler",   label: "SPARKLER" },
+    { type: "emoji-pinata",     label: "PIÑATA" },
+    { type: "emoji-ribbon2",    label: "RIBBON" },
+  ],
+  Seasonal: [
+    { type: "emoji-snowman",    label: "SNOWMAN" },
+    { type: "emoji-jack",       label: "JACK-O-LANTERN" },
+    { type: "emoji-ghost",      label: "GHOST" },
+    { type: "emoji-xmas-tree",  label: "XMAS TREE" },
+    { type: "emoji-santa",      label: "SANTA" },
+    { type: "emoji-candy-cane", label: "CANDY CANE" },
+    { type: "emoji-egg",        label: "EASTER EGG" },
+    { type: "emoji-four-leaf",  label: "FOUR LEAF" },
+    { type: "emoji-pumpkin",    label: "PUMPKIN" },
+    { type: "emoji-bat",        label: "BAT" },
   ],
   Hearts: [
     { type: "emoji-heart-red",     label: "RED HEART" },
@@ -543,6 +555,21 @@ const STICKER_CATEGORIES = {
     { type: "washi-floral",     label: "FLORAL TAPE" },
   ],
 };
+
+const NOTE_COLORS = [
+  { type: "note-pink",    label: "Pink",     bg: "#d81b60", fg: "#ffe0f0" },
+  { type: "note-lilac",   label: "Lilac",    bg: "#7c4dff", fg: "#ece0ff" },
+  { type: "note-mint",    label: "Mint",     bg: "#00897b", fg: "#d0fff0" },
+  { type: "note-peach",   label: "Peach",    bg: "#e65100", fg: "#fff3e0" },
+  { type: "note-gold",    label: "Gold",     bg: "#f9a825", fg: "#3e2723" },
+  { type: "note-sky",     label: "Sky",      bg: "#0288d1", fg: "#e1f5fe" },
+  { type: "note-rose",    label: "Rose",     bg: "#ad1457", fg: "#fce4ec" },
+  { type: "note-neon",    label: "Neon",     bg: "#1b5e20", fg: "#b9f6ca" },
+  { type: "note-coral",   label: "Coral",    bg: "#e65100", fg: "#fbe9e7" },
+  { type: "note-sage",    label: "Sage",     bg: "#2e7d32", fg: "#e8f5e9" },
+  { type: "note-lavender",label: "Lavender", bg: "#5e35b1", fg: "#ede7f6" },
+  { type: "note-sunset",  label: "Sunset",   bg: "#bf360c", fg: "#fff3e0" },
+];
 
 const AFFIRMATION_CMDS: Record<string, { response: string; cls?: string }> = {
   help:      { response: "Try: affirm, breathe, gratitude, goals, sparkle, love, clear" },
@@ -889,7 +916,32 @@ function getStickerContent(type: string): string {
     case "washi-dots": return `<div class="cy-washi" style="background:rgba(179,136,255,0.35);height:24px;width:160px;transform:rotate(1deg);font-size:8px;line-height:24px;text-align:center;letter-spacing:6px;">● ● ● ● ● ● ● ●</div>`;
     case "washi-stripes": return `<div class="cy-washi" style="background:repeating-linear-gradient(45deg,rgba(224,64,251,0.3),rgba(224,64,251,0.3) 4px,rgba(0,229,255,0.3) 4px,rgba(0,229,255,0.3) 8px);height:24px;width:160px;transform:rotate(-1deg);"></div>`;
     case "washi-floral": return `<div class="cy-washi" style="background:rgba(244,143,177,0.35);height:24px;width:160px;transform:rotate(2deg);font-size:12px;line-height:24px;text-align:center;letter-spacing:4px;">🌸🌷🌺🌸🌷🌺🌸</div>`;
+    case "emoji-alien": return `<span style="font-size:3.5rem;">👽</span>`;
+    case "emoji-angel": return `<span style="font-size:3.5rem;">👼</span>`;
+    case "emoji-witch": return `<span style="font-size:3.5rem;">🧙‍♀️</span>`;
+    case "emoji-dragon": return `<span style="font-size:3.5rem;">🐉</span>`;
+    case "emoji-magic-wand": return `<span style="font-size:3.5rem;">🪄</span>`;
+    case "emoji-deer": return `<span style="font-size:3.5rem;">🦌</span>`;
+    case "emoji-duck": return `<span style="font-size:3.5rem;">🦆</span>`;
+    case "emoji-parrot": return `<span style="font-size:3.5rem;">🦜</span>`;
+    case "emoji-jellyfish": return `<span style="font-size:3.5rem;">🪼</span>`;
+    case "emoji-turtle": return `<span style="font-size:3.5rem;">🐢</span>`;
+    case "emoji-sparkler": return `<span style="font-size:3.5rem;">🎇</span>`;
+    case "emoji-pinata": return `<span style="font-size:3.5rem;">🪅</span>`;
+    case "emoji-ribbon2": return `<span style="font-size:3.5rem;">🎀</span>`;
+    case "emoji-snowman": return `<span style="font-size:3.5rem;">⛄</span>`;
+    case "emoji-jack": return `<span style="font-size:3.5rem;">🎃</span>`;
+    case "emoji-ghost": return `<span style="font-size:3.5rem;">👻</span>`;
+    case "emoji-xmas-tree": return `<span style="font-size:3.5rem;">🎄</span>`;
+    case "emoji-santa": return `<span style="font-size:3.5rem;">🎅</span>`;
+    case "emoji-candy-cane": return `<span style="font-size:3.5rem;">🍬</span>`;
+    case "emoji-egg": return `<span style="font-size:3.5rem;">🥚</span>`;
+    case "emoji-four-leaf": return `<span style="font-size:3.5rem;">🍀</span>`;
+    case "emoji-pumpkin": return `<span style="font-size:3.5rem;">🎃</span>`;
+    case "emoji-bat": return `<span style="font-size:3.5rem;">🦇</span>`;
     default:
+      if (type.startsWith("note-image-")) return `<div class="sticky-note sticky-note-media" style="background:#1a0a2e;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><img src="${type.replace("note-image-","")}" class="cy-note-media" /></div>`;
+      if (type.startsWith("note-video-")) return `<div class="sticky-note sticky-note-media" style="background:#1a0a2e;"><div class="cy-note-drag-handle"><i class="fa-solid fa-grip"></i></div><video src="${type.replace("note-video-","")}" class="cy-note-media" controls /></div>`;
       return `<div style="color:var(--cy-primary);font-size:12px;">~</div>`;
   }
 }
@@ -950,6 +1002,10 @@ export default function CyberLog() {
   const [mindMapStickers, setMindMapStickers] = useState<Sticker[]>([]);
   const [assetOpen, setAssetOpen] = useState(false);
   const [assetTab, setAssetTab] = useState<keyof typeof STICKER_CATEGORIES>("Vibes");
+  const [notesPanelOpen, setNotesPanelOpen] = useState(false);
+  const noteImageRef = useRef<HTMLInputElement>(null);
+  const noteVideoRef = useRef<HTMLInputElement>(null);
+  const eventImageRef = useRef<HTMLInputElement>(null);
   const [goals, setGoals] = useState<Goal[]>(INITIAL_GOALS);
   const [showGoalForm, setShowGoalForm] = useState(false);
   const [goalForm, setGoalForm] = useState({ ...EMPTY_GOAL_FORM });
@@ -1058,7 +1114,7 @@ export default function CyberLog() {
   const [selectedDate, setSelectedDate] = useState(getToday());
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
-  const [eventForm, setEventForm] = useState({ title: "", date: getToday(), startTime: "09:00", endTime: "10:00", color: "#e040fb", description: "", location: "", category: "General", allDay: false });
+  const [eventForm, setEventForm] = useState({ title: "", date: getToday(), startTime: "09:00", endTime: "10:00", color: "#e040fb", description: "", location: "", category: "General", allDay: false, image: "" });
   const EVENT_COLORS = ["#e040fb","#ff4081","#7c4dff","#00e5ff","#69f0ae","#ffd740","#ffab40","#f48fb1","#b388ff","#64ffda","#ff6d00","#81d4fa"];
   const EVENT_CATEGORIES = ["General","Work","Personal","Health","Social","Creative","Learning","Finance"];
   const [moodNote, setMoodNote] = useState("");
@@ -1702,13 +1758,13 @@ export default function CyberLog() {
 
   const openEventForm = (date?: string, startTime?: string) => {
     setEditingEvent(null);
-    setEventForm({ title: "", date: date || selectedDate, startTime: startTime || "09:00", endTime: startTime ? `${String(Math.min(23, parseInt(startTime) + 1)).padStart(2, "0")}:00` : "10:00", color: "#e040fb", description: "", location: "", category: "General", allDay: false });
+    setEventForm({ title: "", date: date || selectedDate, startTime: startTime || "09:00", endTime: startTime ? `${String(Math.min(23, parseInt(startTime) + 1)).padStart(2, "0")}:00` : "10:00", color: "#e040fb", description: "", location: "", category: "General", allDay: false, image: "" });
     setShowEventForm(true);
   };
 
   const openEditEvent = (ev: CalendarEvent) => {
     setEditingEvent(ev);
-    setEventForm({ title: ev.title, date: ev.date, startTime: ev.startTime, endTime: ev.endTime, color: ev.color, description: ev.description, location: ev.location, category: ev.category, allDay: ev.allDay });
+    setEventForm({ title: ev.title, date: ev.date, startTime: ev.startTime, endTime: ev.endTime, color: ev.color, description: ev.description, location: ev.location, category: ev.category, allDay: ev.allDay, image: ev.image || "" });
     setShowEventForm(true);
   };
 
@@ -2761,7 +2817,52 @@ export default function CyberLog() {
               <button className="cy-asset-toggle" onClick={() => setAssetOpen(v => !v)} data-testid="btn-assets">
                 <i className="fa-solid fa-palette" /> STICKERS
               </button>
+              <button className="cy-asset-toggle" onClick={() => setNotesPanelOpen(v => !v)} data-testid="btn-notes" style={{ marginLeft: 6 }}>
+                <i className="fa-solid fa-note-sticky" /> NOTES
+              </button>
             </div>
+
+            {notesPanelOpen && (
+              <div className="cy-notes-panel" data-testid="notes-panel">
+                <div className="cy-notes-panel-title">Add a Note</div>
+                <div className="cy-notes-color-grid">
+                  {NOTE_COLORS.map(n => (
+                    <button key={n.type} className="cy-note-color-btn" style={{ background: n.bg, color: n.fg }}
+                      onClick={() => { addSticker(n.type); setNotesPanelOpen(false); }}
+                      data-testid={`note-btn-${n.type}`}
+                    >{n.label}</button>
+                  ))}
+                </div>
+                <div className="cy-notes-media-row">
+                  <button className="cy-quick-add-btn" onClick={() => noteImageRef.current?.click()} data-testid="note-upload-image">
+                    <i className="fa-solid fa-image" style={{ marginRight: 4 }} />Image Note
+                  </button>
+                  <button className="cy-quick-add-btn" onClick={() => noteVideoRef.current?.click()} data-testid="note-upload-video">
+                    <i className="fa-solid fa-video" style={{ marginRight: 4 }} />Video Note
+                  </button>
+                  <input type="file" accept="image/*" ref={noteImageRef} style={{ display: "none" }}
+                    onChange={e => {
+                      const f = e.target.files?.[0];
+                      if (!f) return;
+                      const reader = new FileReader();
+                      reader.onload = () => { addSticker("note-image-" + reader.result); setNotesPanelOpen(false); };
+                      reader.readAsDataURL(f);
+                      e.target.value = "";
+                    }}
+                  />
+                  <input type="file" accept="video/*" ref={noteVideoRef} style={{ display: "none" }}
+                    onChange={e => {
+                      const f = e.target.files?.[0];
+                      if (!f) return;
+                      const reader = new FileReader();
+                      reader.onload = () => { addSticker("note-video-" + reader.result); setNotesPanelOpen(false); };
+                      reader.readAsDataURL(f);
+                      e.target.value = "";
+                    }}
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="cy-editor-wrap" style={{ position: "relative" }}>
               <div className="cy-sticker-layer">
@@ -3389,6 +3490,9 @@ export default function CyberLog() {
                   <button className="cy-quick-add-btn" onClick={() => setAssetOpen(v => !v)} data-testid="btn-mindmap-stickers">
                     <i className="fa-solid fa-palette" style={{ marginRight: 4 }} />Stickers
                   </button>
+                  <button className="cy-quick-add-btn" onClick={() => setNotesPanelOpen(v => !v)} data-testid="btn-mindmap-notes">
+                    <i className="fa-solid fa-note-sticky" style={{ marginRight: 4 }} />Notes
+                  </button>
                   <button className="cy-quick-add-btn" onClick={clearMindMap} data-testid="btn-mindmap-clear"
                     style={{ borderColor: "rgba(255,64,129,0.3)", color: "#ff4081" }}
                   >
@@ -3408,6 +3512,49 @@ export default function CyberLog() {
                 </button>
               ))}
             </div>
+            {notesPanelOpen && section === "mindmap" && (
+              <div className="cy-notes-panel" data-testid="mindmap-notes-panel">
+                <div className="cy-notes-panel-title">Add a Note</div>
+                <div className="cy-notes-color-grid">
+                  {NOTE_COLORS.map(n => (
+                    <button key={n.type} className="cy-note-color-btn" style={{ background: n.bg, color: n.fg }}
+                      onClick={() => { addSticker(n.type, "mindmap"); setNotesPanelOpen(false); }}
+                      data-testid={`mm-note-btn-${n.type}`}
+                    >{n.label}</button>
+                  ))}
+                </div>
+                <div className="cy-notes-media-row">
+                  <button className="cy-quick-add-btn" onClick={() => noteImageRef.current?.click()} data-testid="mm-note-upload-image">
+                    <i className="fa-solid fa-image" style={{ marginRight: 4 }} />Image Note
+                  </button>
+                  <button className="cy-quick-add-btn" onClick={() => noteVideoRef.current?.click()} data-testid="mm-note-upload-video">
+                    <i className="fa-solid fa-video" style={{ marginRight: 4 }} />Video Note
+                  </button>
+                  <input type="file" accept="image/*" style={{ display: "none" }}
+                    ref={el => { if (el && section === "mindmap") (noteImageRef as any).current = el; }}
+                    onChange={e => {
+                      const f = e.target.files?.[0];
+                      if (!f) return;
+                      const reader = new FileReader();
+                      reader.onload = () => { addSticker("note-image-" + reader.result, "mindmap"); setNotesPanelOpen(false); };
+                      reader.readAsDataURL(f);
+                      e.target.value = "";
+                    }}
+                  />
+                  <input type="file" accept="video/*" style={{ display: "none" }}
+                    ref={el => { if (el && section === "mindmap") (noteVideoRef as any).current = el; }}
+                    onChange={e => {
+                      const f = e.target.files?.[0];
+                      if (!f) return;
+                      const reader = new FileReader();
+                      reader.onload = () => { addSticker("note-video-" + reader.result, "mindmap"); setNotesPanelOpen(false); };
+                      reader.readAsDataURL(f);
+                      e.target.value = "";
+                    }}
+                  />
+                </div>
+              </div>
+            )}
             <div className="cy-mindmap-container" ref={mindMapRef} data-testid="mindmap-canvas"
               onClick={(e) => { if ((e.target as HTMLElement).classList.contains("cy-mindmap-container")) setSelectedNode(null); }}
             >
@@ -3917,14 +4064,15 @@ export default function CyberLog() {
                             const height = Math.max(20, bottom - top);
                             const tbc = getTimeBlockColor(ev.startTime);
                             return (
-                              <div key={ev.id} className="cy-cal-event-block"
-                                style={{ top, height, background: tbc + "30", borderLeft: `3px solid ${tbc}`, color: tbc }}
+                              <div key={ev.id} className={`cy-cal-event-block${ev.image ? " has-image" : ""}`}
+                                style={{ top, height, background: ev.image ? `url(${ev.image}) center/cover` : tbc + "30", borderLeft: `3px solid ${tbc}`, color: ev.image ? "#fff" : tbc }}
                                 draggable
                                 onDragStart={() => setDragEventId(ev.id)}
                                 onDragEnd={() => setDragEventId(null)}
                                 onClick={e => { e.stopPropagation(); openEditEvent(ev); }}
                                 data-testid={`cal-event-${ev.id}`}
                               >
+                                {ev.image && <div className="cy-cal-ev-overlay" />}
                                 <div className="cy-cal-ev-title">{ev.title}</div>
                                 <div className="cy-cal-ev-time">{ev.startTime} – {ev.endTime}</div>
                               </div>
@@ -3988,14 +4136,15 @@ export default function CyberLog() {
                           const height = Math.max(30, bottom - top);
                           const tbc = getTimeBlockColor(ev.startTime);
                           return (
-                            <div key={ev.id} className="cy-cal-event-block cy-cal-event-block-daily"
-                              style={{ top, height, background: tbc + "25", borderLeft: `4px solid ${tbc}`, color: tbc }}
+                            <div key={ev.id} className={`cy-cal-event-block cy-cal-event-block-daily${ev.image ? " has-image" : ""}`}
+                              style={{ top, height, background: ev.image ? `url(${ev.image}) center/cover` : tbc + "25", borderLeft: `4px solid ${tbc}`, color: ev.image ? "#fff" : tbc }}
                               draggable
                               onDragStart={() => setDragEventId(ev.id)}
                               onDragEnd={() => setDragEventId(null)}
                               onClick={e => { e.stopPropagation(); openEditEvent(ev); }}
                               data-testid={`cal-event-${ev.id}`}
                             >
+                              {ev.image && <div className="cy-cal-ev-overlay" />}
                               <div className="cy-cal-ev-title">{ev.title}</div>
                               <div className="cy-cal-ev-time">{ev.startTime} – {ev.endTime}</div>
                               {ev.location && <div className="cy-cal-ev-loc"><i className="fa-solid fa-location-dot" style={{ marginRight: 4 }} />{ev.location}</div>}
@@ -4074,6 +4223,31 @@ export default function CyberLog() {
                       rows={3} style={{ resize: "vertical" }}
                       data-testid="event-desc-input"
                     />
+                    <div className="cy-field-label">IMAGE</div>
+                    <div className="cy-event-image-row">
+                      {eventForm.image ? (
+                        <div className="cy-event-image-preview">
+                          <img src={eventForm.image} alt="Event" />
+                          <button className="cy-event-image-remove" onClick={() => setEventForm(f => ({ ...f, image: "" }))} data-testid="event-image-remove">
+                            <i className="fa-solid fa-xmark" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button className="cy-quick-add-btn" onClick={() => eventImageRef.current?.click()} data-testid="event-image-upload">
+                          <i className="fa-solid fa-image" style={{ marginRight: 4 }} />Add Image
+                        </button>
+                      )}
+                      <input type="file" accept="image/*" ref={eventImageRef} style={{ display: "none" }}
+                        onChange={e => {
+                          const f = e.target.files?.[0];
+                          if (!f) return;
+                          const reader = new FileReader();
+                          reader.onload = () => setEventForm(prev => ({ ...prev, image: reader.result as string }));
+                          reader.readAsDataURL(f);
+                          e.target.value = "";
+                        }}
+                      />
+                    </div>
                     <div className="cy-field-label">COLOR</div>
                     <div className="cy-event-color-row">
                       {EVENT_COLORS.map(c => (

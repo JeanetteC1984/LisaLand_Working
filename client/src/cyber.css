@@ -4270,6 +4270,120 @@
   background: color-mix(in srgb, var(--cy-primary) 8%, transparent);
 }
 
+/* Notes Panel */
+.cy-notes-panel {
+  background: var(--cy-bg-card);
+  border: 1px solid var(--cy-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.cy-notes-panel-title {
+  font-family: var(--cy-font-header);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cy-primary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.cy-notes-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.cy-note-color-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: var(--cy-font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.cy-note-color-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.cy-notes-media-row {
+  display: flex;
+  gap: 8px;
+}
+.sticky-note-media {
+  min-width: 150px;
+  padding: 0 !important;
+  overflow: hidden;
+}
+.cy-note-media {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+  border-radius: 0 0 6px 6px;
+}
+.sticky-note-media .cy-note-drag-handle {
+  border-radius: 6px 6px 0 0;
+}
+
+/* Event Image */
+.cy-event-image-row {
+  margin-bottom: 8px;
+}
+.cy-event-image-preview {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 120px;
+}
+.cy-event-image-preview img {
+  width: 100%;
+  max-height: 120px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+.cy-event-image-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.cy-event-image-remove:hover { background: rgba(255,64,129,0.8); }
+
+/* Event block with image */
+.cy-cal-event-block.has-image {
+  overflow: hidden;
+  border-radius: 8px;
+}
+.cy-cal-ev-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 100%);
+  border-radius: inherit;
+  z-index: 0;
+}
+.cy-cal-event-block.has-image .cy-cal-ev-title,
+.cy-cal-event-block.has-image .cy-cal-ev-time,
+.cy-cal-event-block.has-image .cy-cal-ev-loc,
+.cy-cal-event-block.has-image .cy-cal-ev-desc {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
 /* Print */
 @media print {
   .cy-icon-bar, .cy-file-nav, .cy-toolbar, .cy-asset-panel, .crt-overlay, .cy-terminal,
