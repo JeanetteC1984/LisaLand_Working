@@ -24,6 +24,11 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   const PgStore = connectPgSimple(session);
+  const sessionSecret = process.env.SESSION_SECRET ?? "dev-session-secret-change-me";
+
+  if (process.env.NODE_ENV === "production" && !process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET must be set in production");
+  }
 
   app.use(
     session({
@@ -31,7 +36,7 @@ export async function registerRoutes(
         pool,
         createTableIfMissing: true,
       }),
-      secret: process.env.SESSION_SECRET!,
+      secret: sessionSecret,
       resave: false,
       saveUninitialized: false,
       cookie: {

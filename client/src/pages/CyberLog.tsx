@@ -24,6 +24,32 @@ type JournalFile = {
   content: string;
 };
 
+function isJournalFileArray(value: unknown): value is JournalFile[] {
+  if (!Array.isArray(value)) return false;
+  return value.every((item) => {
+    if (!item || typeof item !== "object") return false;
+    const record = item as Record<string, unknown>;
+    return (
+      typeof record.id === "string" &&
+      typeof record.name === "string" &&
+      typeof record.date === "string" &&
+      typeof record.content === "string"
+    );
+  });
+}
+
+function mergeJournalFiles(primary: JournalFile[], secondary: JournalFile[]): JournalFile[] {
+  const merged = [...primary];
+  const seen = new Set(primary.map((f) => f.id));
+  for (const file of secondary) {
+    if (!seen.has(file.id)) {
+      merged.push(file);
+      seen.add(file.id);
+    }
+  }
+  return merged;
+}
+
 type Sticker = {
   id: string;
   type: string;
@@ -1021,6 +1047,7 @@ interface CyberLogProps {
 }
 
 export default function CyberLog({ user, onLogout }: CyberLogProps) {
+  const filesStorageKey = `glowup-files-${user.id}`;
   const [section, setSection] = useState<Section>("journal");
   const [theme, setTheme] = useState("rainbow-dream");
   const [files, setFiles] = useState<JournalFile[]>(INITIAL_FILES);
@@ -1179,12 +1206,31 @@ export default function CyberLog({ user, onLogout }: CyberLogProps) {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
+    let localFiles: JournalFile[] = [];
+    try {
+      const raw = localStorage.getItem(filesStorageKey);
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw);
+        if (isJournalFileArray(parsed) && parsed.length > 0) {
+          localFiles = parsed;
+          setFiles(parsed);
+          setActiveFileId((prev) => (parsed.some((f) => f.id === prev) ? prev : parsed[0].id));
+        }
+      }
+    } catch {
+      localFiles = [];
+    }
+
     fetch("/api/data")
       .then(r => r.json())
       .then(d => {
         if (d && typeof d === "object" && !d.message) {
           if (d.theme) setTheme(d.theme);
-          if (d.files) setFiles(d.files);
+          if (isJournalFileArray(d.files)) {
+            const mergedFiles = mergeJournalFiles(d.files, localFiles);
+            setFiles(mergedFiles);
+            setActiveFileId((prev) => (mergedFiles.some((f) => f.id === prev) ? prev : mergedFiles[0]?.id || "tutorial"));
+          }
           if (d.goals) setGoals(d.goals);
           if (d.identity) setIdentity(d.identity);
           if (d.profilePic) setProfilePic(d.profilePic);
@@ -1226,6 +1272,14 @@ export default function CyberLog({ user, onLogout }: CyberLogProps) {
       localStorage.setItem("dreamlog-affirmation-date", today);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(filesStorageKey, JSON.stringify(files));
+    } catch {
+      // Ignore storage errors (e.g. quota exceeded) and continue server sync.
+    }
+  }, [filesStorageKey, files]);
 
   useEffect(() => {
     if (!dataLoaded) return;

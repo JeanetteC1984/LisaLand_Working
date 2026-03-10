@@ -1,9 +1,12 @@
+import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 import * as schema from "@shared/schema";
 
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL must be set");
+  throw new Error(
+    "DATABASE_URL must be set. Add it to your environment (or a .env file) before starting the server.",
+  );
 }
 
 export const pool = new pg.Pool({
